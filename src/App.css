@@ -1,0 +1,33 @@
+/* src/App.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-warm: #DFE3EA;
+  --sidebar-width: 0px;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background-color: #DFE3EA;
+  color: #1A1A1A;
+}
+
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+h1, h2, h3, h4 {
+  color: #2C2C2C;
+}
+
+html {
+  scroll-behavior: smooth;
+}

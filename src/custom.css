@@ -1,0 +1,111 @@
+/* src/custom.css */
+
+/* Importera Google Font för handskriven text */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+
+/* Globala stilar */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Meny-animationer */
+@keyframes menu-slide-in {
+  0% {
+    transform: translateX(100%);
+  }
+  80% {
+    transform: translateX(-5%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes menu-slide-out {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-menu-in {
+  animation: menu-slide-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-menu-out {
+  animation: menu-slide-out 0.5s ease-in-out forwards;
+}
+
+/* Toast-animationer */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.toast-slide-in {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+.toast-fade-out {
+  animation: fadeOut 0.5s ease-in 2.5s forwards;
+}
+
+/* Blinkande text-animation */
+@keyframes text-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.text-blink {
+  animation: text-blink 2s linear infinite;
+}
+
+@keyframes pulse-once {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.animate-pulse-once {
+  animation: pulse-once 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #FF5421 0%,
+    #FF5421 40%,
+    #ffffff 50%,
+    #FF5421 60%,
+    #FF5421 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
