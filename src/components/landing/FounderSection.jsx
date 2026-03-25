@@ -417,7 +417,7 @@ const DatePicker = () => {
 // ─────────────────────────────────────────────
 
 const FounderSection = () => (
-  <section className="py-20 bg-[#F8F7F4]">
+  <section className="py-20 bg-[#F9FAFB]">
     <div className="max-w-7xl mx-auto px-4">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 

@@ -144,12 +144,7 @@ const PurchasePage = () => {
             <ArrowLeft size={16} />
             Tillbaka
           </button>
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-            <img src="/logo.png" alt="Logo" className="w-8 h-8 object-contain" />
-            <span className="font-bold text-base" style={{ color: DARK }}>
-              <span style={{ color: ORANGE }}>Närings</span>klivet
-            </span>
-          </div>
+          
           <button
             onClick={() => navigate('/')}
             className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors hover:bg-slate-100"

@@ -1,30 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, User, LogOut } from 'lucide-react';
+import { Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTeam } from '../contexts/MockTeamContext';
 
 const Navigation = () => {
   const navigate = useNavigate();
   const { isLoggedIn, currentUser, logout } = useTeam();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isScrolled,    setIsScrolled]    = useState(false);
+  const [isMenuOpen,    setIsMenuOpen]    = useState(false);
+  const [showUserMenu,  setShowUserMenu]  = useState(false);
   const [activeSection, setActiveSection] = useState('');
-  const userMenuRef = useRef(null);
+  const [isAboutOpen,   setIsAboutOpen]   = useState(false);
+  const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
+  const userMenuRef  = useRef(null);
+  const aboutMenuRef = useRef(null);
 
   const menuItems = [
-    { name: 'Kursinnehåll', id: 'content' },
-    { name: 'Omdömen', id: 'results' },
-    { name: 'Boka', id: 'guarantee' },
-    { name: 'Vanliga frågor', id: 'faq' },
-    { name: 'Testa dina styrelsekunskaper', id: null, path: '/testa-dig' } // ← NY
+    { name: 'Kursinnehåll',           id: 'content' },
+    { name: 'Omdömen',                id: 'results' },
+    { name: 'Boka',                   id: 'guarantee' },
+    { name: 'Vanliga frågor',         id: 'faq' },
+    { name: 'Testa dina AI-kunskaper', id: null, path: '/testa-dig' },
+  ];
+
+  const aboutSubItems = [
+    { name: 'Om oss',           path: '/om-oss' },
+    { name: 'Boka One on One',  path: '/seminarier#events' },
+    { name: 'Boka föreläsning', path: '/seminarier#events' },
+    { name: 'Boka workshop',    path: '/seminarier#events' },
+    { name: 'Boka AI-implementering',     path: '/seminarier#events' },
   ];
 
   const urgencyMessages = [
-    "🔥 217 styrelseledamöter kollar på denna kurs just nu",
-    "⚡ Endast 12 platser kvar i nästa omgång",
-    "🎯 Nästa start: 15 oktober"
+    '🔥 Ny AI-kurs lanseras 2026 – anmäl intresse nu',
+    '⚡ Begränsat antal platser på kommande seminarier',
+    '🎯 Nästa seminarium: april 2026',
   ];
 
   // Scroll-detektor
@@ -34,25 +45,26 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Section observer
   useEffect(() => {
-  const timer = setTimeout(() => {
-    const observers = menuItems.map(item => {
-      const el = document.getElementById(item.id);
-      if (!el) return null;
-      const observer = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActiveSection(item.id); },
-        { threshold: 0, rootMargin: '-10% 0px -80% 0px' }
-      );
-      observer.observe(el);
-      return observer;
-    });
-    return () => observers.forEach(obs => obs?.disconnect());
-  }, 500);
+    const timer = setTimeout(() => {
+      const observers = menuItems.map(item => {
+        if (!item.id) return null;
+        const el = document.getElementById(item.id);
+        if (!el) return null;
+        const observer = new IntersectionObserver(
+          ([entry]) => { if (entry.isIntersecting) setActiveSection(item.id); },
+          { threshold: 0, rootMargin: '-10% 0px -80% 0px' }
+        );
+        observer.observe(el);
+        return observer;
+      });
+      return () => observers.forEach(obs => obs?.disconnect());
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
-  return () => clearTimeout(timer);
-}, []);
-
-  // Stäng dropdown när man klickar utanför
+  // Stäng user-dropdown vid klick utanför
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
@@ -81,7 +93,7 @@ const Navigation = () => {
         <div className="bg-[#1E1E1E] text-white py-2 overflow-hidden">
           <motion.div
             animate={{ x: [-1000, 1000] }}
-            transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
+            transition={{ repeat: Infinity, duration: 30, ease: 'linear' }}
             className="flex items-center gap-12 whitespace-nowrap"
           >
             {urgencyMessages.concat(urgencyMessages).map((message, index) => (
@@ -106,30 +118,30 @@ const Navigation = () => {
           }`}>
 
             {/* Logo */}
-<motion.div
-  whileHover={{ scale: 1.05 }}
-  className="flex items-center gap-1 cursor-pointer" // Ändrat från gap-2 till gap-1
-  onClick={() => navigate('/')}
->
-  <img
-    src="/logo.png"
-    alt="Styrelsekörkortet Logotyp"
-    className={`object-contain transition-all duration-300 ${
-      isScrolled ? 'w-12 h-12' : 'w-10 h-10'
-    }`}
-  />
-  <div className={`font-bold transition-all duration-300 ${
-    isScrolled ? 'text-[#2C2C2C] text-lg' : 'text-white text-xl'
-  }`}>
-    <span className="text-[#FF5421]">Närings</span>klivet®
-  </div>
-</motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-1 cursor-pointer"
+              onClick={() => navigate('/')}
+            >
+              <img
+                src="/logo.png"
+                alt="Näringsklivet Logotyp"
+                className={`object-contain transition-all duration-300 ${
+                  isScrolled ? 'w-12 h-12' : 'w-10 h-10'
+                }`}
+              />
+              <div className={`font-bold transition-all duration-300 ${
+                isScrolled ? 'text-[#2C2C2C] text-lg' : 'text-white text-xl'
+              }`}>
+                <span className="text-[#FF5421]">Närings</span>klivet®
+              </div>
+            </motion.div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-8">
+            <nav className="hidden md:flex items-center space-x-6">
               {menuItems.map((item) => (
                 <motion.button
-                  key={item.id}
+                  key={item.id ?? item.path}
                   onClick={() => item.path ? navigate(item.path) : scrollToSection(item.id)}
                   className={`transition-colors font-medium relative pb-1 ${
                     activeSection === item.id
@@ -140,7 +152,6 @@ const Navigation = () => {
                   }`}
                 >
                   {item.name}
-                  {/* Aktiv understrykning */}
                   {activeSection === item.id && (
                     <motion.div
                       layoutId="activeUnderline"
@@ -150,6 +161,55 @@ const Navigation = () => {
                   )}
                 </motion.button>
               ))}
+
+              {/* ── Om oss dropdown ── */}
+              <div
+                className="relative"
+                onMouseEnter={() => setIsAboutOpen(true)}
+                onMouseLeave={() => setIsAboutOpen(false)}
+                ref={aboutMenuRef}
+              >
+                <button
+                  className={`flex items-center gap-1 font-medium transition-colors pb-1 ${
+                    isScrolled
+                      ? 'text-[#2C2C2C] hover:text-[#FF5421]'
+                      : 'text-white/80 hover:text-white'
+                  }`}
+                >
+                  Om oss
+                  <motion.div
+                    animate={{ rotate: isAboutOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ChevronDown size={14} />
+                  </motion.div>
+                </button>
+
+                <AnimatePresence>
+                  {isAboutOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.18 }}
+                      className="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50"
+                    >
+                      {aboutSubItems.map((subItem) => (
+                        <button
+                          key={subItem.name}
+                          onClick={() => {
+                            navigate(subItem.path);
+                            setIsAboutOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-3 text-[#2C2C2C] hover:bg-orange-50 hover:text-[#FF5421] transition-colors text-sm font-medium border-b border-gray-50 last:border-0"
+                        >
+                          {subItem.name}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </nav>
 
             {/* CTA + User Menu */}
@@ -250,34 +310,74 @@ const Navigation = () => {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className={`md:hidden border-t py-4 ${
-                  isScrolled ? 'border-gray-200 bg-white' : 'border-white/20 bg-white'
-                }`}
+                className="md:hidden border-t py-4 border-gray-200 bg-white"
               >
                 <div className="flex flex-col space-y-1">
                   {menuItems.map((item) => (
                     <button
-                      key={item.id}
-                      onClick={() => { item.path ? navigate(item.path) : scrollToSection(item.id); setIsMenuOpen(false); }}
+                      key={item.id ?? item.path}
+                      onClick={() => {
+                        item.path ? navigate(item.path) : scrollToSection(item.id);
+                        setIsMenuOpen(false);
+                      }}
                       className={`text-left px-2 py-3 rounded-lg transition-colors font-medium ${
                         activeSection === item.id
                           ? 'text-[#FF5421] bg-orange-50'
-                          : isScrolled
-                            ? 'text-[#2C2C2C] hover:text-[#FF5421] hover:bg-orange-50'
-                            : 'text-white hover:text-[#FF5421]'
+                          : 'text-[#2C2C2C] hover:text-[#FF5421] hover:bg-orange-50'
                       }`}
                     >
                       {item.name}
                     </button>
                   ))}
 
+                  {/* ── Om oss i mobil ── */}
+                  <div className="border-t border-gray-100 pt-2 mt-1">
+                    <button
+                      onClick={() => setMobileAboutOpen(!mobileAboutOpen)}
+                      className="w-full flex items-center justify-between px-2 py-3 rounded-lg font-medium text-[#2C2C2C] hover:text-[#FF5421] hover:bg-orange-50 transition-colors"
+                    >
+                      Om oss
+                      <motion.div
+                        animate={{ rotate: mobileAboutOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <ChevronDown size={16} />
+                      </motion.div>
+                    </button>
+
+                    <AnimatePresence>
+                      {mobileAboutOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          {aboutSubItems.map((subItem) => (
+                            <button
+                              key={subItem.name}
+                              onClick={() => {
+                                navigate(subItem.path);
+                                setIsMenuOpen(false);
+                                setMobileAboutOpen(false);
+                              }}
+                              className="w-full text-left pl-6 pr-2 py-2.5 text-sm text-[#2C2C2C] hover:text-[#FF5421] hover:bg-orange-50 transition-colors rounded-lg"
+                            >
+                              {subItem.name}
+                            </button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Login / Logout */}
                   {isLoggedIn ? (
                     <>
                       <button
                         onClick={() => { navigate('/dashboard'); setIsMenuOpen(false); }}
-                        className={`flex items-center gap-2 px-4 py-3 rounded-lg font-semibold transition-all ${
-                          isScrolled ? 'bg-gray-100 text-[#2C2C2C]' : 'bg-white/10 text-white border border-white/30'
-                        }`}
+                        className="flex items-center gap-2 px-4 py-3 rounded-lg font-semibold bg-gray-100 text-[#2C2C2C] mt-2"
                       >
                         <User size={20} />
                         Mitt konto
@@ -293,7 +393,7 @@ const Navigation = () => {
                   ) : (
                     <button
                       onClick={() => { navigate('/login'); setIsMenuOpen(false); }}
-                      className="px-6 py-3 rounded-lg font-semibold text-center bg-gradient-to-r from-[#FF5421] to-[#E04619] text-white shadow-lg"
+                      className="px-6 py-3 rounded-lg font-semibold text-center bg-gradient-to-r from-[#FF5421] to-[#E04619] text-white shadow-lg mt-2"
                     >
                       Logga in
                     </button>
