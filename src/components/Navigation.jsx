@@ -106,24 +106,24 @@ const Navigation = () => {
           }`}>
 
             {/* Logo */}
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-2 cursor-pointer"
-              onClick={() => navigate('/')}
-            >
-              <img
-                src="/logo.png"
-                alt="Styrelsekörkortet Logotyp"
-                className={`object-contain transition-all duration-300 ${
-                  isScrolled ? 'w-12 h-12 sm:w-12 sm:h-12' : 'w-10 h-10 sm:w-12 sm:h-12'
-                }`}
-              />
-              <div className={`font-bold transition-all duration-300 ${
-                isScrolled ? 'text-[#2C2C2C] text-lg' : 'text-white text-xl'
-              }`}>
-                <span className="text-[#FF5421]">Närings</span>klivet®
-              </div>
-            </motion.div>
+<motion.div
+  whileHover={{ scale: 1.05 }}
+  className="flex items-center gap-1 cursor-pointer" // Ändrat från gap-2 till gap-1
+  onClick={() => navigate('/')}
+>
+  <img
+    src="/logo.png"
+    alt="Styrelsekörkortet Logotyp"
+    className={`object-contain transition-all duration-300 ${
+      isScrolled ? 'w-12 h-12' : 'w-10 h-10'
+    }`}
+  />
+  <div className={`font-bold transition-all duration-300 ${
+    isScrolled ? 'text-[#2C2C2C] text-lg' : 'text-white text-xl'
+  }`}>
+    <span className="text-[#FF5421]">Närings</span>klivet®
+  </div>
+</motion.div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">

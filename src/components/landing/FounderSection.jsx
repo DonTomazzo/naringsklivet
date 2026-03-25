@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import WorkshopCta from './WorkshopCta';
 import {
   Clock, X, ArrowRight, CheckCircle, Users,
   CalendarCheck, Building2, User, Mail, Phone
@@ -424,7 +425,7 @@ const FounderSection = () => (
           className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div className="flex-1">
-              <div className="text-xs font-bold text-[#FF5421] uppercase tracking-widest mb-3">14 stegsprogram till AI-proffs</div>
+              <div className="text-xs font-bold text-[#FF5421] uppercase tracking-widest mb-3">14 stegsprogram - från lekman till AI-proffs</div>
               <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A] leading-snug">
                 Vi hjälper medarbetare, chefer och egenföretagare att jobba smartare – från dag ett.
               </h2>
@@ -469,6 +470,7 @@ const FounderSection = () => (
             Välj ett datum som passar dig eller din organisation
           </h3>
           <DatePicker />
+          <WorkshopCta /> 
         </motion.div>
 
       </div>

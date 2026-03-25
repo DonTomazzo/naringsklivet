@@ -8,9 +8,8 @@ interface CourseHeaderProps {
   isDesktop: boolean;
   userName?: string;
   userAvatar?: string;
-  // Progressbar – skicka in för att visa, utelämna för att dölja
   slideProgress?: {
-    current: number;  // 0-baserat index
+    current: number;
     total: number;
   };
 }
@@ -23,9 +22,9 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({
   slideProgress,
 }) => {
   const navigate = useNavigate();
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible,  setIsVisible]  = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [openMenu,   setOpenMenu]   = useState<string | null>(null);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -58,30 +57,38 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({
   }, [lastScrollY]);
 
   const menuItems = [
-  {
-    title: 'Kurser',
-    items: [
-      { label: 'Alla kurser', path: '/modules' },
-      { label: 'Styrelsekörkortet Grund', path: '/purchase/styrelsekorkortet-grund' },
-      { label: 'Mina framsteg', path: '/dashboard' },
-    ],
-  },
-  {
-    title: 'Resurser',
-    items: [
-      { label: 'Dokumentmallar', path: '/resources/templates' },
-      { label: 'Guider & FAQ', path: '/resources/guides' },
-      { label: 'Verktyg', path: '/resources/tools' },
-    ],
-  },
-  {
-    title: 'Certifiering',
-    items: [
-      { label: 'Gör slutprovet', path: '/slutprov' },
-      { label: 'Mina diplom', path: '/mina-sidor' },
-    ],
-  },
-];
+    {
+      title: 'Kurser',
+      items: [
+        { label: 'Alla moduler',          path: '/ai-modules' },
+        { label: 'AI-träningsprogrammet', path: '/purchase/naringsklivet-ai' },
+        { label: 'Mina framsteg',         path: '/dashboard' },
+      ],
+    },
+    {
+      title: 'Resurser',
+      items: [
+        { label: 'Promptmallar',     path: '/resources/prompts' },
+        { label: 'AI-verktygskartan', path: '/resources/tools' },
+        { label: 'Guider & FAQ',     path: '/resources/guides' },
+      ],
+    },
+    {
+      title: 'Seminarier',
+      items: [
+        { label: 'Kommande event',   path: '/seminarier' },
+        { label: 'Boka plats',       path: '/seminarier#events' },
+      ],
+    },
+    {
+      title: 'Certifiering',
+      items: [
+        { label: 'Gör slutprovet', path: '/slutprov' },
+        { label: 'Mina diplom',    path: '/mina-sidor' },
+      ],
+    },
+  ];
+
   const progressPct = slideProgress
     ? Math.round(((slideProgress.current + 1) / slideProgress.total) * 100)
     : null;
@@ -102,46 +109,46 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({
 
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity flex-shrink-0">
-              <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-3">
+              <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-1">
                 <img
                   src="/logo.png"
-                  alt="Styrelsekörkortet Logotyp"
+                  alt="Näringsklivet Logotyp"
                   width={26}
                   height={26}
                   className="object-contain opacity-90"
                 />
                 <div className="text-lg sm:text-xl font-bold" style={{ color: '#171f32' }}>
-  <span className="text-[#FF5421]">Styrelse</span>körkortet
-</div>
+                  <span className="text-[#FF5421]">Närings</span>klivet®
+                </div>
               </motion.div>
             </Link>
 
-            {/* ── Progressbar i mitten (desktop) ── */}
-{slideProgress && (
-  <div className="hidden md:flex flex-1 items-center gap-3 max-w-xs mx-auto">
-    <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-slate-200">
-      <motion.div
-        className="h-full rounded-full bg-[#FF5421]"
-        animate={{ width: `${progressPct}%` }}
-        transition={{ duration: 0.4, ease: 'easeInOut' }}
-      />
-    </div>
-    <span className="text-xs font-semibold text-slate-400 flex-shrink-0 tabular-nums">
-      {slideProgress.current + 1}/{slideProgress.total}
-    </span>
-  </div>
-)}
+            {/* Progressbar desktop */}
+            {slideProgress && (
+              <div className="hidden md:flex flex-1 items-center gap-3 max-w-xs mx-auto">
+                <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-slate-200">
+                  <motion.div
+                    className="h-full rounded-full bg-[#FF5421]"
+                    animate={{ width: `${progressPct}%` }}
+                    transition={{ duration: 0.4, ease: 'easeInOut' }}
+                  />
+                </div>
+                <span className="text-xs font-semibold text-slate-400 flex-shrink-0 tabular-nums">
+                  {slideProgress.current + 1}/{slideProgress.total}
+                </span>
+              </div>
+            )}
 
-{/* ── Progressbar mobil – tunn linje längst ner i headern ── */}
-{slideProgress && (
-  <div className="md:hidden absolute bottom-0 left-0 right-0 h-1 bg-slate-200">
-    <motion.div
-      className="h-full bg-[#FF5421]"
-      animate={{ width: `${progressPct}%` }}
-      transition={{ duration: 0.4, ease: 'easeInOut' }}
-    />
-  </div>
-)}
+            {/* Progressbar mobil */}
+            {slideProgress && (
+              <div className="md:hidden absolute bottom-0 left-0 right-0 h-1 bg-slate-200">
+                <motion.div
+                  className="h-full bg-[#FF5421]"
+                  animate={{ width: `${progressPct}%` }}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
+                />
+              </div>
+            )}
 
             {/* Navigation */}
             <div className="hidden md:flex items-center gap-2 flex-shrink-0">
@@ -215,6 +222,7 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({
                 )}
               </Link>
             </div>
+
           </div>
         </div>
       </div>

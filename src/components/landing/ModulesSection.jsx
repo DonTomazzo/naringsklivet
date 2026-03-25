@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Clock, BookOpen, Play, ChevronRight, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { modulesData } from '../../data/modules3.jsx'; // ← AI-kursen
+import { modulesData } from '../../data/modules2.jsx';
 
 const SHOW_COUNT = 6;
-const categories = ["Alla", "Verktyg", "Teknik", "Säkerhet", "Praktik"];
+const categories = ["Alla", "Ekonomi", "Juridik", "Teknik", "Ledarskap"];
 
 const LandingModuleCard = ({ module, index, onClick }) => {
   const isFirst = index === 0;
@@ -20,7 +20,7 @@ const LandingModuleCard = ({ module, index, onClick }) => {
         </div>
       )}
       <div className="relative w-full aspect-[4/3] overflow-hidden">
-        <img src={module.image_url || 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80'}
+        <img src={module.image_url || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80'}
           alt={module.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
         <div className="absolute inset-0 bg-slate-900/60 group-hover:bg-slate-900/70 transition-colors duration-300" />
         <div className={`absolute inset-0 flex flex-col justify-end p-4 sm:p-5 ${isFirst ? 'pt-10' : ''}`}>
@@ -85,7 +85,7 @@ const ModuleModal = ({ module, onClose }) => {
             </div>
           )}
           {module.component ? (
-            <Link to={`/ai-module/${module.slug}`}
+            <Link to={`/module/${module.slug}`}
               className="w-full py-4 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2 shadow-lg hover:opacity-90 transition-opacity"
               style={{ background: 'linear-gradient(to right, #FF5421, #E04619)' }}>
               <Play size={18} /> Starta modulen nu
@@ -94,7 +94,7 @@ const ModuleModal = ({ module, onClose }) => {
             <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={onClose}
               className="w-full py-4 rounded-xl font-bold text-white text-base"
               style={{ background: 'linear-gradient(to right, #FF5421, #E04619)' }}>
-              Kom igång med AI-träningsprogrammet
+              Kom igång med Styrelsekörkortet
             </motion.button>
           )}
         </div>
@@ -158,7 +158,7 @@ const AllModulesModal = ({ onClose, onSelectModule }) => (
 
       {/* Footer */}
       <div className="px-6 py-4 border-t border-gray-100 flex-shrink-0">
-        <Link to="/purchase/naringsklivet-ai" onClick={onClose}
+        <Link to="/purchase/styrelsekorkortet-grund" onClick={onClose}
           className="w-full py-3.5 rounded-xl font-bold text-white text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
           style={{ background: 'linear-gradient(to right, #FF5421, #E04619)' }}>
           Kom igång med alla moduler →
@@ -168,15 +168,13 @@ const AllModulesModal = ({ onClose, onSelectModule }) => (
   </motion.div>
 );
 
-// ─── Sektion ───────────────────────────────────────────────
+// ─── Sektion ───
 const ModulesSection = () => {
   const [activeCategory, setActiveCategory] = useState("Alla");
-  const [selectedModule,  setSelectedModule]  = useState(null);
-  const [showAllModules,  setShowAllModules]  = useState(false);
+  const [selectedModule, setSelectedModule] = useState(null);
+  const [showAllModules, setShowAllModules] = useState(false);
 
-  const filtered = activeCategory === "Alla"
-    ? modulesData
-    : modulesData.filter(m => m.category === activeCategory);
+  const filtered = activeCategory === "Alla" ? modulesData : modulesData.filter(m => m.category === activeCategory);
   const visible = filtered.slice(0, SHOW_COUNT);
 
   return (
@@ -188,21 +186,15 @@ const ModulesSection = () => {
             viewport={{ once: true }} className="text-center mb-10">
             <div className="inline-block px-4 py-2 text-white rounded-full font-semibold mb-4 text-sm"
               style={{ backgroundColor: '#FF5421' }}>KURSMODULER</div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#2C2C2C] mb-3">
-              Lär dig använda AI steg för steg
-            </h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#2C2C2C] mb-3">Lär dig styrelsearbete steg för steg</h2>
             <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-              14 praktiska moduler som tar dig från nybörjare till AI-säker –
-              direkt applicerbara i din arbetsdag
+              Följ vår beprövade process som redan hjälpt 1 450+ styrelseledamöter att bli trygga och kompetenta
             </p>
           </motion.div>
 
-          {/* Kategorifiltrer */}
           <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
             {categories.map(cat => {
-              const count = cat === "Alla"
-                ? modulesData.length
-                : modulesData.filter(m => m.category === cat).length;
+              const count = cat === "Alla" ? modulesData.length : modulesData.filter(m => m.category === cat).length;
               const isActive = activeCategory === cat;
               return (
                 <motion.button key={cat} whileTap={{ scale: 0.96 }} onClick={() => setActiveCategory(cat)}
@@ -216,22 +208,16 @@ const ModulesSection = () => {
             })}
           </div>
 
-          {/* Modulkort */}
           <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             <AnimatePresence mode="popLayout">
               {visible.map((module) => {
                 const realIndex = modulesData.findIndex(m => m.id === module.id);
-                return (
-                  <LandingModuleCard
-                    key={module.id} module={module}
-                    index={realIndex} onClick={setSelectedModule}
-                  />
-                );
+                return <LandingModuleCard key={module.id} module={module} index={realIndex} onClick={setSelectedModule} />;
               })}
             </AnimatePresence>
           </motion.div>
 
-          {/* CTA */}
+          {/* CTA – ersätter gamla textraden */}
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} className="mt-10 flex justify-center">
             <motion.button
@@ -239,7 +225,7 @@ const ModulesSection = () => {
               onClick={() => setShowAllModules(true)}
               className="inline-flex items-center gap-2.5 px-7 py-4 rounded-xl font-bold text-sm border-2 transition-all"
               style={{ borderColor: '#FF5421', color: '#FF5421', background: 'white' }}>
-              Se alla {modulesData.length} moduler i programmet
+              Se alla {modulesData.length} kursdelar i programmet
               <ChevronRight size={16} />
             </motion.button>
           </motion.div>
@@ -250,6 +236,7 @@ const ModulesSection = () => {
       <AnimatePresence>
         {selectedModule && <ModuleModal module={selectedModule} onClose={() => setSelectedModule(null)} />}
       </AnimatePresence>
+
       <AnimatePresence>
         {showAllModules && <AllModulesModal onClose={() => setShowAllModules(false)} onSelectModule={setSelectedModule} />}
       </AnimatePresence>

@@ -43,7 +43,7 @@ function LoginForm() {
 };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative" style={{ backgroundImage: 'url(/t1.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="min-h-screen flex items-center justify-center p-4 relative" style={{ backgroundImage: 'url(/t5.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
 
       
       <div className="w-full max-w-md">

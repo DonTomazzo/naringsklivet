@@ -21,812 +21,342 @@ export interface Post {
   user_profiles: UserProfile;
 }
 
-// Artiklar om styrelsearbete i bostadsrättsföreningar
 export const posts: Post[] = [
+  // ─────────────────────────────────────────────
+  // ARTIKEL 1
+  // ─────────────────────────────────────────────
   {
     id: '1',
-    slug: 'ny-lag-arsredovisning-bolagsverket-2025',
-    title: 'Nya regler 2025: Alla BRF måste lämna in årsredovisning till Bolagsverket',
-    subtitle: 'Viktig lagändring som träder i kraft – så påverkas din förening',
-    excerpt: 'Från och med 2025 måste alla bostadsrättsföreningar lämna in årsredovisning och revisionsberättelse till Bolagsverket. Här är vad styrelsen behöver veta.',
-    content: `
-      <h2>Ny inlämningsplikt för alla föreningar</h2>
-      <p>Den 20 november 2024 beslutade riksdagen om nya regler som innebär att alla bostadsrättsföreningar, oavsett storlek, måste lämna in årsredovisning och revisionsberättelse till Bolagsverket. Lagändringarna träder i kraft den 1 januari 2025 och gäller för räkenskapsår som påbörjas efter den 31 december 2024.</p>
-      
-      <p>Det innebär att årsredovisningen för räkenskapsåret 2025 blir den första som måste lämnas in, vilket i praktiken sker under 2026 efter att föreningsstämman fastställt handlingarna.</p>
-      
-      <h2>Vad innebär förändringen?</h2>
-      <p>Tidigare var det endast större föreningar som uppfyllde särskilda storlekskriterier som var skyldiga att självmant lämna in årsredovisningen. Nu omfattas samtliga bostadsrättsföreningar av kravet.</p>
-      
-      <p>Handlingarna ska lämnas in inom en månad efter det att föreningsstämman har fastställt årsredovisningen och revisionsberättelsen. Inlämningen ska ske i bestyrkta kopior, där även elektroniska original godkänns.</p>
-      
-      <h2>Konsekvenser vid försenad inlämning</h2>
-      <p>Om föreningen inte lämnar in handlingarna i tid påförs en förseningsavgift på 7 500 kronor. Detta kan vara en betydande kostnad, särskilt för mindre föreningar.</p>
-      
-      <p>Om handlingarna fortfarande saknas elva månader efter räkenskapsårets slut kan Bolagsverket besluta om tvångslikvidation av föreningen. Detta är en mycket allvarlig konsekvens som styrelsen måste ta på största allvar.</p>
-      
-      <h2>Utökade befogenheter för Bolagsverket</h2>
-      <p>Lagändringarna innebär också att Bolagsverket får större möjligheter att kontrollera företagsregistren och motverka ekonomisk brottslighet. Bland annat får myndigheten befogenhet att:</p>
-      <ul>
-        <li>Kräva personlig närvaro vid anmälan av företrädare</li>
-        <li>Kontrollera misstänkta felaktiga uppgifter i registren</li>
-        <li>Stryka oriktiga uppgifter om företrädare</li>
-      </ul>
-      
-      <p>Dessutom kriminaliseras företagskapning, och straffet för brott mot målvaktsförbudet skärps.</p>
-      
-      <h2>Praktiska råd för styrelsen</h2>
-      <p>För att säkerställa att föreningen klarar övergången till de nya reglerna rekommenderas följande:</p>
-      <ul>
-        <li>Starta arbetet med årsredovisningen tidigare än tidigare år</li>
-        <li>Sätt en intern deadline minst en månad före den officiella</li>
-        <li>Kontrollera att er förvaltare eller redovisningsbyrå är förberedd för det nya kravet</li>
-        <li>Utbilda styrelsen om de nya kraven och konsekvenserna</li>
-        <li>Förbered er för digital inlämning via Bolagsverkets system</li>
-        <li>Säkerställ att ni har rätt behörigheter för inlämning</li>
-      </ul>
-      
-      <h2>Syfte med lagändringarna</h2>
-      <p>Syftet med de nya reglerna är att öka insynen i föreningarnas ekonomi och bekämpa ekonomisk brottslighet. Genom att alla föreningar måste registrera sina årsredovisningar skapas en större transparens som gynnar både medlemmar och samhället i stort.</p>
-      
-      <p>Lagändringarna är en del av regeringens arbete för att motverka brottslighet som begås inom ramen för företag och föreningar.</p>
-    `,
-    header_image_url: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800',
-    published_at: '2025-01-10T09:00:00Z',
+    slug: 'chatgpt-vs-claude-vs-gemini-vilket-verktyg-passar-dig-2026',
+    title: 'ChatGPT vs Claude vs Gemini – vilket AI-verktyg passar dig bäst 2026?',
+    subtitle: 'En ärlig jämförelse utan reklam',
+    excerpt:
+      'Tre giganter, tre styrkor. Vi jämför de mest populära AI-verktygen utan att favorisera – och hjälper dig välja rätt för just din arbetsdag.',
+    header_image_url:
+      'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800',
+    published_at: '2026-01-08T09:00:00Z',
     type: 'article',
-    category: 'Juridik & Lagstiftning',
+    category: 'Verktygsguider',
     status: 'published',
+    content: `
+<h2>Tre verktyg – tre filosofier</h2>
+<p>ChatGPT, Claude och Gemini är alla kraftfulla AI-assistenter, men de är byggda med fundamentalt olika prioriteringar. Det märks inte när du ställer en enkel fråga, men det märks tydligt när du försöker lösa ett komplext problem, analysera ett långt dokument eller skriva något som faktiskt ska användas.</p>
+<p>Att förstå skillnaderna handlar inte om att hitta det "bästa" verktyget i absolut mening – det handlar om att hitta rätt verktyg för din specifika situation. Den kloka strategin är att förstå styrkor och svagheter, välja ett primärt verktyg och komplettera med de andra när det behövs.</p>
+
+<h2>ChatGPT – allroundern som tog världen med storm</h2>
+<p>OpenAIs ChatGPT är fortfarande det mest använda AI-verktyget i världen, och det av goda skäl. Styrkan ligger i bredd: text, kod, bilder via DALL·E, röst, filanalys och ett enormt ekosystem av plugins och integrationer med andra tjänster. GPT-4o – den senaste modellen – är särskilt stark på att resonera steg för steg, lösa matematiska problem och generera kod.</p>
+<p><strong>ChatGPT är bäst för:</strong> brainstorming, kreativt skrivande, kodhjälp, bildgenerering, snabba svar på faktafrågor och uppgifter där du vill ha ett brett perspektiv snabbt.</p>
+<p><strong>Svagheter:</strong> ChatGPT är mer benäget att hallusinera – presentera felaktig information med total självförtroende – än Claude. Det är också mer benäget att ge dig det svar det tror att du vill höra, snarare än det du behöver höra.</p>
+<p><strong>Pris:</strong> Gratisversion finns med GPT-4o. Plus-prenumeration kostar ca 220 kr/månad.</p>
+
+<h2>Claude – analytikern med djup och nuans</h2>
+<p>Anthropics Claude är känt bland de som jobbar professionellt med AI för att leverera mer genomtänkta, nyanserade och ärliga svar. Där ChatGPT ibland svarar det du vill höra, säger Claude det du behöver höra – även när det är obekvämt.</p>
+<p>Claudes absoluta styrka är hantering av långa dokument. Medan ChatGPT tappar tråden i mycket långa konversationer kan Claude hålla kontexten över hela dokument på hundratals sidor. Det gör det oslagbart för juridiska texter, långa rapporter, bokmanuskript eller teknisk dokumentation. Claude är också känt för sin förmåga att uttrycka osäkerhet ärligt – istället för att hitta på ett svar säger det "det är jag osäker på".</p>
+<p><strong>Claude är bäst för:</strong> analys av långa dokument, juridik och policy, känslig kommunikation, texter som kräver nyans och situationer där du vill ha ett ärligt svar snarare än ett bekräftande.</p>
+<p><strong>Svagheter:</strong> Claudes ekosystem är mindre – färre integrationer, inga inbyggda bildgenereringsfunktioner. Det kan också vara mer försiktigt än nödvändigt i vissa situationer.</p>
+<p><strong>Pris:</strong> Gratisversion finns. Pro-prenumeration kostar ca 220 kr/månad.</p>
+
+<h2>Gemini – Googlarens AI med direktlinje till sökmotorn</h2>
+<p>Googles Gemini har en unik fördel: inbyggd koppling till sökmotorn och Google Workspace. Det innebär att Gemini kan hämta aktuell information från webben i realtid. Om du arbetar i Google Docs, Gmail eller Google Sheets är Gemini det naturliga valet – det lever direkt i de verktygen utan att du behöver byta flik.</p>
+<p><strong>Gemini är bäst för:</strong> research och faktasökning som kräver aktuell information, Google Workspace-integration, uppgifter som kräver webbsökning i realtid.</p>
+<p><strong>Svagheter:</strong> Ojämn kvalitet på svenska jämfört med engelska, sämre på kreativt skrivande, och med Googles datamodell finns integritetsfrågor värda att beakta.</p>
+<p><strong>Pris:</strong> Gratisversion finns. Advanced ingår i Google One AI Premium, ca 220 kr/månad.</p>
+
+<h2>Direkt jämförelse: Vad ska du använda för vad?</h2>
+<p><strong>Skriva och redigera texter:</strong> Claude för djup och nuans, ChatGPT för snabb kreativitet och volym.</p>
+<p><strong>Kod och programmering:</strong> Båda är starka. ChatGPT har något bättre ekosystem, Claude ger ofta mer pedagogiska förklaringar.</p>
+<p><strong>Research och faktasökning:</strong> Gemini om du behöver aktuell information, Perplexity AI om du vill ha källhänvisningar.</p>
+<p><strong>Analysera ett långt dokument:</strong> Claude, utan tvekan.</p>
+<p><strong>Integration i Office-appar:</strong> Microsoft Copilot för Microsoft 365, Gemini för Google Workspace.</p>
+
+<h2>Vilket ska du börja med?</h2>
+<p>Om du är ny på AI-verktyg: börja med ChatGPT. Det är mest känt, har bäst dokumentation och det är lättast att hitta hjälp och guider. Testa gratisversionen i en månad. Jobbar du mycket med text och analys? Prova Claude parallellt. Lever du i Google Workspace? Ge Gemini en chans.</p>
+<p>Den viktigaste lärdomen är enkel: att äga tre verktyg halvhjärtat är sämre än att behärska ett till fullo. Välj ett, lär dig det ordentligt, och lägg sedan till fler när du vet vad du saknar.</p>
+    `,
     user_profiles: {
-      name: 'Maria Lindqvist',
-      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Maria'
-    }
+      name: 'Sara Lindqvist',
+      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sara',
+    },
   },
+
+  // ─────────────────────────────────────────────
+  // ARTIKEL 2
+  // ─────────────────────────────────────────────
   {
     id: '2',
-    slug: 'k3-redovisning-bostadsrattsforeningar-2026',
-    title: 'Obligatorisk K3-redovisning för alla BRF från 2026',
-    subtitle: 'Bokföringsnämndens beslut – så förbereder du föreningen',
-    excerpt: 'Alla bostadsrättsföreningar måste gå över från K2 till K3-redovisning från och med räkenskapsår som inleds efter 31 december 2025. Här är vad det innebär.',
-    content: `
-      <h2>Tvingande byte av redovisningsmetod</h2>
-      <p>Bokföringsnämnden (BFN) har beslutat att alla bostadsrättsföreningar och bostadsföreningar ska upprätta årsredovisning enligt K3 – Årsredovisning och koncernredovisning (BFNAR 2012:1) för räkenskapsår som inleds efter den 31 december 2025.</p>
-      
-      <p>Detta innebär att föreningar som idag använder K2-regelverket måste göra övergången till K3 senast för räkenskapsåret som börjar 2026. För de flesta föreningar med kalenderår som räkenskapsår blir det alltså årsredovisningen för 2026 som ska upprättas enligt K3.</p>
-      
-      <h2>Vad är skillnaden mellan K2 och K3?</h2>
-      <p>K2 är ett förenklat regelverk som har varit tillgängligt för mindre företag, medan K3 är ett mer omfattande regelverk som ställer högre krav på redovisningen.</p>
-      
-      <p>De viktigaste skillnaderna inkluderar:</p>
-      <ul>
-        <li>Mer detaljerad värdering av tillgångar och skulder</li>
-        <li>Utökade krav på upplysningar i noterna</li>
-        <li>Mer omfattande redovisning av finansiella instrument</li>
-        <li>Ökade krav på värderingsprinciper och jämförelsetal</li>
-        <li>Mer komplexa regler för olika typer av transaktioner</li>
-      </ul>
-      
-      <h2>Varför görs förändringen?</h2>
-      <p>Beslutet att införa K3 för alla bostadsrättsföreningar motiveras av behovet av en mer enhetlig och transparent redovisning. K3-regelverket ger en mer rättvisande bild av föreningens ekonomiska ställning och resultat.</p>
-      
-      <p>Förändringen är också en följd av de tidigare lagändringarna som kräver att alla föreningar lämnar in sin årsredovisning till Bolagsverket. För att säkerställa kvalitet och jämförbarhet behövs ett mer omfattande regelverk.</p>
-      
-      <h2>Praktiska konsekvenser för styrelsen</h2>
-      <p>Övergången till K3 kommer att kräva mer arbete från både styrelsen och de som ansvarar för föreningens redovisning:</p>
-      <ul>
-        <li>Mer tid behövs för att upprätta årsredovisningen</li>
-        <li>Ökade kostnader för redovisning och revision kan förväntas</li>
-        <li>Styrelsen behöver förstå mer komplexa redovisningsfrågor</li>
-        <li>Kompetenskrav ökar för de som arbetar med ekonomin</li>
-        <li>Behov av utbildning för styrelseledamöter</li>
-      </ul>
-      
-      <h2>Hur förbereder ni er bäst?</h2>
-      <p>För att göra övergången så smidig som möjligt rekommenderas följande åtgärder:</p>
-      <ul>
-        <li>Ta kontakt med er förvaltare eller redovisningskonsult i god tid</li>
-        <li>Boka utbildning för styrelsen om K3-regelverket</li>
-        <li>Granska föreningens nuvarande redovisning och identifiera förändringsområden</li>
-        <li>Budgetera för ökade kostnader relaterade till övergången</li>
-        <li>Säkerställ att ert ekonomisystem kan hantera K3-kraven</li>
-        <li>Planera för mer tid i årsredovisningsprocessen</li>
-      </ul>
-      
-      <h2>Tillämpning för nystartade föreningar</h2>
-      <p>K3 ska även tillämpas av nystartade föreningar som inleder sin verksamhet efter den 30 juni 2025 om det första räkenskapsåret är förlängt och avslutas den 31 december 2026 eller senare.</p>
-      
-      <h2>Kompletterande regler fortsätter att gälla</h2>
-      <p>Oavsett om föreningen tidigare tillämpat K2 eller K3 ska den även fortsättningsvis tillämpa BFN:s kompletterande regler för bostadsrättsföreningar (BFNAR 2023:1). Dessa regler hanterar specifika frågor som är relevanta för just bostadsrättsföreningar.</p>
-      
-      <p>Det är viktigt att styrelsen förstår att både K3 och de kompletterande reglerna måste följas för att årsredovisningen ska vara korrekt upprättad.</p>
-    `,
-    header_image_url: 'https://images.unsplash.com/photo-1554224311-beee2091fdb0?w=800',
-    published_at: '2025-01-20T10:30:00Z',
+    slug: 'promptteknik-fem-principer-som-forandrar-dina-resultat',
+    title: '5 promptprinciper som förändrar hur du arbetar med AI',
+    subtitle: 'Det är inte verktyget som avgör – det är frågan',
+    excerpt:
+      'De flesta använder AI som en sökmotor och undrar varför svaren är mediokra. De som verkligen sparar tid har lärt sig att ställa rätt frågor. Här är fem principer som gör störst skillnad.',
+    header_image_url:
+      'https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=800',
+    published_at: '2026-01-22T10:00:00Z',
     type: 'article',
-    category: 'Ekonomi & Redovisning',
+    category: 'Promptteknik',
     status: 'published',
+    content: `
+<h2>Varför de flesta är besvikna på AI</h2>
+<p>Det finns ett mönster i hur folk introduceras till AI-verktyg. De öppnar ChatGPT, skriver en fråga ungefär som de skulle googla, får ett generiskt svar, tänker "jo, det var ju inte så imponerande" – och stänger fliken. Sedan hör de om någon som sparar tre timmar om dagen med AI och förstår inte varför de inte upplever samma sak.</p>
+<p>Skillnaden är nästan aldrig verktyget. Det är prompten – hur du formulerar din fråga och ditt uppdrag. Samma AI-modell kan ge dig ett oanvändbart svar eller ett svar som sparar dig två timmar, beroende helt på hur du kommunicerar med den. Det är som skillnaden mellan att beställa "mat" och att beställa "en vegetarisk pasta med parmesan, al dente, medelstor portion, inte för kryddig". Kocken är densamma. Resultaten är helt olika.</p>
+
+<h2>Princip 1: Ge AI en roll och ett sammanhang</h2>
+<p>Det enklaste och kraftfullaste du kan göra är att börja varje prompt med att definiera vem AI ska vara i den konversationen. "Du är en erfaren copywriter som specialiserar sig på B2B-kommunikation" ger dramatiskt bättre resultat än att bara skriva din fråga.</p>
+<p>Det fungerar för att AI-modeller är tränade på enorma mängder text från alla möjliga sammanhang. Genom att definiera en roll hjälper du modellen att hitta rätt del av sin träning och aktivera det tankesätt, den ton och de kunskaper som är relevanta. Exempel på roller som fungerar bra: "erfaren projektledare", "skicklig redaktör", "pedagog som förklarar komplexa ämnen enkelt", "kritisk granskare som letar efter svagheter i argument".</p>
+
+<h2>Princip 2: Specificera format, längd och struktur</h2>
+<p>AI antar ingenting om hur du vill ha svaret om du inte säger det. Det kan ge dig en essä när du ville ha en lista, eller tre meningar när du ville ha en djupanalys. Var explicit. "Svara i punktlista med max fem punkter" är tydligare än att hoppas att AI gissar rätt. "Strukturera svaret med rubriker" gör långa svar navigerbara. "Ge mig tre alternativ att välja bland" är ovärderligt när du vill ha variation.</p>
+<p>Andra formateringskommandon som sparar tid: "Skriv i tabellformat", "Sammanfatta i tre meningar", "Presentera för- och nackdelar separat", "Börja med slutsatsen, förklara sedan varför".</p>
+
+<h2>Princip 3: Ge kontext som en bra briefing</h2>
+<p>Tänk dig att du ska anlita en frilansare för en uppgift. Du skulle inte bara skicka uppgiften utan bakgrundsinformation – du skulle förklara vem kunden är, vad syftet är, vilka begränsningar som finns och vad ett bra resultat ser ut. Behandla AI på samma sätt.</p>
+<p>Berätta vem målgruppen är, vad syftet är, vilken ton som passar och vad du redan vet. En enkel minnesregel: vad skulle du berätta för en ny, duktig kollega som ska lösa samma uppgift för första gången?</p>
+
+<h2>Princip 4: Visa med exempel</h2>
+<p>Exempel är ett av de kraftfullaste verktygen i promptteknik och det är underanvänt. "Skriv en rubrik i stil med: Så sparar du 3 timmar om dagen utan att jobba hårdare" är hundra gånger tydligare än "skriv en bra rubrik". Du ger modellen en mall att matcha – ton, längd, struktur och känsla – istället för en abstrakt instruktion att tolka. Det fungerar för all typ av innehåll: mejl, presentationsrubriker, sammanfattningar, tonalitet.</p>
+
+<h2>Princip 5: Iterera i konversationen – redigera inte prompten</h2>
+<p>Det vanligaste misstaget är att skriva om hela prompten från noll när svaret inte är exakt rätt. Det ignorerar en av AI:s största styrkor: förmågan att hålla en konversation och bygga vidare på vad som sagts. Ge istället feedback i konversationen. "Bra, men gör det 30% kortare" fungerar utmärkt. "Tonläget är för formellt – skriv om det mer avslappnat" ger precist resultat. Tänk på det som att samarbeta med en skicklig assistent snarare än att programmera en maskin.</p>
+
+<h2>En mall att spara</h2>
+<p>Här är en grundstruktur du kan återanvända för komplexa uppgifter:</p>
+<p><strong>[Roll]</strong> Du är en [expert/roll] med erfarenhet av [relevant område].<br>
+<strong>[Uppgift]</strong> Din uppgift är att [konkret uppgift].<br>
+<strong>[Kontext]</strong> Bakgrunden är [information]. Målgruppen är [vem]. Syftet är [varför].<br>
+<strong>[Format]</strong> Svara med [format, längd, struktur].<br>
+<strong>[Exempel]</strong> Tonen ska likna: [exempel].</p>
+<p>Du behöver inte använda alla delar varje gång. Men ju mer komplex uppgiften är, desto mer lönar det sig att investera 2–3 minuter i en välstrukturerad prompt snarare än att skriva om ett halvbra svar tre gånger.</p>
+    `,
     user_profiles: {
-      name: 'Anders Bergström',
-      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Anders'
-    }
+      name: 'Jonas Eriksson',
+      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jonas',
+    },
   },
+
+  // ─────────────────────────────────────────────
+  // ARTIKEL 3
+  // ─────────────────────────────────────────────
   {
     id: '3',
-    slug: 'lagandring-ombyggnad-tillstand-2023',
-    title: 'Skärpta regler för ombyggnader – detta kräver nu tillstånd',
-    subtitle: 'Lagändring från 2023 som många styrelser missar',
-    excerpt: 'Sedan januari 2023 gäller nya, tydligare regler för vilka ändringar i lägenheter som kräver styrelsens tillstånd. Här är vad som ändrats och hur hyresnämnden tolkar reglerna.',
-    content: `
-      <h2>Tydligare regler från 1 januari 2023</h2>
-      <p>Den 1 januari 2023 trädde en lagändring i kraft som gör det tydligare vilka ändringar och installationer i en bostadsrättslägenhet som kräver styrelsens tillstånd. Ändringen berör paragraf 7 i kapitel 7 i bostadsrättslagen.</p>
-      
-      <p>Syftet med lagändringen är att minska konflikter mellan medlemmar och mellan medlemmar och styrelse genom att göra reglerna mer precisa och lättare att förstå.</p>
-      
-      <h2>Vad krävs nu tillstånd för?</h2>
-      <p>Även tidigare behövde bostadsrättshavaren ha styrelsens tillstånd för vissa åtgärder, men nu har listan utökats. Tillstånd krävs nu för:</p>
-      <ul>
-        <li>Ingrepp i bärande konstruktioner</li>
-        <li>Ändringar av ledningar för avlopp, värme, vatten eller gas</li>
-        <li>Nyinstallationer av ledningar (nytt från 2023)</li>
-        <li>Installationer och ändringar som gäller ventilation</li>
-        <li>Ändringar av eldstad och rökkanal</li>
-        <li>Andra åtgärder som påverkar brandskyddet</li>
-        <li>Alla åtgärder i lägenheter med särskilt historiskt, kulturhistoriskt, miljömässigt eller konstnärligt värde som påverkar det värdet</li>
-      </ul>
-      
-      <h2>Var går gränsen för lägenheten?</h2>
-      <p>En viktig fråga som hyresnämnden har tagit ställning till är var gränsen för lägenheten går. Enligt nämndens tolkning slutar lägenheten under ytskikten. Det innebär att:</p>
-      <ul>
-        <li>Ändringar utanför en lägenhet alltid kräver föreningens tillstånd</li>
-        <li>Tapetsering och byte av golv normalt inte kräver tillstånd</li>
-        <li>Ytskikt, dvs. vägg-, tak- och golvytor, är bostadsrättshavarens ansvar</li>
-      </ul>
-      
-      <h2>Hur hyresnämnden bedömer tillståndsansökningar</h2>
-      <p>Sedan lagändringen trädde i kraft har ett stort antal ärenden prövats i hyresnämnden. Detta ger vägledning för hur reglerna tillämpas i praktiken.</p>
-      
-      <p>I 17 granskade ärenden har bostadsrättshavare fått avslag eller avvisats i 16 av fallen. De vanligaste ärendena har handlat om:</p>
-      <ul>
-        <li>Flytt av kök</li>
-        <li>Utökande av badrum</li>
-        <li>Uppförande av staket runt altan</li>
-      </ul>
-      
-      <p>De genomgående motiven till avslag har varit:</p>
-      <ul>
-        <li>Bristande tekniska utredningar</li>
-        <li>Otillräcklig hänsyn till grannar och huset i övrigt</li>
-        <li>Svag konsekvensanalys</li>
-        <li>Åtgärden uppenbart utanför lägenhetens gräns</li>
-      </ul>
-      
-      <h2>Exempel på beviljat tillstånd</h2>
-      <p>I endast ett av de granskade ärendena beviljade hyresnämnden tillstånd. Det handlade om förlängning av ett värmerör för att flytta ett element. Bostadsrättshavaren visade med två enklare utlåtanden från rörmokaren att ändringen kunde göras utan negativa konsekvenser för föreningen.</p>
-      
-      <p>Detta exempel visar att hyresnämnden kan bevilja tillstånd, men att det krävs välunderbyggd dokumentation.</p>
-      
-      <h2>Höga krav på utredningar</h2>
-      <p>En viktig lärdom från hyresnämndens avgöranden är att nämnden ställer höga krav på utredningarna. För att ha chans att få tillstånd måste bostadsrättshavaren:</p>
-      <ul>
-        <li>Lämna in ritningar på den förändring som planeras</li>
-        <li>Få utlåtande från tekniskt sakkunnig</li>
-        <li>Presentera en bedömning av konsekvenserna</li>
-        <li>Visa hänsyn till grannar och huset i övrigt</li>
-        <li>Dokumentera att brandskyddet inte äventyras</li>
-      </ul>
-      
-      <h2>Praktiska råd till styrelsen</h2>
-      <p>För att hantera tillståndsansökningar på ett bra sätt rekommenderas följande:</p>
-      <ul>
-        <li>Formulera tydlig information till medlemmarna om vilka ändringar som kräver tillstånd</li>
-        <li>Specificera vilket underlag som krävs för tillståndsansökan</li>
-        <li>Framhåll att det underlag ni kräver är detsamma som hyresnämnden kommer att kräva</li>
-        <li>Fråga berörda grannar om deras synpunkter på ansökan</li>
-        <li>Gör en bedömning om föreningens byggnader är särskilt skyddsvärda</li>
-        <li>Informera medlemmarna om eventuella skyddsvärden</li>
-      </ul>
-      
-      <h2>Konsekvenser vid otillåtna åtgärder</h2>
-      <p>Om en medlem utför en otillåten åtgärd ska styrelsen inom två månader från att den fått kännedom om ändringen uppmana medlemmen att omgående återställa det som gjorts.</p>
-      
-      <p>Om detta inte sker kan medlemmen bli uppsagd och tvingas flytta. En uppsägning kräver dock att ändringen är allvarlig och gäller inte om medlemmen rättar till åtgärden eller ansöker om tillstånd och får det beviljat av hyresnämnden.</p>
-      
-      <p>Föreningen kan även välja att rätta till ombyggnationen på bostadsrättshavarens bekostnad, men detta gäller endast vid allvarliga ändringar.</p>
-      
-      <h2>Viktigt att veta om retroaktivitet</h2>
-      <p>Förfarandet gäller endast sedan lagändringarna trädde i kraft. Ombyggnationer som är gjorda före den 1 januari 2023 kan inte tas upp i hyresnämnden enligt de nya reglerna.</p>
-      
-      <h2>Överklagandemöjlighet</h2>
-      <p>Den bostadsrättshavare som är missnöjd med styrelsens beslut om ett nekat tillstånd kan begära att frågan prövas i hyresnämnden. Hyresnämndens beslut kan i sin tur överklagas till Svea hovrätt.</p>
-    `,
-    header_image_url: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800',
-    published_at: '2025-02-01T14:00:00Z',
+    slug: 'ai-sakerhet-gdpr-vad-far-du-lagga-in-pa-jobbet',
+    title: 'AI och säkerhet: Vad får du egentligen lägga in i ChatGPT på jobbet?',
+    subtitle: 'GDPR, sekretess och sunt förnuft – en praktisk guide',
+    excerpt:
+      'Många använder AI-verktyg på jobbet utan att veta vad som gäller. Det finns reella risker – men också enkla riktlinjer som gör att du kan använda AI tryggt och effektivt.',
+    header_image_url:
+      'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800',
+    published_at: '2026-02-05T11:00:00Z',
     type: 'article',
-    category: 'Juridik & Lagstiftning',
+    category: 'Säkerhet & Policy',
     status: 'published',
+    content: `
+<h2>Det korta svaret</h2>
+<p>Lägg aldrig in personuppgifter, kunddata, affärshemligheter eller konfidentiell information i gratisversioner av AI-verktyg utan att ha kontrollerat datapolicyn. Det långa svaret är mer nyanserat – och mer användbart.</p>
+
+<h2>Vad händer med data du matar in?</h2>
+<p>Det är en fråga fler borde ställa sig. Svaret varierar beroende på vilket verktyg du använder, vilken version och om du är inloggad med ett privat konto eller ett företagskonto. Gratisversionerna av ChatGPT kan som standard använda dina konversationer för att förbättra och träna modellerna. Det går att stänga av i inställningarna under "Data controls" – men det kräver att du aktivt gör det, och de flesta vet inte om att inställningen finns.</p>
+<p>ChatGPT Team, Enterprise och API-versionen har starkare dataskydd och tränar som standard inte på kunddata. Claude Pro och Anthropic API fungerar liknande. Google Workspace och Microsoft 365 har enterprise-avtal som skyddar din data om din organisation har rätt licens. Den praktiska lärdomen: kontrollera om din organisation har ett dataskyddsavtal med leverantören innan du antar att din data är skyddad.</p>
+
+<h2>GDPR – vad det faktiskt innebär i praktiken</h2>
+<p>GDPR kräver att personuppgifter behandlas lagligt, ändamålsenligt och med skydd. Om du klistrar in en lista med kundnamn och e-postadresser i ChatGPT för att "snygga till" ett utskick, har du potentiellt överfört personuppgifter till ett tredjepartsbolag utan en rättslig grund för det. Det kan vara ett GDPR-brott – och det är du och din arbetsgivare som är ansvariga, inte OpenAI.</p>
+<p>Personuppgifter som kräver extra försiktighet: namn kombinerat med kontaktuppgifter, personnummer, hälsodata, ekonomisk information, känsliga kategorier som etnicitet, politisk åsikt eller religion.</p>
+
+<h2>Tre enkla regler som löser 90% av problemen</h2>
+<p><strong>Regel 1: Anonymisera innan du klistrar in.</strong> Ersätt kundnamn med "Kund A", personnummer med "XXXXXX-XXXX", specifika platser med generiska beskrivningar. Du kan sedan ersätta tillbaka när AI levererat sitt svar.</p>
+<p><strong>Regel 2: Kontrollera vad din organisation tillåter.</strong> Allt fler arbetsgivare har AI-policys. Om din organisation inte har en – ta initiativet att fråga IT eller HR. En enkel policy sparar enormt mycket problem.</p>
+<p><strong>Regel 3: Dubbelkolla fakta alltid.</strong> AI kan presentera felaktig information med stor självförtroende. Kontrollera siffror, citat och juridisk information mot primärkällor innan du använder dem.</p>
+
+<h2>Vad är det helt okej att använda AI för på jobbet?</h2>
+<p>Det är värt att poängtera att det finns enormt mycket du kan göra utan risk:</p>
+<ul>
+  <li>Skriva och redigera generella texter, mejl och presentationer utan känslig information</li>
+  <li>Brainstorming och idégenerering</li>
+  <li>Kodning och tekniska problemlösningar</li>
+  <li>Research och faktafrågor om offentlig information</li>
+  <li>Sammanfatta offentliga rapporter och artiklar</li>
+  <li>Anonymiserade kundcase och scenarion</li>
+  <li>Förbereda mötesagendor och strukturera presentationer</li>
+</ul>
+
+<h2>Hur sätter du upp en AI-policy för ditt team?</h2>
+<p>Om du är chef eller ansvarar för ett team är det värt att avsätta en timme för att skriva en enkel AI-policy. Tre punkter räcker för de flesta organisationer:</p>
+<p><strong>1. Godkända verktyg:</strong> Specificera vilka AI-verktyg som är okej att använda, gärna företagsversioner med dataskyddsavtal.</p>
+<p><strong>2. Vad som aldrig ska läggas in:</strong> Personuppgifter, kunddata, affärshemligheter, lösenord, finansiell information.</p>
+<p><strong>3. Verifiering:</strong> Allt AI-genererat innehåll ska granskas av en människa innan det publiceras, skickas till kund eller används som beslutsunderlag.</p>
+
+<h2>Framtiden: Organisationsintern AI</h2>
+<p>Allt fler organisationer börjar använda egna AI-lösningar som körs på deras egna servrar eller i ett dedikerat molnutrymme. Det löser dataskyddsproblemen elegant – din data lämnar aldrig organisationen. Om du arbetar med känslig data i en stororganisation är det värt att fråga IT om detta är något som är på gång.</p>
+    `,
     user_profiles: {
-      name: 'Eva Johansson',
-      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Eva'
-    }
+      name: 'Anders Bergström',
+      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Anders',
+    },
   },
+
+  // ─────────────────────────────────────────────
+  // ARTIKEL 4
+  // ─────────────────────────────────────────────
   {
     id: '4',
-    slug: '50-arig-underhallsplan-ekonomisk-plan-2024',
-    title: '50-årig underhållsplan – nytt krav i den ekonomiska planen',
-    subtitle: 'Lagändring från 2024 som påverkar nyproduktion och nya upplåtelser',
-    excerpt: 'Från 1 januari 2024 ska den ekonomiska planen innehålla en teknisk underhållsplan som visar fastighetens underhålls- och återinvesteringsbehov de kommande 50 åren.',
-    content: `
-      <h2>Skärpta krav på ekonomisk plan</h2>
-      <p>Den 1 januari 2024 trädde ändringar i kraft som påverkar upprättandet av den ekonomiska planen för bostadsrättsföreningar. Vid denna tidpunkt började även ändringar rörande intygsgivarnas arbete att gälla.</p>
-      
-      <p>De nya reglerna är en del av lagändringarna i Lag (2022:1026) som ändrar bostadsrättslagen. Syftet med lagändringarna är att skapa en tryggare bostadsrätt och i ett tidigt skede upplysa om de ekonomiska åtaganden som köparna tar.</p>
-      
-      <h2>Vad är en ekonomisk plan?</h2>
-      <p>Den ekonomiska planen är ett dokument som upprättas när nya bostadsrätter upplåts, främst i samband med nyproduktion. Planen ska ge en tydlig bild av föreningens ekonomiska förutsättningar och framtida behov.</p>
-      
-      <p>Den ekonomiska planen granskas av en oberoende intygsgivare som ska bekräfta att planen är ekonomiskt hållbar.</p>
-      
-      <h2>Krav på 50-årig underhållsplan</h2>
-      <p>Det centrala i lagändringen är att den ekonomiska planen nu måste innehålla en teknisk underhållsplan som visar fastighetens underhålls- och återinvesteringsbehov de kommande 50 åren.</p>
-      
-      <p>Denna långsiktiga planering ska ge köpare en bättre förståelse för vilka kostnader som kan förväntas över tid och hur föreningen planerar att hantera dessa.</p>
-      
-      <h2>Vad ska underhållsplanen innehålla?</h2>
-      <p>Den 50-åriga underhållsplanen ska omfatta:</p>
-      <ul>
-        <li>Identifiering av alla fastighetens komponenter och deras förväntade livslängd</li>
-        <li>Planerade tidpunkter för underhåll och utbyte</li>
-        <li>Uppskattade kostnader för varje åtgärd</li>
-        <li>Bedömning av föreningens förmåga att finansiera dessa åtgärder</li>
-        <li>Analys av hur åtgärderna påverkar månadsavgiften över tid</li>
-      </ul>
-      
-      <h2>Boverkets riktlinjer</h2>
-      <p>Boverket har tagit fram riktlinjer för hur den 50-åriga underhållsplanen ska upprättas. Dessa riktlinjer ger vägledning om:</p>
-      <ul>
-        <li>Vilken information som ska ingå</li>
-        <li>Hur beräkningar ska göras</li>
-        <li>Vilken dokumentation som krävs</li>
-        <li>Hur osäkerhetsfaktorer ska hanteras</li>
-      </ul>
-      
-      <h2>Skärpta krav på intygsgivare</h2>
-      <p>Samtidigt som kraven på den ekonomiska planen skärps, införs också nya regler för intygsgivare. Syftet är att säkerställa oberoende och förhindra intressekonflikter.</p>
-      
-      <p>De nya reglerna innebär att:</p>
-      <ul>
-        <li>Intygsgivare inte längre får arbeta tillsammans med en och samma intygsgivare vid alltför många tillfällen</li>
-        <li>Detta för att förhindra att förtroende och opartiskhet rubbas</li>
-        <li>Boverket har tagit fram riktlinjer för hur ofta samma intygsgivare får anlitas</li>
-      </ul>
-      
-      <h2>Andra ändringar i bostadsrättslagen från 2023-2024</h2>
-      <p>De skärpta kraven på ekonomisk plan är en del av ett större paket av ändringar. Andra viktiga förändringar inkluderar:</p>
-      <ul>
-        <li>Krav på att upplåtelseavtal ska vara skriftligt och undertecknat av båda parter</li>
-        <li>Datum för tillträde ska anges om tillträde inte sker i anslutning till upplåtelse</li>
-        <li>Borttagande av möjligheten att på föreningsstämma slå fast att anskaffningskostnaden för föreningens fastighet är känd</li>
-        <li>Borttagande av möjligheten att låta en medlem ha en majoritet av rösterna under en period</li>
-        <li>En medlem får inte ha mer än en röst på föreningsstämman</li>
-      </ul>
-      
-      <h2>Vem berörs av ändringarna?</h2>
-      <p>Lagändringarna påverkar främst:</p>
-      <ul>
-        <li>Utvecklare av nyproduktionsprojekt</li>
-        <li>Föreningar som upplåter nya bostadsrätter</li>
-        <li>Intygsgivare som granskar ekonomiska planer</li>
-        <li>Köpare av nyproducerade bostadsrätter</li>
-      </ul>
-      
-      <p>För befintliga föreningar där alla lägenheter redan är upplåtna påverkas inte den löpande verksamheten direkt av dessa ändringar. Däremot är det viktigt att styrelsen har kunskap om de nya reglerna för att kunna ge råd till medlemmar och förstå den ekonomiska planens betydelse.</p>
-      
-      <h2>Fördelar med de nya reglerna</h2>
-      <p>De skärpta kraven på ekonomisk plan och underhållsplan ger flera fördelar:</p>
-      <ul>
-        <li>Köpare får bättre information om framtida kostnader</li>
-        <li>Risken för ekonomiska överraskningar minskar</li>
-        <li>Långsiktig planering förbättras</li>
-        <li>Kvaliteten på ekonomiska planer höjs</li>
-        <li>Transparensen ökar</li>
-      </ul>
-      
-      <h2>Utmaningar med implementeringen</h2>
-      <p>Att upprätta en 50-årig underhållsplan innebär utmaningar:</p>
-      <ul>
-        <li>Svårt att förutse framtida kostnader och livslängd på komponenter</li>
-        <li>Teknisk utveckling kan förändra förutsättningarna</li>
-        <li>Kräver expertis inom både teknik och ekonomi</li>
-        <li>Ökade kostnader för framtagande av ekonomisk plan</li>
-      </ul>
-      
-      <p>Trots dessa utmaningar är syftet tydligt: att ge köpare en mer realistisk bild av vad det innebär att äga en bostadsrätt över tid.</p>
-    `,
-    header_image_url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800',
-    published_at: '2025-02-10T11:00:00Z',
+    slug: 'ai-for-egenforetagare-vaxa-utan-att-anstalla',
+    title: 'AI för egenföretagare: 6 sätt att växa utan att anställa',
+    subtitle: 'Hur soloföretagare använder AI som sin digitala assistent',
+    excerpt:
+      'Som soloföretagare är tid din knappaste resurs. AI kan fungera som din copywriter, analytiker, kundtjänst och projektledare – dygnet runt, utan lön. Så här ser det ut i praktiken.',
+    header_image_url:
+      'https://images.unsplash.com/photo-1553484771-371a605b060b?w=800',
+    published_at: '2026-02-19T09:00:00Z',
     type: 'article',
-    category: 'Ekonomi & Redovisning',
+    category: 'Egenföretagare',
     status: 'published',
+    content: `
+<h2>Asymmetrin som förändrar spelplanen</h2>
+<p>Stora företag har team av specialister: en marknadsavdelning, en ekonomiavdelning, en säljavdelning. Som egenföretagare är du allt detta på en gång. Det är en orimlig ekvation – och det är precis den ekvationen som AI börjar förändra på allvar. Det handlar inte om att AI ersätter din expertis eller din kundrelation. Det handlar om att AI kan ta hand om uppgifter som kräver tid och struktur men inte nödvändigtvis din unika kompetens.</p>
+
+<h2>1. Offerter och kundkommunikation</h2>
+<p>En välformulerad offert är skillnaden mellan att vinna och förlora ett uppdrag. Men att skriva en ny offert från grunden för varje kund tar tid – tid du inte har mitt i ett pågående projekt. Med AI: beskriv kunden, uppdraget, din lösning och ditt pris i punktform. Ge AI din befintliga offertmall som referens för ton och struktur. Få tillbaka en professionell offert på fem minuter. Du granskar, anpassar och skickar. Det som brukade ta 1–2 timmar tar nu 20 minuter. Samma princip gäller uppföljningsmejl, avtalsutkast och kundpresentationer.</p>
+
+<h2>2. Marknadsföring och innehållsskapande</h2>
+<p>Konsekvent närvaro på LinkedIn och i nyhetsbrev bygger varumärke och genererar leads. Det är också det som oftast faller bort när projekten staplas på varandra. Med AI kan du skapa en månads innehåll på ett par timmar. Ge verktyget din positionering, dina viktigaste ämnen, ton och målgrupp. Generera utkast, välj de bästa, redigera med din röst och schemalägg. Det viktiga: använd AI för att producera volym, men lägg din tid på att redigera med din unika röst och erfarenhet. Det är kombinationen av AI-hastighet och mänsklig autenticitet som fungerar.</p>
+
+<h2>3. Research och omvärldsanalys</h2>
+<p>Att hålla sig uppdaterad om sin bransch, analysera konkurrenter eller förstå ett nytt kundområde kräver tid. Nu kan du klistra in de viktigaste artiklarna och rapporterna i Claude och be om en sammanfattning med de insikter som är mest relevanta för just din fråga. Verktyget Perplexity AI är utmärkt för research med källhänvisningar – det söker, sammanfattar och citerar, allt i ett flöde.</p>
+
+<h2>4. Administration och ekonomi</h2>
+<p>Bokföring, fakturering, utgiftskategorisering – nödvändiga uppgifter som egenföretagare ofta skjuter upp. Verktyg som Fortnox och Visma har inbyggd AI som automatiserar kategorisering och skapar fakturaunderlag. Du kan dessutom använda ChatGPT eller Claude för att förstå momsregler och skatteavdrag utan att behöva ringa en revisor för varje enkel fråga. En viktig brasklapp: för komplexa skattefrågor ersätter AI inte en specialist.</p>
+
+<h2>5. Kundservice och FAQ</h2>
+<p>Om du har en hemsida och får återkommande frågor kan en AI-driven FAQ-bot svara dygnet runt utan att du behöver vara uppkopplad. Verktyg som Tidio och Intercom har gratisversioner med AI-chatbottar som du tränar med din specifika information. Du skapar innehållet, AI hanterar frågorna. Du svarar bara på de komplexa ärendena som kräver din personliga bedömning.</p>
+
+<h2>6. Bollplank och problemlösning</h2>
+<p>En av de mest underskattade användningarna: AI som mentor. Har du ett komplicerat kundproblem? Beskriv det för Claude och be om tre möjliga lösningsstrategier med för- och nackdelar. Funderar du på ett strategiskt beslut? Be AI utmana dina antaganden. Det är inte att AI har rätt svar – det är att processen att formulera problemet och diskutera det med ett verktyg som ställer följdfrågor ofta ger klarhet.</p>
+
+<h2>Kom igång utan att göra det för stort</h2>
+<p>Identifiera den uppgift du lägger mest tid på som inte kräver din unika expertis. Det är din startpunkt. Testa AI-hjälp på just den uppgiften i en vecka. Mät om det sparar tid. Bygg sedan gradvis vidare. Det vanligaste misstaget är att försöka implementera allt på en gång – det leder till överväldigande känsla och ingenting fastnar. En uppgift, en rutin, bygg gradvis.</p>
+    `,
     user_profiles: {
-      name: 'Thomas Svensson',
-      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Thomas'
-    }
+      name: 'Lisa Johansson',
+      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa',
+    },
   },
+
+  // ─────────────────────────────────────────────
+  // ARTIKEL 5
+  // ─────────────────────────────────────────────
   {
     id: '5',
-    slug: 'digitala-foreningsstammor-lagandring-2024',
-    title: 'Helt digitala föreningsstämmor – så fungerar de nya reglerna',
-    subtitle: 'Lagändring från 2024 som kräver stadgeändring',
-    excerpt: 'Från årsskiftet 2024 tillåter lagen bostadsrättsföreningar att hålla helt digitala föreningsstämmor. Men det krävs en ändring av stadgarna. Här är vad du behöver veta.',
-    content: `
-      <h2>Nya möjligheter från 2024</h2>
-      <p>Från årsskiftet 2024 tillåter bostadsrättslagen och den överordnade lagen om ekonomiska föreningar att bostadsrättsföreningar håller föreningsstämmor helt digitalt. Detta är en viktigt förändring som ger föreningarna större flexibilitet.</p>
-      
-      <h2>Krav på stadgeändring</h2>
-      <p>En förutsättning för att stämman ska kunna genomföras helt digitalt är dock att föreningens stadgar föreskriver att det ska vara tillåtet. Detta innebär att föreningar som vill utnyttja möjligheten måste genomföra en stadgeändring.</p>
-      
-      <p>Undantaget från kravet på stadgeändring är om det föreligger särskilda omständigheter, såsom vid en epidemi. I sådana fall får helt digitala stämmor hållas även utan att stadgarna föreskriver sådan rätt.</p>
-      
-      <h2>Hybridstämmor fortsatt tillåtna</h2>
-      <p>Så kallade hybridstämmor – där stämman hålls på en fysisk plats men medlemmar även kan medverka på distans – kommer även fortsättningsvis att tillåtas utan att stadgarna behöver ändras.</p>
-      
-      <p>Detta ger föreningar möjlighet att erbjuda både fysisk närvaro och digitalt deltagande, vilket kan öka tillgängligheten för alla medlemmar.</p>
-      
-      <h2>Poströstning inte längre tillåtet</h2>
-      <p>En viktig förändring är att poströstning inte längre tillåts vid föreningsstämmor. Detta betyder att medlemmar som inte kan närvara fysiskt eller digitalt inte kan rösta i förväg genom att skicka in sin röst per post.</p>
-      
-      <p>Förändringen motiveras av att digital närvaro nu är möjlig, vilket ger medlemmar bättre möjlighet att följa debatten och fatta beslut baserat på diskussionen.</p>
-      
-      <h2>Hur genomföra en stadgeändring</h2>
-      <p>För att ändra stadgarna och möjliggöra helt digitala stämmor krävs beslut vid två föreningsstämmor:</p>
-      <ul>
-        <li>På den första stämman måste mer än hälften av de avgivna rösterna vara för stadgeändringen</li>
-        <li>På den andra stämman måste minst två tredjedelar rösta för ändringen</li>
-        <li>Mellan stämmorna måste det ha gått minst två veckor</li>
-      </ul>
-      
-      <p>När stadgeändringen är beslutad ska ändringen anmälas till Bolagsverket för registrering. Smidigast är det att anmäla elektroniskt via verksamt.se. De nya stadgarna gäller inte förrän registrering har skett.</p>
-      
-      <h2>Bostadsrätternas uppdaterade stadgemall</h2>
-      <p>Bostadsrätternas stadgemall (tidigare kallad mönsterstadgar) har uppdaterats med förslag till skrivning för att möjliggöra helt digitala föreningsstämmor. Medlemsföreningar kan använda mallen kostnadsfritt.</p>
-      
-      <p>Det rekommenderas att föreningar som överväger att möjliggöra digitala stämmor använder denna mall eller tar hjälp av juridisk expertis för att säkerställa att stadgarna uppfyller alla krav.</p>
-      
-      <h2>Tekniska krav för digitala stämmor</h2>
-      <p>För att kunna genomföra en helt digital föreningsstämma behöver föreningen:</p>
-      <ul>
-        <li>En digital plattform som möjliggör deltagande i realtid</li>
-        <li>Funktion för identifiering av medlemmar</li>
-        <li>Möjlighet att rösta elektroniskt</li>
-        <li>System för protokollföring</li>
-        <li>Teknisk support för medlemmar som behöver hjälp</li>
-      </ul>
-      
-      <h2>Fördelar med digitala stämmor</h2>
-      <p>Möjligheten att hålla helt digitala stämmor ger flera fördelar:</p>
-      <ul>
-        <li>Ökat deltagande från medlemmar som av olika skäl inte kan närvara fysiskt</li>
-        <li>Lägre kostnader för lokal och eventuell förtäring</li>
-        <li>Möjlighet att nå medlemmar som bor utomlands eller långt bort</li>
-        <li>Flexibilitet vid oväntade händelser som sjukdom eller väderförhållanden</li>
-        <li>Miljöfördelar genom minskade resor</li>
-      </ul>
-      
-      <h2>Utmaningar att vara medveten om</h2>
-      <p>Samtidigt finns det utmaningar med helt digitala stämmor:</p>
-      <ul>
-        <li>Alla medlemmar har inte tillgång till eller är bekväma med digital teknik</li>
-        <li>Risk för tekniska problem som kan störa genomförandet</li>
-        <li>Svårare att skapa en dialog och diskussion jämfört med fysiska möten</li>
-        <li>Kostnad för digital plattform och teknisk support</li>
-        <li>Säkerhetsfrågor kring identifiering och röstning</li>
-      </ul>
-      
-      <h2>Rekommendationer för styrelsen</h2>
-      <p>Om styrelsen överväger att möjliggöra helt digitala stämmor rekommenderas följande:</p>
-      <ul>
-        <li>Kartlägg medlemmarnas behov och tekniska förutsättningar</li>
-        <li>Testa olika digitala plattformar innan beslut fattas</li>
-        <li>Överväg att börja med hybridstämmor för att samla erfarenhet</li>
-        <li>Säkerställ att det finns teknisk support tillgänglig</li>
-        <li>Utbilda styrelseledamöter i att leda digitala möten</li>
-        <li>Förbered tydliga instruktioner för medlemmarna</li>
-        <li>Ha en plan B om tekniken skulle krångla</li>
-      </ul>
-      
-      <h2>Juridisk bakgrund och motivering</h2>
-      <p>Bakgrunden till lagändringarna finns att läsa i regeringens lagrådsremiss från juni 2023: "Digitala bolags- och föreningsstämmor". Där framgår att syftet är att modernisera regelverket och ge föreningar större flexibilitet.</p>
-      
-      <p>Lagändringen är också en läring från pandemin, då många föreningar tvingades hitta alternativa lösningar för att hålla föreningsstämmor.</p>
-    `,
-    header_image_url: 'https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?w=800',
-    published_at: '2025-02-15T09:30:00Z',
+    slug: 'nar-ai-har-fel-hallucination-kallkritik',
+    title: 'När AI ljuger med ett leende – så undviker du AI-hallucination',
+    subtitle: 'Det viktigaste du behöver veta om AI:s begränsningar',
+    excerpt:
+      'AI-verktyg kan presentera felaktig information med total självförtroende. Det kallas hallucination – och det är det enskilt viktigaste du måste förstå för att använda AI ansvarsfullt.',
+    header_image_url:
+      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800',
+    published_at: '2026-03-05T11:00:00Z',
     type: 'article',
-    category: 'Juridik & Lagstiftning',
+    category: 'Källkritik',
     status: 'published',
+    content: `
+<h2>Problemet ingen vill prata om</h2>
+<p>Det finns ett mönster i hur AI-entusiaster presenterar verktygen: imponerande demos, häpnadsväckande möjligheter, inspirerande framtidsscenarion. Det är sällan du hör: "Och ibland hittar det bara på saker och presenterar dem som fakta." Men det är precis vad som händer. Och det är det enskilt viktigaste du behöver förstå för att använda AI-verktyg ansvarsfullt och effektivt.</p>
+
+<h2>Vad är hallucination – egentligen?</h2>
+<p>AI-modeller fungerar inte som sökmotorer som hämtar information ur en databas. De genererar text baserat på statistiska mönster i träningsdata – de förutsäger vad nästa ord, mening och stycke rimligtvis borde vara utifrån kontexten. Det innebär att de inte "vet" om något är sant. De vet vad som är textuellt plausibelt. När de möter en fråga om något de inte har tillräcklig träningsdata om, fyller de luckor med information som låter rimlig. Det kan vara korrekt – eller komplett påhittad.</p>
+<p>Det skrämmande är att du inte kan höra skillnaden på tonläget. AI är lika säker och flytande när det presenterar ett korrekt faktum som när det hittar på ett citat, en referens eller ett datum.</p>
+
+<h2>Verkliga fall med konsekvenser</h2>
+<p>I februari 2023 presenterade en advokat i New York AI-genererade rättsfall som stöd för sin argumentation i en federal domstol. Fallen existerade inte. Domstolen krävde förklaring, advokaten tvingades vittna om händelseförloppet och fick böter. OpenAI var inte ansvarigt – advokaten var det. En välkänd tidning publicerade samma år en artikel med ett citat från en offentlig person – ett citat som AI genererat och som aldrig sagts. Personen krävde rättelse och juridisk prövning följde.</p>
+<p>Dessa är de spektakulära fallen. De vardagliga hallucinationerna är subtilare: fel statistik, en studie som inte riktigt sagt det AI påstår, ett datum som är felaktigt med ett år. Tillräckligt nära sanningen för att passera ouppmärksamt. Tillräckligt fel för att skapa problem.</p>
+
+<h2>Var hallucinerar AI oftast?</h2>
+<ul>
+  <li><strong>Specifika fakta:</strong> Datum, siffror, statistik och procentsatser är riskzoner.</li>
+  <li><strong>Källor och referenser:</strong> Be AI citera en källa och du kan få en referens som låter perfekt men inte existerar.</li>
+  <li><strong>Nischad eller ny information:</strong> Ju mer specialiserat ämnet, desto större risk.</li>
+  <li><strong>Aktuella händelser:</strong> AI-modeller har ett träningsdatum – saker efter det vet de inget om.</li>
+  <li><strong>Juridik och medicin:</strong> Extra farliga områden eftersom konsekvenserna av fel kan vara allvarliga.</li>
+</ul>
+
+<h2>Fem regler för att arbeta säkert med AI</h2>
+<p><strong>1. Verifiera alltid specifika fakta mot primärkällan.</strong> AI är fantastisk på sammanhang och struktur – inte på att vara ett faktaregister.</p>
+<p><strong>2. Fråga efter källorna.</strong> Om AI inte kan ge en konkret källa är faktumet osäkert. Om det ger en källa – kontrollera att den finns.</p>
+<p><strong>3. Var extra skeptisk mot siffror.</strong> Statistik, procentsatser och ekonomiska data är hallucinations-hotspots.</p>
+<p><strong>4. Testa med frågor du vet svaret på.</strong> Innan du litar på AI för ett viktigt ämne, testa det med frågor du kan kontrollera.</p>
+<p><strong>5. Behandla AI-svar som ett utkast.</strong> Allt AI producerar är ett startläge för din granskning och ditt omdöme, inte ett slutresultat.</p>
+
+<h2>Rätt mental modell</h2>
+<p>Tänk på AI som en extremt snabb, extremt välläst praktikant som ibland diktar upp detaljer när han eller hon är osäker men inte vill erkänna det. Du vill ha den praktikantens hjälp – den sparar massor av tid. Men du granskar deras arbete, du fakta-checkar deras påståenden, och du tar det slutliga ansvaret för vad som lämnar ditt skrivbord. Det är inte ett skäl att undvika AI. Det är ett skäl att använda det med rätt förväntningar och rätt rutiner.</p>
+    `,
     user_profiles: {
-      name: 'Karin Nilsson',
-      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Karin'
-    }
+      name: 'Thomas Lindgren',
+      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Thomas',
+    },
   },
+
+  // ─────────────────────────────────────────────
+  // ARTIKEL 6
+  // ─────────────────────────────────────────────
   {
     id: '6',
-    slug: 'rattsfall-andrahandsuthyrning-svarssald-lagenhet',
-    title: 'Rättsfall: Fick hyra ut svårsåld lägenhet trots föreningens nej',
-    subtitle: 'Hyresnämndens beslut visar när andrahandsuthyrning kan godkännas',
-    excerpt: 'Ett aktuellt rättsfall från Uddevalla visar att hyresnämnden kan ge tillstånd till andrahandsuthyrning även när föreningen säger nej – om lägenheten är svårsåld.',
-    content: `
-      <h2>Bakgrund till fallet</h2>
-      <p>En man i 55-årsåldern köpte i slutet av 2022 en bostadsrätt på Västgötavägen i centrala Uddevalla för 2 110 000 kronor. Han flyttade aldrig in, utan bad istället bostadsrättsföreningen om lov att få hyra ut lägenheten i andra hand med motiveringen att han ville provbo med sin partner.</p>
-      
-      <p>Ett drygt år senare, i januari 2024, bestämde sig mannen för att sälja lägenheten. Vid visningen dök elva spekulanter upp, men endast en lade ett bud på först 1 500 000 kronor och sedan 1 700 000 kronor. Mannen accepterade inte budet då han ville ha minst 1 995 000 kronor.</p>
-      
-      <h2>Föreningens ställningstagande</h2>
-      <p>För att inte förlora pengar ville mannen invänta bättre tider och fortsätta hyra ut sin lägenhet i andra hand. Men bostadsrättsföreningen sa nej till detta.</p>
-      
-      <p>Föreningen menade att:</p>
-      <ul>
-        <li>Lägenheterna ska användas för permanentboende</li>
-        <li>Andrahandsuthyrning endast ska godkännas i undantagsfall</li>
-        <li>Endast en andrahandsuthyrning per medlem ska tillåtas</li>
-        <li>Det räckte med att mannen redan fått hyra ut lägenheten under ett år då han var provsambo</li>
-      </ul>
-      
-      <h2>Hyresnämndens beslut</h2>
-      <p>När mannen fick nej av sin förening vände han sig till Hyresnämnden i Göteborg för att få sin sak prövad. Som bevis för att lägenheten är svårsåld lade han fram mäklarintyg och försäljningsunderlag.</p>
-      
-      <p>I sitt beslut konstaterade nämnden att en bostadsrättsinnehavare kan få tillstånd att hyra ut i andra hand även om man inte planerar att flytta tillbaka, om bostaden är svårsåld.</p>
-      
-      <p>Hyresnämnden gav därför mannen rätt att hyra ut lägenheten i ytterligare ett år, från november 2025 till och med oktober 2026. Detta för att ge honom tid att försöka sälja bostaden på bättre villkor.</p>
-      
-      <p>Nämnden påpekade dock att mannen inte kan räkna med ytterligare tillstånd på samma grund framöver.</p>
-      
-      <h2>Betydelsen av mäklarintyg</h2>
-      <p>Ett viktigt lärdomar från detta fall är betydelsen av att kunna visa att lägenheten verkligen är svårsåld. Enligt mäklaren hade det sedan januari 2024 endast sålts en enda likadan lägenhet i bostadsföreningen, och den gick för 1 910 000 kronor.</p>
-      
-      <p>Detta underlag var avgörande för hyresnämndens beslut att ge tillstånd till fortsatt andrahandsuthyrning.</p>
-      
-      <h2>Kan föreningar överklaga?</h2>
-      <p>Hyresnämndens beslut är slutgiltigt och kan inte överklagas. Detta innebär att föreningen måste acceptera beslutet även om de inte är överens.</p>
-      
-      <h2>Ökande antal ärenden om andrahandsuthyrning</h2>
-      <p>Enligt en granskning hanterade landets hyresnämnder under 2023 över 650 uthyrningsärenden för bostadsrätter, en ökning med 30 procent på tre år.</p>
-      
-      <p>En orsak till ökningen är det höga ränteläget som gjort det svårare att sälja bostadsrätter och ökat trycket på att få hyra ut dem istället.</p>
-      
-      <h2>Regelverket för andrahandsuthyrning</h2>
-      <p>Det är viktigt att förstå grundreglerna för andrahandsuthyrning av bostadsrätter:</p>
-      <ul>
-        <li>Tillstånd krävs alltid från styrelsen</li>
-        <li>Om föreningen säger nej kan bostadsrättshavaren vända sig till hyresnämnden</li>
-        <li>Hyresnämnden kan bevilja tillstånd om det finns skäl och föreningen saknar befogad anledning att säga nej</li>
-        <li>Tillstånd är vanligtvis tidsbegränsat, ofta högst ett år i taget</li>
-      </ul>
-      
-      <h2>Godtagbara skäl för andrahandsuthyrning</h2>
-      <p>Exempel på situationer som kan ge rätt till andrahandsuthyrning:</p>
-      <ul>
-        <li>Studier eller arbete på annan ort</li>
-        <li>Provsamboende</li>
-        <li>Vård av sjuk anhörig</li>
-        <li>Längre utlandsresa</li>
-        <li>Svårsåld lägenhet (som i detta fall)</li>
-      </ul>
-      
-      <h2>Vad kan föreningen neka på?</h2>
-      <p>Föreningen kan bara neka andrahandsuthyrning om det finns befogad anledning, till exempel:</p>
-      <ul>
-        <li>Den tilltänkta hyresgästen bedöms inte vara lämplig</li>
-        <li>Hyresvillkoren är orimliga</li>
-        <li>Andrahandsuthyrningen innebär påtaglig olägenhet för föreningen</li>
-      </ul>
-      
-      <p>Att föreningen generellt är negativ till andrahandsuthyrning är inte ett giltigt skäl att neka om de formella villkoren är uppfyllda.</p>
-      
-      <h2>Regeländring 2014</h2>
-      <p>Det är värt att notera att reglerna för andrahandsuthyrning ändrades 2014 för att göra det lättare att hyra ut bostadsrätter i andra hand. Syftet var att skapa fler lediga lägenheter och få bukt med bostadsbristen.</p>
-      
-      <p>Trots lättnaderna är det fortfarande många uthyrningar som stoppas av föreningar, vilket visar på en spänning mellan föreningarnas önskan om permanentboende och enskilda medlemmars behov av flexibilitet.</p>
-      
-      <h2>Praktiska råd för medlemmar</h2>
-      <p>Om du som bostadsrättshavare vill hyra ut din lägenhet i andra hand:</p>
-      <ul>
-        <li>Ansök i god tid hos styrelsen</li>
-        <li>Motivera tydligt varför du vill hyra ut</li>
-        <li>Lägg fram relevant dokumentation (t.ex. mäklarintyg vid svårsåld lägenhet)</li>
-        <li>Om du får nej, överväg att vända dig till hyresnämnden</li>
-        <li>Förbered dig för att det kan ta tid att få ett beslut</li>
-      </ul>
-      
-      <h2>Praktiska råd för styrelser</h2>
-      <p>Som styrelse är det viktigt att:</p>
-      <ul>
-        <li>Ha tydliga regler för andrahandsuthyrning i stadgarna</li>
-        <li>Behandla alla ansökningar individuellt och objektivt</li>
-        <li>Förstå att generella förbud inte håller i hyresnämnden</li>
-        <li>Dokumentera skälen för eventuella avslagsärenden</li>
-        <li>Vara medveten om att hyresnämndens beslut inte kan överklagas</li>
-      </ul>
-    `,
-    header_image_url: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800',
-    published_at: '2025-02-20T13:00:00Z',
+    slug: 'ai-och-jobben-vad-sager-forskningen',
+    title: 'AI och jobben: Vad säger forskningen egentligen?',
+    subtitle: 'Utan hysteri och utan naivitet – en nyanserad genomgång',
+    excerpt:
+      'Ska AI ta ditt jobb? Frågan ställs hela tiden men sällan med data. Vi går igenom vad forskningen faktiskt säger – och vad det betyder för dig som arbetar idag.',
+    header_image_url:
+      'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800',
+    published_at: '2026-03-19T10:00:00Z',
     type: 'article',
-    category: 'Rättsfall & Praxis',
+    category: 'Trender',
     status: 'published',
-    user_profiles: {
-      name: 'Per Andersson',
-      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Per'
-    }
-  },
-  {
-    id: '7',
-    slug: 'kommande-lagandring-brottslighet-bostadsratter-2025',
-    title: 'Utredning: Möjlighet att säga upp bostadsrättshavare som begår brott',
-    subtitle: 'Regeringens direktiv för tryggare bostadsområden',
-    excerpt: 'En ny utredning ska föreslå utökade möjligheter att neka medlemskap och säga upp bostadsrättshavare som begår brott. Betänkandet ska redovisas i december 2025.',
     content: `
-      <h2>Bakgrund till utredningen</h2>
-      <p>Den 2 juni 2025 tillsatte regeringen en bokstavsutredning med uppdraget att föreslå utökade möjligheter för bostadsrättsföreningar att hantera medlemmar som begår brott. Utredningen ska redovisas senast den 2 december 2025.</p>
-      
-      <p>Bakgrunden är att det finns ett behov av att öka tryggheten i och kring bostadsrätter. Personer som bär vapen i sitt bostadsområde, säljer narkotika på gathörnet eller i lekparken, eller angriper polis genom stenkastning skapar stor otrygghet för andra boende i området.</p>
-      
-      <h2>Vad ska utredningen föreslå?</h2>
-      <p>Utredaren får i uppdrag att föreslå utökade möjligheter på två områden:</p>
-      <ul>
-        <li>Att neka medlemskap i en bostadsrättsförening på grund av att sökanden har begått brott</li>
-        <li>Att säga upp bostadsrättshavare som begår brott i lägenheten eller i närområdet</li>
-      </ul>
-      
-      <p>Utredaren ska lämna nödvändiga författningsförslag för att genomföra dessa förändringar.</p>
-      
-      <h2>Jämförelse med hyreslagen</h2>
-      <p>Den 1 juli 2024 trädde ändringar i 12 kap. jordabalken (hyreslagen) i kraft som ger fastighetsägare utökade möjligheter att säga upp hyresgäster som har begått brott i lägenheten eller närområdet.</p>
-      
-      <p>Regleringen av hyresrätter liknar på flera sätt regleringen av bostadsrätter. I bostadsrättslagen finns bestämmelser om förverkande av bostadsrätt (7 kap. 18–25 §§) som motsvarar i stor utsträckning reglerna om förverkande av hyresrätt. De grunder som kan åberopas för förverkande är väsentligen desamma.</p>
-      
-      <p>En skillnad är dock att de ändringar som nyligen genomfördes i hyreslagen inte har införts för bostadsrätter. Utredningen ska alltså föreslå motsvarande ändringar för bostadsrätter.</p>
-      
-      <h2>Befintliga regler om förverkande</h2>
-      <p>Redan idag finns regler i bostadsrättslagen om när en bostadsrätt kan förverkas. En bostadsrätt kan förverkas om bostadsrättshavaren:</p>
-      <ul>
-        <li>Inte betalar avgifter i rätt tid</li>
-        <li>Använder lägenheten för annat ändamål än som avtalats</li>
-        <li>Genom vårdslöshet är vållande till att lägenheten vanvårdas</li>
-        <li>Genom störande uppträdande är till avsevärt men för föreningen eller för dem som bor i närheten</li>
-        <li>Åsidosätter sina skyldigheter på annat sätt och det är av synnerlig vikt för föreningen</li>
-      </ul>
-      
-      <p>De nya reglerna som utreds kommer att komplettera och förtydliga dessa bestämmelser, särskilt när det gäller brottslig verksamhet.</p>
-      
-      <h2>Nuvarande regler om medlemskap</h2>
-      <p>En bostadsrättsförening är en ekonomisk förening, och utgångspunkten är att en ekonomisk förening ska vara öppen för alla. Det innebär att föreningen är skyldig att anta nya medlemmar om det inte finns objektivt godtagbara skäl att vägra inträde.</p>
-      
-      <p>I bostadsrättsföreningar gäller att en köpare inte får vägras inträde om han eller hon uppfyller villkoren för medlemskap i stadgarna och har ekonomiska förutsättningar att betala avgifterna.</p>
-      
-      <p>En förening kan ställa upp krav på skötsamhet i stadgarna, men sådana villkor får inte gå längre än vad som följer av en skälighetsbedömning.</p>
-      
-      <h2>Utredningens utmaningar</h2>
-      <p>Utredningen måste balansera flera intressen och hänsyn:</p>
-      <ul>
-        <li>Föreningsfriheten enligt grundlagen</li>
-        <li>Rätten till bostad</li>
-        <li>Behovet av trygghet för de boende</li>
-        <li>FN:s konvention om barnets rättigheter (barnkonventionen)</li>
-        <li>Den särskilda utsatthet som vräkningar av barnfamiljer medför</li>
-      </ul>
-      
-      <p>Föreningsfriheten gäller gentemot det allmänna och möjligheterna för staten att begränsa denna frihet är mycket begränsade. Utredaren ska inte lämna förslag som strider mot grundlagen.</p>
-      
-      <h2>Medlemmars efterfrågan på lagändring</h2>
-      <p>Enligt en ny rapport från Sveriges BostadsrättsCentrum (SBC), Sveriges Bostadsrättsrapport 2025, efterfrågar 64 procent av tillfrågade bostadsrättsägare en lagändring för att underlätta vräkning av kriminella i föreningens hus.</p>
-      
-      <p>Frågan som ställdes till bostadsrättsinnehavarna löd: "En lagändring från 2024 underlättar vräkning av personer som bor i hyresrätt och som begått brott eller använder sin bostad för att begå brott. Skulle du vilja se en lagändring som denna även för bostadsrätter?"</p>
-      
-      <p>Detta visar att det finns ett starkt stöd bland medlemmar för skärpta regler.</p>
-      
-      <h2>Skillnader mellan bostadsrätt och hyresrätt</h2>
-      <p>Det är viktigt att förstå att bostadsrätt och hyresrätt är olika boendeformer med olika rättslig ställning:</p>
-      <ul>
-        <li>Bostadsrätten är en rätt som kan överlåtas och förvärvas fritt</li>
-        <li>Bostadsrätten har ett ekonomiskt värde för bostadsrättshavaren</li>
-        <li>Bostadsrätten kan pantsättas för bostadsrättshavarens skulder</li>
-        <li>Bostadsrättshavaren är medlem i föreningen</li>
-      </ul>
-      
-      <p>Dessa skillnader gör att reglerna för att säga upp en bostadsrättshavare måste utformas på ett annat sätt än reglerna för uppsägning av hyresrätt.</p>
-      
-      <h2>Vad händer nu?</h2>
-      <p>Utredningen pågår och ska redovisas senast den 2 december 2025. Efter det kommer förslagen att skickas på remiss, vilket innebär att organisationer och myndigheter får möjlighet att lämna sina synpunkter.</p>
-      
-      <p>Om förslagen går vidare kan ny lagstiftning träda i kraft tidigast under 2026 eller 2027.</p>
-      
-      <h2>Praktiska konsekvenser för styrelser</h2>
-      <p>Om de föreslagna lagändringarna genomförs kommer styrelser att få:</p>
-      <ul>
-        <li>Fler verktyg för att hantera störande medlemmar</li>
-        <li>Möjlighet att neka medlemskap på grund av tidigare brottslighet</li>
-        <li>Ökade krav på dokumentation och utredning</li>
-        <li>Behov av juridisk expertis vid hantering av sådana ärenden</li>
-        <li>Större ansvar för att göra avvägningar mellan olika intressen</li>
-      </ul>
-      
-      <h2>Kritiska röster</h2>
-      <p>Det är viktigt att notera att förslaget kommer att väcka debatt. Kritiker kan hävda att:</p>
-      <ul>
-        <li>Risken för diskriminering ökar</li>
-        <li>Människor får dubbelt straff (både straffrättsligt och genom att förlora bostaden)</li>
-        <li>Barnfamiljer drabbas särskilt hårt</li>
-        <li>Misstag i bedömningar kan få allvarliga konsekvenser</li>
-      </ul>
-      
-      <p>Utredaren måste beakta dessa invändningar och föreslå en balanserad lagstiftning som respekterar både trygghetsbehoven och rättssäkerheten.</p>
+<h2>Den fråga alla ställer och ingen svarar ordentligt på</h2>
+<p>Frågan dyker upp i varje konversation om AI: "Kommer det ta mitt jobb?" Svaret du ofta får är antingen naivt optimistiskt ("AI skapar fler jobb än det tar!") eller dramatiskt dystopiskt ("85% av alla jobb försvinner inom tio år!"). Båda saknar substans. Verkligheten är mer komplex, mer nyanserad och – om du förstår den – mer handlingsbar.</p>
+
+<h2>Vad forskningen faktiskt säger</h2>
+<p>McKinseys Global Institute visade i sin analys att upp till 30% av arbetsuppgifterna i de flesta jobb potentiellt kan automatiseras med nuvarande AI-teknik. Notera: uppgifter, inte jobb. Det är en viktig distinktion. Att 30% av en ekonoms uppgifter kan automatiseras innebär inte att 30% av alla ekonomer förlorar jobbet. Det innebär att de frigör 30% av sin tid för uppgifter som kräver mänskligt omdöme, kundrelation och strategisk analys. Det är en produktivitetsökning, inte en jobbförlust.</p>
+<p>Goldman Sachs estimerade att generativ AI kan "exponera" 300 miljoner heltidsarbeten globalt för automatisering. Rubrikerna var apokalyptiska. Rapporten specificerade dock att "exponera" inte innebär "eliminera" – det innebär att delar av jobbet kan förändras och att produktiviteten ökar.</p>
+
+<h2>Jobben som förändras mest – och varför</h2>
+<p><strong>Administrativa roller:</strong> Datainmatning, schemaläggning, standardiserad rapportskrivning – uppgifter med tydliga regler och väldefinierade outputs är exakt vad AI gör bra.</p>
+<p><strong>Kundservice:</strong> Chatbottar hanterar redan majoriteten av standardfrågor hos stora företag. Det som återstår för mänsklig kundtjänst är de komplexa, emotionellt laddade och unika ärendena.</p>
+<p><strong>Grundläggande analys:</strong> AI kan bearbeta och sammanfatta data snabbare och billigare. Men att ställa rätt frågor till datan och kommunicera insikterna till beslutsfattare är fortfarande mänskliga styrkor.</p>
+<p><strong>Rutinmässigt skrivande:</strong> Standardiserade pressreleaser och produktbeskrivningar görs redan till stor del av AI hos stora organisationer. Kreativt och analytiskt skrivande är fortfarande mänskligt.</p>
+
+<h2>Jobben som är relativt skyddade – och varför</h2>
+<p><strong>Social och emotionell intelligens:</strong> Terapi, vård, ledarskap, förhandling, mentorskap – allt som kräver genuin mänsklig förståelse och förtroende. AI kan simulera empati; det kan inte skapa den.</p>
+<p><strong>Kreativitet i komplexa sammanhang:</strong> Att producera text är inte detsamma som att vara kreativ. Strategisk kreativitet – att identifiera vilken fråga man ska lösa, varför, för vem – är djupt mänsklig.</p>
+<p><strong>Fysiska uppgifter i oförutsägbara miljöer:</strong> Rörmokare, elektriker, kirurger – yrken som kräver finmotorik och anpassning i verkliga, föränderliga miljöer.</p>
+<p><strong>Komplex etisk bedömning:</strong> Domstolsbeslut, medicinsk diagnostik i edge cases, etiska avvägningar – situationer utan tydliga regler där omdöme och ansvar är oupplösligt sammankopplade.</p>
+
+<h2>Vad historien lär oss – och var den lär oss ingenting</h2>
+<p>Det vanligaste optimistiska argumentet är det historiska: ångmaskinen, elektriciteten, datorn, internet – alla förutspåddes leda till massarbetslöshet. Ingen av dem gjorde det. Det argumentet är delvis hållbart. Men det ignorerar en viktig skillnad: hastigheten. Industrialiseringen tog hundra år. Internet tog tjugo år. Nuvarande AI-utveckling rör sig på en tidsskala där anpassningsförmågan hos individer och utbildningssystem kan ha svårt att hålla jämna steg. Det är den legitima oro som finns under ytan.</p>
+
+<h2>Den rätta frågan att ställa sig</h2>
+<p>Istället för "Kommer AI ta mitt jobb?" – en fråga ingen kan svara på med säkerhet – är en mer handlingsbar fråga: "Vilka delar av mitt jobb kan AI göra – och vad innebär det för hur jag bör lägga min tid och bygga min kompetens?" Det är en fråga du kan svara på. Det är en fråga som leder till handling.</p>
+
+<h2>Vad du konkret kan göra nu</h2>
+<p>Investera i att lära dig använda AI. Inte för att rädda ditt jobb – utan för att bli mer värdefull på arbetsmarknaden. Den person som kan kombinera djup domänexpertis med förmåga att använda AI effektivt är mer produktiv, levererar mer och är svårare att ersätta – inte lättare. Det är precis vad AI-träningsprogram som Näringsklivets är byggt för: inte att göra dig till en AI-expert, utan att göra dig till en bättre yrkesperson med AI som ett av dina kraftfullaste verktyg.</p>
     `,
-    header_image_url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800',
-    published_at: '2025-02-25T10:00:00Z',
-    type: 'article',
-    category: 'Juridik & Lagstiftning',
-    status: 'published',
     user_profiles: {
       name: 'Anna Holm',
-      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Anna'
-    }
+      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Anna',
+    },
   },
-  {
-    id: '8',
-    slug: 'rattsfall-ekonomisk-formaga-medlemskap-nekad',
-    title: 'Rättsfall: Hovrätten bekräftar nekad medlemskap på grund av bristande ekonomi',
-    subtitle: 'Viktigt prejudikat om ekonomisk prövning vid medlemskap',
-    excerpt: 'Ett aktuellt hovrättsavgörande visar att föreningar kan neka medlemskap när sökanden inte kan visa tillräckliga ekonomiska förutsättningar. Här är vad du behöver veta.',
-    content: `
-      <h2>Bakgrunden till fallet</h2>
-      <p>I detta fall hade en kvinna ansökt om medlemskap i en bostadsrättsförening efter att ha förvärvat en bostadsrätt. Föreningen nekade henne medlemskap med hänvisning till att hon inte hade visat tillräckliga ekonomiska förutsättningar för att klara de kostnader som bostadsrätten medför.</p>
-      
-      <p>Kvinnan överklagade beslutet till hyresnämnden, som gav föreningen rätt. Hon valde då att överklaga även det beslutet till hovrätten.</p>
-      
-      <h2>Hovrättens bedömning</h2>
-      <p>Hovrätten instämde i hyresnämndens bedömning och avslogs kvinnans överklagande. I domskälen framhålls att en ny medlem måste kunna uppfylla sina ekonomiska förpliktelser gentemot föreningen.</p>
-      
-      <p>Vidare konstaterar domstolen att kvinnan inte visat att hon har tillräckliga ekonomiska förutsättningar för att klara av de kostnader som bostadsrätten medför.</p>
-      
-      <h2>Motstridiga uppgifter om inkomst</h2>
-      <p>Ett avgörande skäl för hovrättens beslut var att kvinnan lämnat oklara och motsägelsefulla uppgifter om sin månadslön.</p>
-      
-      <p>Domstolen konstaterar en skillnad mellan:</p>
-      <ul>
-        <li>Den lön på 26 000 kronor per månad som kvinnan uppgav i sin medlemskapsansökan</li>
-        <li>De 20 000 kronor per månad som framgår av anställningsintyg och lönespecifikationer</li>
-      </ul>
-      
-      <p>I och med detta bedömer hovrätten det som osäkert hur stora kvinnans inkomster kan förväntas bli framöver, även om hon haft en månadslön på 20 000 kronor i drygt nio månader under inkomståret 2024.</p>
-      
-      <h2>Betydelsen av ekonomisk prövning</h2>
-      <p>Detta rättsfall förtydligar att bostadsrättsföreningar har rätt och skyldighet att göra en ekonomisk prövning av nya medlemmar. Syftet är att skydda föreningens ekonomiska intressen och säkerställa att alla medlemmar kan betala sina avgifter.</p>
-      
-      <p>En förening riskerar ekonomiska problem om medlemmar inte kan betala sina avgifter, vilket i slutändan drabbar alla medlemmar genom höjda avgifter eller undermåligt underhåll.</p>
-      
-      <h2>Vad kan föreningar kräva vid ekonomisk prövning?</h2>
-      <p>Enligt rättspraxis och detta avgörande kan föreningar begära:</p>
-      <ul>
-        <li>Inkomstuppgifter (lönespecifikationer, skattedeklaration)</li>
-        <li>Anställningsintyg</li>
-        <li>Uppgifter om andra inkomster</li>
-        <li>Kreditskulder och andra ekonomiska åtaganden</li>
-        <li>UC-upplysning eller kreditupplysning</li>
-      </ul>
-      
-      <p>Det är viktigt att informationen är korrekt och att det inte finns motsägelser mellan olika dokument, vilket detta fall tydligt visar.</p>
-      
-      <h2>När kan medlemskap nekas?</h2>
-      <p>Enligt bostadsrättslagen och praxis kan medlemskap nekas om:</p>
-      <ul>
-        <li>Sökanden inte uppfyller villkoren i stadgarna</li>
-        <li>Sökanden inte har ekonomiska förutsättningar att betala avgifterna</li>
-        <li>Sökanden lämnat vilseledande eller motsägelsefulla uppgifter</li>
-        <li>Det finns andra objektiva skäl som gör att medlemskap inte kan beviljas</li>
-      </ul>
-      
-      <p>Däremot får föreningar inte neka medlemskap på diskriminerande grunder eller av godtyckliga skäl.</p>
-      
-      <h2>Riktlinjer för ekonomisk bedömning</h2>
-      <p>När styrelsen gör en ekonomisk bedömning bör följande beaktas:</p>
-      <ul>
-        <li>Vad är månadsavgiften för lägenheten?</li>
-        <li>Vad är sökandens dokumenterade inkomst?</li>
-        <li>Finns det andra ekonomiska åtaganden (lån, försörjningsplikt)?</li>
-        <li>Är inkomsterna stabila eller tillfälliga?</li>
-        <li>Finns det betalningsanmärkningar?</li>
-      </ul>
-      
-      <p>Som tumregel brukar det anses att månadsavgiften inte bör överstiga en viss procent av inkomsten, ofta omkring 30-35 procent, men detta är inte en absolut regel.</p>
-      
-      <h2>Vad händer om fel uppgifter lämnats?</h2>
-      <p>Detta rättsfall visar tydligt att det är mycket viktigt att lämna korrekta uppgifter vid ansökan om medlemskap. Om uppgifterna är motsägelsefulla eller vilseledande:</p>
-      <ul>
-        <li>Kan medlemskap nekas</li>
-        <li>Skapar det misstro hos styrelsen</li>
-        <li>Försvårar det möjligheten att få rätt vid överklagande</li>
-        <li>Kan det i värsta fall leda till att köpet av bostadsrätten inte kan genomföras</li>
-      </ul>
-      
-      <h2>Köparens dilemma</h2>
-      <p>För den som köper en bostadsrätt är detta ett viktigt budskap. Även om köpeavtalet är undertecknat och köpesumman betalad, kan man nekas medlemskap i föreningen om man inte kan visa tillräcklig ekonomisk bärighet.</p>
-      
-      <p>Detta innebär att:</p>
-      <ul>
-        <li>Man bör säkerställa sin ekonomiska situation innan köp</li>
-        <li>Man ska vara beredd att visa upp fullständig dokumentation</li>
-        <li>Man ska vara ärlig och konsekvent i sina uppgifter</li>
-        <li>Man bör ta kontakt med föreningen tidigt i processen</li>
-      </ul>
-      
-      <h2>Vad händer om medlemskap nekas?</h2>
-      <p>Om föreningen nekar medlemskap händer följande:</p>
-      <ul>
-        <li>Köparen kan inte flytta in i lägenheten</li>
-        <li>Köparen kan överklaga beslutet till hyresnämnden och sedan hovrätten</li>
-        <li>Om även hovrätten säger nej måste lägenheten säljas vidare</li>
-        <li>Säljaren kan i vissa fall vara skyldig att ta tillbaka lägenheten</li>
-      </ul>
-      
-      <h2>Praktiska råd för styrelser</h2>
-      <p>När styrelsen prövar medlemskapsansökningar rekommenderas följande:</p>
-      <ul>
-        <li>Ha tydliga rutiner för ekonomisk prövning</li>
-        <li>Behandla alla ansökningar likvärdigt</li>
-        <li>Begär in tillräcklig dokumentation</li>
-        <li>Kontrollera att uppgifterna stämmer överens</li>
-        <li>Dokumentera skälen för beslut noga</li>
-        <li>Fatta beslut i styrelsen, inte av enskild ledamot</li>
-        <li>Ge sökanden möjlighet att komplettera uppgifter</li>
-        <li>Informera tydligt om vad som krävs</li>
-      </ul>
-      
-      <h2>Rättslig grund</h2>
-      <p>Den rättsliga grunden för ekonomisk prövning finns i:</p>
-      <ul>
-        <li>Bostadsrättslagen (1991:614)</li>
-        <li>Lagen om ekonomiska föreningar</li>
-        <li>Föreningens stadgar</li>
-        <li>Praxis från hyresnämnder och domstolar</li>
-      </ul>
-      
-      <h2>Balans mellan intressen</h2>
-      <p>Detta rättsfall visar hur domstolar balanserar olika intressen:</p>
-      <ul>
-        <li>Köparens rätt till bostad</li>
-        <li>Föreningens rätt att skydda sin ekonomi</li>
-        <li>Övriga medlemmars intressen</li>
-        <li>Kravet på objektivitet och saklighet</li>
-      </ul>
-      
-      <p>Domstolen har kommit fram till att föreningens rätt att skydda sin ekonomi väger tyngre när sökanden inte kan visa tillräckliga och konsekventa uppgifter om sin ekonomi.</p>
-    `,
-    header_image_url: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800',
-    published_at: '2025-03-01T12:00:00Z',
-    type: 'article',
-    category: 'Rättsfall & Praxis',
-    status: 'published',
-    user_profiles: {
-      name: 'Lars Eriksson',
-      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Lars'
-    }
-  }
 ];
 
-// Hjälpfunktioner
-export const getPublishedPosts = (): Post[] => {
-  return posts.filter(post => post.status === 'published');
-};
+// ─── Hjälpfunktioner ──────────────────────────────────────
 
-export const getPostBySlug = (slug: string): Post | undefined => {
-  return posts.find(post => post.slug === slug && post.status === 'published');
-};
+export const getPublishedPosts = (): Post[] =>
+  posts.filter(post => post.status === 'published');
 
-export const getRelatedPosts = (currentPostId: string, limit: number = 3): Post[] => {
-  return posts
-    .filter(post => post.id !== currentPostId && post.status === 'published')
+export const getPostBySlug = (slug: string): Post | undefined =>
+  posts.find(post => post.slug === slug && post.status === 'published');
+
+export const getRelatedPosts = (currentPostId: string, limit = 3): Post[] =>
+  posts
+    .filter(p => p.id !== currentPostId && p.status === 'published')
     .slice(0, limit);
-};
 
-export const getPostsByCategory = (category: string): Post[] => {
-  return posts.filter(post => post.category === category && post.status === 'published');
-};
+export const getPostsByCategory = (category: string): Post[] =>
+  posts.filter(post => post.category === category && post.status === 'published');
