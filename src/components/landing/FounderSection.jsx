@@ -426,12 +426,12 @@ const FounderSection = () => (
           <div className="flex items-start justify-between gap-4 mb-4">
             <div className="flex-1">
               <div className="text-xs font-bold text-[#FF5421] uppercase tracking-widest mb-3">14 stegsprogram - från lekman till AI-proffs</div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A] leading-snug">
+              <h2 className="text-4xl sm:text-3xl font-bold text-[#1A1A1A] leading-snug">
                 Vi hjälper medarbetare, chefer och egenföretagare att jobba smartare – från dag ett.
               </h2>
             </div>
           </div>
-          <p className="text-gray-500 leading-relaxed mb-6 text-sm sm:text-base">
+          <p className="text-gray-500 leading-relaxed mb-6 text-lg sm:text-base">
             Näringsklivet AI grundades ur en enkel insikt: de flesta som börjar använda AI i jobbet
             lär sig på egen hand – utan struktur, utan strategi och utan att få ut det fulla värdet.
             Vi har samlat det viktigaste i ett träningsprogram byggt för verkliga arbetssituationer,
