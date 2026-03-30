@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navigation from '../components/Navigation'; // Notera de två punkterna ..
 import {
   ArrowRight, CheckCircle, Zap, Users, Target,
   MessageSquare, Mic, Wrench, Brain,
@@ -53,6 +54,8 @@ const Hero = () => {
     <section className="relative min-h-[70vh] flex items-center overflow-hidden">
       <img src="/t2.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
       <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${DARK}f0, ${DARK}cc)` }} />
+
+     
 
       {/* Orange glow */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[300px]
@@ -670,6 +673,7 @@ const FooterStrip = () => {
 
 const OmOssPage = () => (
   <div className="min-h-screen" style={{ fontFamily: "'Nunito', sans-serif" }}>
+    <Navigation />
     <Hero />
     <Story />
     <Metodik />

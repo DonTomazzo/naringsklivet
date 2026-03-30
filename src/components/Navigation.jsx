@@ -25,11 +25,12 @@ const Navigation = () => {
   ];
 
   const aboutSubItems = [
-    { name: 'Om oss',           path: '/om-oss' },
+    
     { name: 'Boka One on One',  path: '/seminarier#events' },
     { name: 'Boka föreläsning', path: '/seminarier#events' },
     { name: 'Boka workshop',    path: '/seminarier#events' },
     { name: 'Boka AI-implementering',     path: '/seminarier#events' },
+    { name: 'Om Näringsklivet',           path: '/om-oss' },
   ];
 
   const urgencyMessages = [
@@ -176,7 +177,7 @@ const Navigation = () => {
                       : 'text-white/80 hover:text-white'
                   }`}
                 >
-                  Om oss
+                  Boka
                   <motion.div
                     animate={{ rotate: isAboutOpen ? 180 : 0 }}
                     transition={{ duration: 0.2 }}

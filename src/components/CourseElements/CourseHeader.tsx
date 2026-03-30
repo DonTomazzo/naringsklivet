@@ -65,14 +65,7 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({
         { label: 'Mina framsteg',         path: '/dashboard' },
       ],
     },
-    {
-      title: 'Resurser',
-      items: [
-        { label: 'Promptmallar',     path: '/resources/prompts' },
-        { label: 'AI-verktygskartan', path: '/resources/tools' },
-        { label: 'Guider & FAQ',     path: '/resources/guides' },
-      ],
-    },
+    
     {
       title: 'Seminarier',
       items: [
@@ -98,7 +91,7 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({
       initial={{ y: 0 }}
       animate={{ y: isVisible ? 0 : -100 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="fixed top-0 left-0 right-0 bg-[#f8f8f8] border-b border-gray-200 z-40 shadow-sm"
+      className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-40 shadow-sm"
     >
       <div
         className="transition-all duration-300 ease-in-out"
@@ -211,7 +204,7 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({
                     className="w-8 h-8 rounded-full object-cover border-2 border-slate-200 group-hover:border-[#FF5421] transition-colors"
                   />
                 ) : (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FF5421] to-[#E04A1D] flex items-center justify-center border-2 border-slate-200 group-hover:border-[#FF5421] transition-colors">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FF5421] to-[#FF5421] flex items-center justify-center border-2 border-slate-200 group-hover:border-[#FF5421] transition-colors">
                     <User className="w-4 h-4 text-white" />
                   </div>
                 )}

@@ -157,61 +157,37 @@ const ModuleSlideLayout = ({
         </AnimatePresence>
       </div>
 
-      {/* Navigeringsknappar – transparent, fixed, följer sidebar via --sidebar-width */}
-      <div
-        className="fixed bottom-0 right-0 flex items-center justify-between px-4 py-4 pointer-events-none transition-all duration-300"
-        style={{ left: 'var(--sidebar-width, 0px)' }}
-      >
-        {/* Föregående – helt osynlig på första sliden */}
-        <button
-          onClick={prev}
-          disabled={!canPrev}
-          className="pointer-events-auto flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm transition-all"
-          style={
-            canPrev
-              ? {
-                  background: 'rgba(15,22,35,0.6)',
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  color: 'rgba(255,255,255,0.85)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                }
-              : {
-                  background: 'transparent',
-                  color: 'transparent',
-                  cursor: 'default',
-                  pointerEvents: 'none',
-                  border: '1px solid transparent',
-                }
-          }
-        >
-          <ChevronLeft size={18} />
-          <span className="hidden sm:inline">Föregående</span>
-        </button>
+     {/* Navigeringsknappar – E.ON-stil, enkla pilar centrerat */}
+<div
+  className="fixed bottom-0 right-0 flex items-center justify-center gap-6 py-4 pointer-events-none transition-all duration-300"
+  style={{ left: 'var(--sidebar-width, 0px)' }}
+>
+  <button
+    onClick={prev}
+    disabled={!canPrev}
+    className="pointer-events-auto transition-all"
+    style={canPrev
+      ? { color: '#FF5421', opacity: 1 }
+      : { color: 'transparent', cursor: 'default', pointerEvents: 'none' }}
+  >
+    <ChevronLeft size={32} strokeWidth={2.5} />
+  </button>
 
-        {/* Nästa */}
-        <button
-          onClick={next}
-          disabled={!canNext}
-          className="pointer-events-auto flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm transition-all"
-          style={
-            canNext
-              ? {
-                  background: '#FF5421',
-                  color: '#fff',
-                  boxShadow: '0 4px 16px rgba(255,84,33,0.35)',
-                }
-              : {
-                  background: 'rgba(255,255,255,0.06)',
-                  color: 'rgba(255,255,255,0.2)',
-                  cursor: 'default',
-                }
-          }
-        >
-          <span className="hidden sm:inline">Nästa</span>
-          <ChevronRight size={18} />
-        </button>
-      </div>
+  <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.25)' }}>
+    {currentIndex + 1} / {total}
+  </span>
+
+  <button
+    onClick={next}
+    disabled={!canNext}
+    className="pointer-events-auto transition-all"
+    style={canNext
+      ? { color: '#FF5421', opacity: 1 }
+      : { color: 'rgba(255,255,255,0.15)', cursor: 'default' }}
+  >
+    <ChevronRight size={32} strokeWidth={2.5} />
+  </button>
+</div>
 
     </div>
   );

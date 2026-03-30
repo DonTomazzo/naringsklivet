@@ -23,7 +23,7 @@ export const modulesData = [
    {
     id: 'styrelseroller',
     slug: 'styrelseroller',
-    title: 'Välkommen till bostadsrättsföreningen',
+    title: 'Lär känna din nya kollega i teamet',
     category: 'STYRELSEN',
     short_description: 'Lär dig om de olika rollerna i en bostadsrättsförenings styrelse.',
     long_description: 'Detaljerad genomgång av ordförande, vice ordförande, sekreterare, kassör och ledamöters ansvarsområden.',
@@ -50,7 +50,7 @@ export const modulesData = [
   {
     id: 'bostadsrattsforeningen',
     slug: 'bostadsrattsforeningen',
-    title: 'Bostadsrättsföreningen',
+    title: 'Prompttekniker',
     category: 'Juridik',
     short_description: 'Lär dig allt om hur en bostadsrättsförening fungerar. Från beslut till',
     long_description: 'En komplett introduktion till bostadsrättsföreningen - vad den är, hur den styrs och vilka regler som gäller. Perfekt för nya styrelsemedlemmar!',
