@@ -25,8 +25,8 @@ const OL = '#FFF0EB';   // orange light bg
 // SLIDE SHELL – begränsad bredd, vit bakgrund (E.ON-känsla)
 // ─────────────────────────────────────────────────────────
 const SlideShell = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-full w-full overflow-y-auto bg-[#f5f5f0] flex items-start justify-center pt-40 pb-20">
-    <div className="w-full max-w-5xl px-4 sm:px-8">
+  <div className="min-h-full w-full overflow-y-auto bg-white flex items-start justify-center pt-40 pb-20">
+    <div className="w-full max-w-7xl px-4 sm:px-8">
       {children}
     </div>
   </div>

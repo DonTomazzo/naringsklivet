@@ -44,7 +44,7 @@ const ModuleCard = ({ module, index }) => {
       <motion.div
         whileHover={{ y: -4 }}
         transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-        onClick={() => hasContent && navigate(`/module/${module.slug}`)}
+        onClick={() => navigate(`/kurs/${module.slug}`)}
         className="rounded-2xl overflow-hidden border group flex flex-col h-full"
         style={{
           borderColor: C.border,

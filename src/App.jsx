@@ -9,6 +9,7 @@ import SeminarierPage from './pages/SeminarierPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import NewsCards from './components/blog/NewsCards';
+import CoursePage from './pages/CoursePage';
 import FinalQuiz from './pages/FinalQuiz'
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetailPage';
@@ -324,6 +325,7 @@ const AppRoutes = () => {
       <Route path="/integritetspolicy" element={<IntegritetspolicyPage />} />
       <Route path="/om-oss" element={<OmOssPage />} />
       <Route path="/seminarier" element={<SeminarierPage />} />
+      <Route path="/kurs/:slug" element={<CoursePage />} />
 
       {/* Auth routes */}
       <Route path="/register" element={<TeamCodeRegister />} />

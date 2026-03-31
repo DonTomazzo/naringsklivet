@@ -84,105 +84,127 @@ const SlideHeading = ({ icon: Icon, title, dark = false }: {
   </h2>
 );
 
-// ─────────────────────────────────────────────────────────
-// SLIDE 1 – INTRO
-// ─────────────────────────────────────────────────────────
 const IntroSlide = ({ onStart, onQuizOpen }: { onStart: () => void; onQuizOpen: () => void }) => {
   const [played, setPlayed] = useState(false);
+
   return (
-  <div className="min-h-full flex items-center relative overflow-hidden">
-    <img
-      src="https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=1920&q=80"
-      alt="GDPR bakgrund"
-      className="absolute inset-0 w-full h-full object-cover"
-    />
-    <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg,rgba(15,22,35,.93),rgba(23,31,50,.86))' }} />
-    <div className="max-w-4xl mx-auto px-4 sm:px-8 relative z-10 py-16">
-      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="inline-block bg-[#FF5421] text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
-          Inledning
-        </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">
-          GDPR för <span className="text-[#FF5421]">BRF-styrelsen</span>
-        </h1>
- 
-       <div className="flex items-center gap-3 mb-6">
-  <div className="flex-1">
-    <AudioPlayer audioSrc="/audio/gdpr-intro.mp3" onPlay={() => setPlayed(true)} />
-  </div>
-  <AudioCTA visible={!played} direction="up-left" />
-</div>
-        <p className="text-base sm:text-lg text-gray-200 mb-8 leading-relaxed max-w-2xl">
-          Som styrelseledamot hanterar du personuppgifter varje dag – medlemsregister, fakturor,
-          protokoll, kamerainspelningar. Lär dig vad GDPR kräver och hur ni skyddar
-          medlemmarnas integritet.
-        </p>
- 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          {/* Kort 1 och 2 via map */}
-          {[
-            { icon: Shield, title: '7 Avsnitt', sub: 'Från grundprinciper till Privacy by Design' },
-            {
-              icon: Database,
-              title: (
-                <motion.span
-                  onClick={onQuizOpen}
-                  className="cursor-pointer underline decoration-dotted underline-offset-4 hover:text-[#FF5421] transition-colors"
-                  whileHover={{ scale: 1.03 }}
-                >
-                  Gå direkt till kunskapstest
-                </motion.span>
-              ),
-              sub: 'Klicka här för att komma direkt till övningstestet ',
-            },
-          ].map((item, i) => (
-            <motion.div key={i} whileHover={{ scale: 1.03, y: -3 }}
-              className="bg-white/10 backdrop-blur-sm p-4 sm:p-5 rounded-xl border border-white/20">
-              <item.icon className="w-9 h-9 text-[#FF5421] mb-3" />
-              <h3 className="text-sm sm:text-base font-bold text-white mb-1">{item.title}</h3>
-              <p className="text-gray-300 text-xs sm:text-sm">{item.sub}</p>
-            </motion.div>
-          ))}
- 
-          {/* Kort 3 – nedladdning, identiskt utseende men som <a> */}
-          <motion.a
-            href="/pdf/GDPR_Kursmaterial.pdf"
-            download="GDPR_Kursmaterial.pdf"
-            whileHover={{ scale: 1.03, y: -3 }}
-            className="bg-white/10 backdrop-blur-sm p-4 sm:p-5 rounded-xl border border-white/20 block"
-          >
-            <Award className="w-9 h-9 text-[#FF5421] mb-3" />
-            <h3 className="text-sm sm:text-base font-bold text-white mb-1">Ladda ner kursmaterial</h3>
-            <p className="text-gray-300 text-xs sm:text-sm">Ett steg närmre Certifierad styrelseledamot</p>
-          </motion.a>
-        </div>
- 
-      </motion.div>
+    <div className="min-h-full flex items-center relative overflow-hidden">
+      <img
+        src="https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=1920&q=80"
+        alt="GDPR bakgrund"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg,rgba(15,22,35,.93),rgba(23,31,50,.86))' }} />
+      
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 relative z-10 py-16">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+          <div className="inline-block bg-[#FF5421] text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            Inledning
+          </div>
+          
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">
+            GDPR för <span className="text-[#FF5421]">BRF-styrelsen</span>
+          </h1>
+
+          {/* --- LJUDSPELARE MED ABSOLUT POSITIONERAD CTA TILL VÄNSTER --- */}
+          <div className="relative mb-8 max-w-xl"> 
+            {/* CTA: hamnar utanför till vänster om spelaren */}
+            <div className="absolute right-full mr-8 top-0 -mt-12 hidden lg:block whitespace-nowrap">
+              <AudioCTA visible={!played} direction="right" />
+            </div>
+
+            <div className="w-full">
+              <AudioPlayer 
+                audioSrc="/audio/gdpr-intro.mp3" 
+                onPlay={() => setPlayed(true)} 
+              />
+            </div>
+          </div>
+          {/* --------------------------------------------------------- */}
+
+          <p className="text-base sm:text-lg text-gray-200 mb-8 leading-relaxed max-w-2xl">
+            Som styrelseledamot hanterar du personuppgifter varje dag – medlemsregister, fakturor,
+            protokoll, kamerainspelningar. Lär dig vad GDPR kräver och hur ni skyddar
+            medlemmarnas integritet.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            {[
+              { icon: Shield, title: '7 Avsnitt', sub: 'Från grundprinciper till Privacy by Design' },
+              {
+                icon: Database,
+                title: (
+                  <motion.span
+                    onClick={onQuizOpen}
+                    className="cursor-pointer underline decoration-dotted underline-offset-4 hover:text-[#FF5421] transition-colors"
+                    whileHover={{ scale: 1.03 }}
+                  >
+                    Gå direkt till kunskapstest
+                  </motion.span>
+                ),
+                sub: 'Klicka här för att komma direkt till övningstestet',
+              },
+            ].map((item, i) => (
+              <motion.div key={i} whileHover={{ scale: 1.03, y: -3 }}
+                className="bg-white/10 backdrop-blur-sm p-4 sm:p-5 rounded-xl border border-white/20">
+                <item.icon className="w-9 h-9 text-[#FF5421] mb-3" />
+                <h3 className="text-sm sm:text-base font-bold text-white mb-1">{item.title}</h3>
+                <p className="text-gray-300 text-xs sm:text-sm">{item.sub}</p>
+              </motion.div>
+            ))}
+
+            <motion.a
+              href="/pdf/GDPR_Kursmaterial.pdf"
+              download="GDPR_Kursmaterial.pdf"
+              whileHover={{ scale: 1.03, y: -3 }}
+              className="bg-white/10 backdrop-blur-sm p-4 sm:p-5 rounded-xl border border-white/20 block"
+            >
+              <Award className="w-9 h-9 text-[#FF5421] mb-3" />
+              <h3 className="text-sm sm:text-base font-bold text-white mb-1">Ladda ner kursmaterial</h3>
+              <p className="text-gray-300 text-xs sm:text-sm">Ett steg närmre Certifierad styrelseledamot</p>
+            </motion.a>
+          </div>
+
+        </motion.div>
+      </div>
     </div>
-  </div>
-);
+  );
 };
 
-// ─────────────────────────────────────────────────────────
-// SLIDE 2 – VAD ÄR GDPR?
-// ─────────────────────────────────────────────────────────
 const VadArGdprSlide = () => (
   <div className="min-h-full relative overflow-hidden">
     <img
-      src="/images/gdpr-roller.jpg"
+      src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1920&q=80"
       alt=""
       className="absolute inset-0 w-full h-full object-cover"
     />
-    <div className="absolute inset-0 bg-[#0f1623]/85" />
-    <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-8 py-10 sm:py-14">
-      <AudioPlayer audioSrc="/audio/vad-ar-gdpr.mp3" />
-      <p className="text-gray-200 text-base sm:text-lg leading-relaxed mb-6">
-        GDPR – <em>General Data Protection Regulation</em> – är EU:s dataskyddsförordning...
+    <div className="absolute inset-0 bg-black/55" />
+
+    <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-8 py-10 sm:py-14">
+
+      <div className="mb-6">
+        <p className="font-bold text-white text-xl sm:text-2xl mb-1">GDPR:s sju principer</p>
+        <p className="text-white/60 text-sm">
+          Klicka på varje cirkel för att läsa mer
+        </p>
+      </div>
+
+      <p className="text-white/80 text-base leading-relaxed mb-8 max-w-2xl">
+        GDPR – <em>General Data Protection Regulation</em> – är EU:s dataskyddsförordning
+        som gäller sedan 25 maj 2018. Den vilar på sju grundprinciper.
       </p>
+
       <GdprPrinciplesSection />
-      <InfoBox color="slate" icon="💡" title="IMY – Integritetsskyddsmyndigheten">
-        ...
-      </InfoBox>
+
+      <div className="mt-8 p-4 rounded-xl border-l-4 border-orange-400 bg-black/40 backdrop-blur-sm max-w-2xl">
+        <p className="text-xs font-bold uppercase tracking-widest mb-1 text-orange-400">
+          IMY – Integritetsskyddsmyndigheten
+        </p>
+        <p className="text-sm text-white/80 leading-relaxed">
+          IMY är den svenska tillsynsmyndigheten för GDPR. De kan utfärda böter på upp
+          till 20 miljoner euro eller 4% av omsättningen vid överträdelser.
+        </p>
+      </div>
     </div>
   </div>
 );

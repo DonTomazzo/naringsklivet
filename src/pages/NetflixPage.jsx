@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, CheckCircle, ChevronDown, Play, X } from 'lucide-react';
+import  DatePicker  from "../components/DatePicker";
 import ModulesSection2 from '../components/landing/ModulesSection2';
 
 // ── Design tokens ─────────────────────────────────────────
@@ -132,13 +133,11 @@ const Nav = () => {
   );
 };
 
-// ── HERO ──────────────────────────────────────────────────
 const Hero = () => {
   const navigate = useNavigate();
 
   return (
     <section className="relative pt-28 pb-0 overflow-hidden" style={{ background: C.bg }}>
-      {/* Subtle orange circle bg */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full pointer-events-none"
         style={{ background: `radial-gradient(circle, ${C.orangeL} 0%, transparent 70%)`, transform: 'translate(30%, -20%)' }} />
 
@@ -153,22 +152,18 @@ const Hero = () => {
           AI-utbildning för yrkesverksamma
         </motion.div>
 
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-          className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight mb-8"
-          style={{ color: C.dark, fontFamily: "'Nunito', sans-serif", maxWidth: '14ch' }}>
-          Lär dig<br />
-          <span style={{ color: C.orange, WebkitTextStroke: '0px' }}>
-            använda AI
-          </span><br />
-          på riktigt.
-        </motion.h1>
+        {/* Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-end pb-0">
+          {/* Vänster – text */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.18 }}>
+            transition={{ duration: 0.7, delay: 0.08 }}>
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight mb-8"
+              style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>
+              Lär dig<br />
+              <span style={{ color: C.orange }}>använda AI</span><br />
+              på riktigt.
+            </h1>
             <p className="text-lg sm:text-xl leading-relaxed mb-8 max-w-lg"
               style={{ color: C.mid }}>
               Träningsprogram, workshops och föreläsningar som ger
@@ -191,29 +186,15 @@ const Hero = () => {
             </div>
           </motion.div>
 
-          {/* Stats strip */}
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.28 }}
-            className="flex flex-col gap-px overflow-hidden rounded-3xl border"
-            style={{ borderColor: C.border }}>
-            {[
-              { num: '4',    label: 'Utbildningsformat', sub: 'Kurs · Workshop · Föreläsning · 1-on-1' },
-              { num: '14',   label: 'Moduler i träningsprogrammet', sub: 'Från grunder till avancerad användning' },
-              { num: '100%', label: 'Praktikbaserat', sub: 'Inga slidedeck-maratons – bara handling' },
-            ].map((s, i) => (
-              <div key={i} className="flex items-center gap-5 px-6 py-5"
-                style={{ background: i % 2 === 0 ? C.white : C.bgAlt, borderBottom: i < 2 ? `1px solid ${C.border}` : 'none' }}>
-                <span className="text-3xl font-black flex-shrink-0" style={{ color: C.orange }}>{s.num}</span>
-                <div>
-                  <p className="font-bold text-sm" style={{ color: C.dark }}>{s.label}</p>
-                  <p className="text-xs mt-0.5" style={{ color: C.muted }}>{s.sub}</p>
-                </div>
-              </div>
-            ))}
+          {/* Höger – kalender */}
+          <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.65, delay: 0.25 }}>
+            <DatePicker />
           </motion.div>
+
         </div>
 
-        {/* Hero image – full bleed */}
+        {/* Hero image */}
         <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.36 }}
           className="mt-12 rounded-t-3xl overflow-hidden relative"
@@ -222,7 +203,6 @@ const Hero = () => {
             alt="Workshop" className="w-full h-full object-cover object-center" />
           <div className="absolute inset-0"
             style={{ background: `linear-gradient(to right, ${C.dark}55 0%, transparent 50%, ${C.orange}22 100%)` }} />
-          {/* Floating pill */}
           <div className="absolute bottom-6 left-6 sm:left-10 flex items-center gap-3 px-5 py-3.5 rounded-2xl"
             style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)' }}>
             <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: C.orange }} />
@@ -231,6 +211,7 @@ const Hero = () => {
             </span>
           </div>
         </motion.div>
+
       </div>
     </section>
   );

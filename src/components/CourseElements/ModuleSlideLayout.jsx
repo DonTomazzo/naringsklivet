@@ -157,7 +157,7 @@ const ModuleSlideLayout = ({
         </AnimatePresence>
       </div>
 
-     {/* Navigeringsknappar – E.ON-stil, enkla pilar centrerat */}
+     {/* Navigeringsknappar */}
 <div
   className="fixed bottom-0 right-0 flex items-center justify-center gap-6 py-4 pointer-events-none transition-all duration-300"
   style={{ left: 'var(--sidebar-width, 0px)' }}
@@ -165,27 +165,32 @@ const ModuleSlideLayout = ({
   <button
     onClick={prev}
     disabled={!canPrev}
-    className="pointer-events-auto transition-all"
+    className="pointer-events-auto w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all"
     style={canPrev
-      ? { color: '#FF5421', opacity: 1 }
-      : { color: 'transparent', cursor: 'default', pointerEvents: 'none' }}
+      ? { background: 'rgba(255,84,33,0.15)', color: '#FF5421',
+          border: '1px solid rgba(255,84,33,0.3)' }
+      : { background: 'transparent', color: 'transparent',
+          cursor: 'default', pointerEvents: 'none', border: '1px solid transparent' }}
   >
-    <ChevronLeft size={32} strokeWidth={2.5} />
+    <ChevronLeft size={20} strokeWidth={2.5} />
   </button>
 
-  <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.25)' }}>
+  <span className="text-xs font-semibold tabular-nums"
+    style={{ color: 'rgba(255,255,255,0.3)', minWidth: '3rem', textAlign: 'center' }}>
     {currentIndex + 1} / {total}
   </span>
 
   <button
     onClick={next}
     disabled={!canNext}
-    className="pointer-events-auto transition-all"
+    className="pointer-events-auto w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all"
     style={canNext
-      ? { color: '#FF5421', opacity: 1 }
-      : { color: 'rgba(255,255,255,0.15)', cursor: 'default' }}
+      ? { background: '#FF5421', color: '#fff',
+          boxShadow: '0 4px 12px rgba(255,84,33,0.4)' }
+      : { background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.2)',
+          cursor: 'default' }}
   >
-    <ChevronRight size={32} strokeWidth={2.5} />
+    <ChevronRight size={20} strokeWidth={2.5} />
   </button>
 </div>
 

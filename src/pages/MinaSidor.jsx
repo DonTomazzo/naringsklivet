@@ -1,458 +1,553 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import {
-  User, Building2, CheckCircle, Circle, Download, Star,
-  FileText, ChevronRight, Award, MessageSquare, LogOut,
-  BookOpen, Zap, HelpCircle, Target, X, Send, Lock
+  User, CheckCircle, Circle, Download, Star, FileText,
+  ChevronRight, Award, MessageSquare, LogOut, BookOpen,
+  Search, Send, X, Lock, Receipt, FolderOpen,
+  LayoutDashboard, GraduationCap, Menu, ArrowRight
 } from 'lucide-react';
 
-// ─── MOCK DATA (ersätt med Supabase auth/data) ───────────────────────────────
-const MOCK_USER = {
-  name: 'Anna Lindström',
-  email: 'anna@brf-solglansen.se',
-  avatar: null,
-  forening: 'BRF Solglänsen',
-  roll: 'Ordförande',
-  joinedDate: '2025-01-15',
-  faktura: {
-    referens: 'INV-2025-0042',
-    belopp: '3 995 kr',
-    datum: '2025-01-15',
-    status: 'Betald',
-    org: '559123-4567',
-    adress: 'Storgatan 12, 211 45 Malmö',
-  },
-  totalPoang: 400,
-  maxPoang: 500,
+// ── Brand tokens ──────────────────────────────────────────
+const C = {
+  orange:  '#FF5421',
+  orangeD: '#E04619',
+  orangeL: '#FFF0EB',
+  dark:    '#1A1A1A',
+  mid:     '#4A4A4A',
+  muted:   '#8A8A8A',
+  bg:      '#FAFAF8',
+  bgAlt:   '#F4F2EE',
+  bgCard:  '#FFFFFF',
+  border:  '#E8E5E0',
 };
 
-const MOCK_PROGRESS = [
-  { id: 'intro',            title: 'Välkommen & Introduktion', icon: BookOpen, completed: true,  points: 0   },
-  { id: 'ai-idag',          title: 'Styrelsens roller',        icon: Zap,      completed: true,  points: 100 },
-  { id: 'ordforande',       title: 'Ordförande',               icon: Target,   completed: true,  points: 100 },
-  { id: 'quiz-grundroller', title: 'Quiz: Grundroller',        icon: HelpCircle, completed: true, points: 200 },
-  { id: 'gdpr',             title: 'GDPR & Dataskydd',         icon: FileText, completed: false, points: 150 },
-  { id: 'ekonomi',          title: 'Ekonomiansvar',            icon: FileText, completed: false, points: 150 },
+// ── Mock data ─────────────────────────────────────────────
+const USER = {
+  name: 'Anna Lindström',
+  email: 'anna@brf-solglansen.se',
+  forening: 'BRF Solglänsen',
+  roll: 'Ordförande',
+  joined: '15 jan 2025',
+  faktura: {
+    referens: 'INV-2025-0042', belopp: '3 995 kr',
+    datum: '15 jan 2025', status: 'Betald',
+    org: '559123-4567', adress: 'Storgatan 12, 211 45 Malmö',
+  },
+};
+
+const PROGRESS = [
+  { id: 'intro',     title: 'Välkommen & Introduktion',  icon: BookOpen,       completed: true  },
+  { id: 'roller',    title: 'Styrelsens roller',          icon: User,           completed: true  },
+  { id: 'ordforande',title: 'Ordförande',                 icon: User,           completed: true  },
+  { id: 'gdpr',      title: 'GDPR & Dataskydd',           icon: FileText,       completed: false },
+  { id: 'ekonomi',   title: 'Ekonomiansvar',              icon: FileText,       completed: false },
+  { id: 'stamma',    title: 'Föreningsstämman',           icon: BookOpen,       completed: false },
+  { id: 'underhall', title: 'Underhåll & planering',      icon: BookOpen,       completed: false },
+  { id: 'slutprov',  title: 'Slutprov & certifikat',      icon: GraduationCap,  completed: false },
 ];
 
-const MOCK_DOCUMENTS = [
-  { title: 'Mötesprotokoll – mall',        size: '42 KB',  url: '/pdf/motesprotokoll.pdf' },
-  { title: 'Kallelse till styrelsemöte',   size: '28 KB',  url: '/pdf/kallelse.pdf' },
-  { title: 'Årsredovisning – checklista',  size: '65 KB',  url: '/pdf/arsredovisning.pdf' },
-  { title: 'GDPR-policy för BRF',          size: '88 KB',  url: '/pdf/gdpr-policy.pdf' },
-  { title: 'Budget – mall',                size: '120 KB', url: '/pdf/budget.pdf' },
-  { title: 'Välkomstbrev till ny medlem',  size: '35 KB',  url: '/pdf/valkombrev.pdf' },
+const PDF_CATS = ['Alla', 'Protokoll & stämma', 'Ekonomi', 'GDPR', 'Juridik', 'Mallar'];
+
+const DOCUMENTS = [
+  { title: 'Mötesprotokoll – mall',              cat: 'Protokoll & stämma', size: '42 KB',  url: '#' },
+  { title: 'Kallelse till styrelsemöte',          cat: 'Protokoll & stämma', size: '28 KB',  url: '#' },
+  { title: 'Stämmoprotokollets struktur',         cat: 'Protokoll & stämma', size: '55 KB',  url: '#' },
+  { title: 'Dagordning – föreningsstämma',        cat: 'Protokoll & stämma', size: '30 KB',  url: '#' },
+  { title: 'Årsredovisning – checklista',         cat: 'Ekonomi',            size: '65 KB',  url: '#' },
+  { title: 'Budget – mall',                       cat: 'Ekonomi',            size: '120 KB', url: '#' },
+  { title: 'GDPR-policy för BRF',                cat: 'GDPR',               size: '88 KB',  url: '#' },
+  { title: 'Registerförteckning – mall',          cat: 'GDPR',               size: '52 KB',  url: '#' },
+  { title: 'Bostadsrättslagen – sammanfattning',  cat: 'Juridik',            size: '75 KB',  url: '#' },
+  { title: 'Diskrimineringslagen – guide',        cat: 'Juridik',            size: '60 KB',  url: '#' },
+  { title: 'Välkomstbrev till ny medlem',         cat: 'Mallar',             size: '35 KB',  url: '#' },
+  { title: 'Störningsanmälan – blankett',         cat: 'Mallar',             size: '28 KB',  url: '#' },
 ];
 
-// ─── GavelIcon ────────────────────────────────────────────────────────────────
-const GavelIcon = ({ size = 24, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <path d="M14 6L18 10L10 18L6 14L14 6Z" fill={color} opacity="0.9" />
-    <path d="M14 6L18 10" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
-    <path d="M4 20L8 16" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
-    <rect x="15" y="2" width="5" height="7" rx="1.5" transform="rotate(45 15 2)" fill={color} />
-  </svg>
-);
-
-// ─── TabButton ────────────────────────────────────────────────────────────────
-const TabButton = ({ id, label, icon: Icon, active, onClick }) => (
-  <button
-    onClick={() => onClick(id)}
-    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap ${
-      active
-        ? 'bg-[#FF5421] text-white shadow-lg shadow-[#FF5421]/25'
-        : 'text-white/50 hover:text-white hover:bg-white/8'
-    }`}
-  >
-    <Icon size={15} />
-    {label}
-  </button>
-);
-
-// ─── Card wrapper ─────────────────────────────────────────────────────────────
-const Card = ({ children, className = '' }) => (
-  <div className={`rounded-2xl border border-white/10 bg-white/8 backdrop-blur-md p-5 sm:p-6 ${className}`}>
-    {children}
-  </div>
-);
-
-// ─── FeedbackModal ────────────────────────────────────────────────────────────
+// ── Feedback modal ────────────────────────────────────────
 const FeedbackModal = ({ onClose }) => {
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
-  const [text, setText] = useState('');
-  const [sent, setSent] = useState(false);
-
-  const handleSend = () => {
-    if (!rating) return;
-    // TODO: skicka till Supabase
-    setSent(true);
-  };
+  const [text, setText]       = useState('');
+  const [sent, setSent]       = useState(false);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      onClick={onClose}>
+      <motion.div initial={{ scale: 0.95, y: 16 }} animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.95, y: 16 }} transition={{ type: 'spring', damping: 26, stiffness: 320 }}
         onClick={e => e.stopPropagation()}
-        className="bg-[#1a2235] border border-white/10 rounded-2xl w-full max-w-md p-6 sm:p-8"
-      >
-        {!sent ? (
-          <>
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold text-white">Lämna feedback</h3>
-              <button onClick={onClose} className="text-white/40 hover:text-white transition-colors">
-                <X size={20} />
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div className="px-6 py-5 border-b flex items-center justify-between" style={{ borderColor: C.border }}>
+          <h3 className="font-bold text-base" style={{ color: C.dark }}>Lämna feedback</h3>
+          <button onClick={onClose} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors hover:bg-gray-100">
+            <X size={15} style={{ color: C.muted }} />
+          </button>
+        </div>
+        <div className="p-6">
+          {!sent ? (
+            <div className="space-y-5">
+              <p className="text-sm" style={{ color: C.muted }}>Hur upplever du kursen hittills?</p>
+              <div className="flex justify-center gap-2">
+                {[1,2,3,4,5].map(s => (
+                  <button key={s} onMouseEnter={() => setHovered(s)} onMouseLeave={() => setHovered(0)}
+                    onClick={() => setRating(s)} className="transition-transform hover:scale-110">
+                    <Star size={34} fill={(hovered||rating)>=s ? C.orange : 'transparent'}
+                      color={(hovered||rating)>=s ? C.orange : C.border} />
+                  </button>
+                ))}
+              </div>
+              <textarea value={text} onChange={e => setText(e.target.value)}
+                placeholder="Skriv gärna en kommentar (valfritt)..." rows={3}
+                className="w-full px-4 py-3 rounded-xl text-sm resize-none focus:outline-none border-2 transition-colors"
+                style={{ borderColor: C.border, color: C.dark }} />
+              <button onClick={() => rating && setSent(true)} disabled={!rating}
+                className="w-full py-3.5 rounded-xl font-bold text-white text-sm disabled:opacity-30"
+                style={{ background: `linear-gradient(135deg, ${C.orange}, ${C.orangeD})` }}>
+                Skicka feedback
               </button>
             </div>
-
-            <p className="text-white/50 text-sm mb-5">Hur upplever du kursen hittills?</p>
-
-            {/* Stjärnor */}
-            <div className="flex justify-center gap-2 mb-6">
-              {[1,2,3,4,5].map(s => (
-                <button
-                  key={s}
-                  onMouseEnter={() => setHovered(s)}
-                  onMouseLeave={() => setHovered(0)}
-                  onClick={() => setRating(s)}
-                >
-                  <Star
-                    size={36}
-                    className="transition-all"
-                    fill={(hovered || rating) >= s ? '#FF5421' : 'transparent'}
-                    color={(hovered || rating) >= s ? '#FF5421' : 'rgba(255,255,255,0.2)'}
-                  />
-                </button>
-              ))}
+          ) : (
+            <div className="text-center py-6">
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
+                style={{ background: C.orangeL }}>
+                <CheckCircle size={26} style={{ color: C.orange }} />
+              </div>
+              <h4 className="font-bold text-base mb-1" style={{ color: C.dark }}>Tack!</h4>
+              <p className="text-sm mb-5" style={{ color: C.muted }}>Din feedback hjälper oss att förbättra kursen.</p>
+              <button onClick={onClose} className="px-8 py-3 rounded-xl font-bold text-white text-sm"
+                style={{ background: `linear-gradient(135deg, ${C.orange}, ${C.orangeD})` }}>Stäng</button>
             </div>
-
-            <textarea
-              value={text}
-              onChange={e => setText(e.target.value)}
-              placeholder="Skriv gärna en kommentar (valfritt)..."
-              rows={4}
-              className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-white/30 text-sm resize-none outline-none focus:border-[#FF5421]/50 transition-colors"
-            />
-
-            <button
-              onClick={handleSend}
-              disabled={!rating}
-              className={`mt-4 w-full py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${
-                rating ? 'text-white shadow-lg' : 'bg-white/10 text-white/30 cursor-not-allowed'
-              }`}
-              style={rating ? { background: 'linear-gradient(135deg, #FF5421, #E04619)' } : {}}
-            >
-              <Send size={15} /> Skicka feedback
-            </button>
-          </>
-        ) : (
-          <div className="text-center py-6">
-            <div className="w-16 h-16 rounded-full bg-[#FF5421]/20 flex items-center justify-center mx-auto mb-4">
-              <CheckCircle size={32} className="text-[#FF5421]" />
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">Tack!</h3>
-            <p className="text-white/50 text-sm mb-6">Din feedback hjälper oss att förbättra kursen.</p>
-            <button
-              onClick={onClose}
-              className="px-8 py-3 rounded-xl font-bold text-white"
-              style={{ background: 'linear-gradient(135deg, #FF5421, #E04619)' }}
-            >
-              Stäng
-            </button>
-          </div>
-        )}
+          )}
+        </div>
       </motion.div>
     </motion.div>
   );
 };
 
-// ─── TABS ─────────────────────────────────────────────────────────────────────
-
-const OverviewTab = ({ user, progress, onFeedback, onDownloadDiploma }) => {
-  const completed = progress.filter(p => p.completed).length;
-  const pct = Math.round((completed / progress.length) * 100);
-  const earnedPoints = progress.filter(p => p.completed).reduce((s, p) => s + p.points, 0);
-  const allDone = completed === progress.length;
+// ── OVERVIEW TAB ──────────────────────────────────────────
+const OverviewTab = ({ onFeedback }) => {
+  const completed = PROGRESS.filter(p => p.completed).length;
+  const pct       = Math.round((completed / PROGRESS.length) * 100);
+  const allDone   = completed === PROGRESS.length;
+  const navigate  = useNavigate();
 
   return (
     <div className="space-y-4">
-      {/* Välkomsthälsning */}
-      <Card>
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#FF5421] to-[#E04619] flex items-center justify-center flex-shrink-0">
-            {user.avatar
-              ? <img src={user.avatar} className="w-full h-full rounded-full object-cover" />
-              : <User size={26} className="text-white" />
-            }
-          </div>
-          <div>
-            <h2 className="text-lg font-bold text-white">Hej, {user.name.split(' ')[0]}!</h2>
-            <p className="text-white/50 text-sm">{user.forening} · {user.roll}</p>
-          </div>
-        </div>
-      </Card>
 
-      {/* Framstegsring */}
-      <Card>
-        <div className="flex items-center gap-5">
-          {/* Ring */}
-          <div className="relative w-20 h-20 flex-shrink-0">
-            <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
-              <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="7" />
-              <motion.circle
-                cx="40" cy="40" r="34" fill="none"
-                stroke="#FF5421" strokeWidth="7" strokeLinecap="round"
-                strokeDasharray={`${2 * Math.PI * 34}`}
-                initial={{ strokeDashoffset: 2 * Math.PI * 34 }}
-                animate={{ strokeDashoffset: 2 * Math.PI * 34 * (1 - pct / 100) }}
-                transition={{ duration: 1.2, ease: 'easeOut' }}
-              />
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-lg font-bold text-white">{pct}%</span>
-            </div>
+      {/* Hero user card */}
+      <div className="rounded-2xl overflow-hidden relative" style={{ background: C.dark }}>
+        <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800&q=60"
+          alt="" className="absolute inset-0 w-full h-full object-cover opacity-15" />
+        <div className="relative z-10 px-6 py-6 flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 font-black text-xl text-white"
+            style={{ background: C.orange }}>
+            {USER.name[0]}
           </div>
-
-          <div className="flex-1">
-            <h3 className="font-bold text-white mb-1">Kursframsteg</h3>
-            <p className="text-white/50 text-sm mb-3">{completed} av {progress.length} avsnitt klara</p>
-            <div className="flex items-center gap-2">
-              <GavelIcon size={16} color="#FF5421" />
-              <span className="text-sm font-semibold text-white/70">{earnedPoints} poäng intjänade</span>
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      {/* Diplom */}
-      <Card className={allDone ? 'border-[#FF5421]/30 bg-[#FF5421]/10' : ''}>
-        <div className="flex items-center gap-4">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${allDone ? 'bg-[#FF5421]' : 'bg-white/10'}`}>
-            <Award size={22} className={allDone ? 'text-white' : 'text-white/30'} />
-          </div>
-          <div className="flex-1">
-            <h3 className={`font-bold text-sm ${allDone ? 'text-white' : 'text-white/50'}`}>Styrelsekörkortet – Diplom</h3>
-            <p className="text-xs text-white/40 mt-0.5">
-              {allDone ? 'Kursen avklarad – grattis!' : `${progress.length - completed} avsnitt kvar för diplom`}
+          <div className="flex-1 min-w-0">
+            <h2 className="text-lg font-bold text-white">Hej, {USER.name.split(' ')[0]}!</h2>
+            <p className="text-sm mt-0.5" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              {USER.forening} · {USER.roll}
             </p>
           </div>
-          <button
-            onClick={allDone ? onDownloadDiploma : undefined}
-            disabled={!allDone}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-              allDone
-                ? 'text-white shadow-lg'
-                : 'bg-white/5 text-white/20 cursor-not-allowed'
-            }`}
-            style={allDone ? { background: 'linear-gradient(135deg, #FF5421, #E04619)' } : {}}
-          >
-            {allDone ? <><Download size={14} /> Ladda ner</> : <><Lock size={14} /> Låst</>}
-          </button>
+          <div className="text-right flex-shrink-0">
+            <p className="text-2xl font-black text-white">{pct}%</p>
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>genomfört</p>
+          </div>
         </div>
-      </Card>
 
-      {/* Feedback */}
-      <button
-        onClick={onFeedback}
-        className="w-full flex items-center gap-4 rounded-2xl border border-white/10 bg-white/8 p-5 hover:border-[#FF5421]/30 hover:bg-[#FF5421]/5 transition-all group"
-      >
-        <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center group-hover:bg-[#FF5421]/20 transition-colors">
-          <MessageSquare size={20} className="text-white/60 group-hover:text-[#FF5421] transition-colors" />
+        {/* Progress bar */}
+        <div className="h-1.5 mx-6 mb-5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
+          <motion.div className="h-full rounded-full"
+            style={{ background: `linear-gradient(to right, ${C.orange}, ${C.orangeD})` }}
+            initial={{ width: 0 }} animate={{ width: `${pct}%` }}
+            transition={{ duration: 1.2, ease: 'easeOut', delay: 0.3 }} />
         </div>
-        <div className="flex-1 text-left">
-          <h3 className="font-bold text-sm text-white">Lämna feedback</h3>
-          <p className="text-xs text-white/40 mt-0.5">Hjälp oss göra kursen bättre</p>
+
+        {/* Stats row */}
+        <div className="grid grid-cols-3 divide-x mx-6 mb-5 rounded-xl overflow-hidden"
+          style={{ background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.1)' }}>
+          {[
+            { val: completed, label: 'Avsnitt klara' },
+            { val: PROGRESS.length - completed, label: 'Kvar' },
+            { val: '365d', label: 'Åtkomst kvar' },
+          ].map((s, i) => (
+            <div key={i} className="px-4 py-3 text-center">
+              <p className="text-lg font-black text-white">{s.val}</p>
+              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>{s.label}</p>
+            </div>
+          ))}
         </div>
-        <ChevronRight size={18} className="text-white/20 group-hover:text-[#FF5421] transition-colors" />
+      </div>
+
+      {/* Fortsätt kursen */}
+      {!allDone && (
+        <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+          onClick={() => navigate('/module/styrelseroller')}
+          className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl border-2 text-left transition-all"
+          style={{ borderColor: C.orange, background: C.orangeL }}>
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: C.orange }}>
+            <BookOpen size={18} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <p className="font-bold text-sm" style={{ color: C.dark }}>Fortsätt där du slutade</p>
+            <p className="text-xs mt-0.5" style={{ color: C.muted }}>
+              {PROGRESS.find(p => !p.completed)?.title}
+            </p>
+          </div>
+          <ArrowRight size={18} style={{ color: C.orange }} />
+        </motion.button>
+      )}
+
+      {/* Certifikat */}
+      <div className={`rounded-2xl border-2 p-5 flex items-center gap-4 transition-all ${
+        allDone ? 'border-orange-200' : 'border-transparent'
+      }`} style={{ background: allDone ? C.orangeL : C.bgCard,
+        border: `2px solid ${allDone ? C.orange + '40' : C.border}` }}>
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ background: allDone ? C.orange : C.bgAlt }}>
+          {allDone ? <Award size={22} className="text-white" />
+            : <Lock size={18} style={{ color: C.muted }} />}
+        </div>
+        <div className="flex-1">
+          <p className="font-bold text-sm" style={{ color: allDone ? C.dark : C.muted }}>
+            Styrelsekörkortet – Certifikat
+          </p>
+          <p className="text-xs mt-0.5" style={{ color: C.muted }}>
+            {allDone ? 'Kursen avklarad – grattis!' : `${PROGRESS.length - completed} avsnitt kvar`}
+          </p>
+        </div>
+        <button disabled={!allDone}
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold transition-all disabled:opacity-30 text-white"
+          style={{ background: allDone ? C.orange : C.bgAlt,
+            color: allDone ? 'white' : C.muted }}>
+          <Download size={13} /> Ladda ner
+        </button>
+      </div>
+
+      {/* Feedback knapp */}
+      <button onClick={onFeedback}
+        className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl border text-left group transition-all hover:border-orange-200 hover:bg-orange-50"
+        style={{ background: C.bgCard, borderColor: C.border }}>
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-orange-100"
+          style={{ background: C.bgAlt }}>
+          <MessageSquare size={17} className="transition-colors group-hover:text-orange-500"
+            style={{ color: C.muted }} />
+        </div>
+        <div className="flex-1">
+          <p className="font-semibold text-sm" style={{ color: C.dark }}>Lämna feedback</p>
+          <p className="text-xs mt-0.5" style={{ color: C.muted }}>Hjälp oss göra kursen bättre</p>
+        </div>
+        <ChevronRight size={16} className="transition-colors group-hover:text-orange-400"
+          style={{ color: C.muted }} />
       </button>
+
     </div>
   );
 };
 
-const ProgressTab = ({ progress }) => (
-  <div className="space-y-3">
-    <p className="text-white/40 text-xs uppercase tracking-wider font-semibold px-1 mb-4">Alla avsnitt</p>
-    {progress.map((item, i) => {
-      const Icon = item.icon;
-      return (
-        <motion.div
-          key={item.id}
-          initial={{ opacity: 0, x: -16 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: i * 0.06 }}
-          className={`flex items-center gap-4 rounded-2xl border p-4 transition-all ${
-            item.completed
-              ? 'border-[#FF5421]/25 bg-[#FF5421]/8'
-              : 'border-white/8 bg-white/5'
-          }`}
-        >
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-            item.completed ? 'bg-[#FF5421]/20' : 'bg-white/8'
-          }`}>
-            <Icon size={18} className={item.completed ? 'text-[#FF5421]' : 'text-white/30'} />
-          </div>
-          <div className="flex-1">
-            <h4 className={`font-semibold text-sm ${item.completed ? 'text-white' : 'text-white/40'}`}>
-              {item.title}
-            </h4>
-            {item.points > 0 && (
-              <p className={`text-xs mt-0.5 ${item.completed ? 'text-[#FF5421]/70' : 'text-white/25'}`}>
-                +{item.points} poäng
-              </p>
-            )}
-          </div>
-          {item.completed
-            ? <CheckCircle size={18} className="text-[#FF5421] flex-shrink-0" />
-            : <Circle size={18} className="text-white/15 flex-shrink-0" />
-          }
-        </motion.div>
-      );
-    })}
-  </div>
-);
+// ── PROGRESS TAB ──────────────────────────────────────────
+const ProgressTab = () => {
+  const completed = PROGRESS.filter(p => p.completed).length;
+  const pct       = Math.round((completed / PROGRESS.length) * 100);
 
-const FakturaTab = ({ faktura }) => (
+  return (
+    <div className="space-y-4">
+      {/* Header bar */}
+      <div className="rounded-2xl p-5 flex items-center gap-4"
+        style={{ background: C.dark }}>
+        <div className="flex-1">
+          <p className="font-bold text-white mb-1">Kursframsteg</p>
+          <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
+            <motion.div className="h-full rounded-full"
+              style={{ background: `linear-gradient(to right, ${C.orange}, ${C.orangeD})` }}
+              initial={{ width: 0 }} animate={{ width: `${pct}%` }}
+              transition={{ duration: 1, ease: 'easeOut' }} />
+          </div>
+        </div>
+        <div className="text-right flex-shrink-0">
+          <p className="text-2xl font-black text-white">{pct}%</p>
+          <p className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
+            {completed}/{PROGRESS.length}
+          </p>
+        </div>
+      </div>
+
+      {/* Avsnittslista */}
+      <div className="space-y-2">
+        {PROGRESS.map((item, i) => {
+          const Icon = item.icon;
+          return (
+            <motion.div key={item.id}
+              initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.04 }}
+              className="flex items-center gap-4 px-4 py-3.5 rounded-xl border transition-all"
+              style={{
+                background: item.completed ? C.orangeL : C.bgCard,
+                borderColor: item.completed ? C.orange + '30' : C.border,
+              }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: item.completed ? C.orange + '20' : C.bgAlt }}>
+                <Icon size={15} style={{ color: item.completed ? C.orange : C.muted }} />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-sm"
+                  style={{ color: item.completed ? C.dark : C.muted }}>
+                  {item.title}
+                </p>
+              </div>
+              {item.completed
+                ? <CheckCircle size={16} style={{ color: C.orange }} />
+                : <Circle size={16} style={{ color: C.border }} />
+              }
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// ── DOKUMENT TAB ──────────────────────────────────────────
+const DokumentTab = () => {
+  const [query, setQuery] = useState('');
+  const [cat, setCat]     = useState('Alla');
+
+  const filtered = DOCUMENTS.filter(d => {
+    const matchCat = cat === 'Alla' || d.cat === cat;
+    const matchQ   = !query || d.title.toLowerCase().includes(query.toLowerCase());
+    return matchCat && matchQ;
+  });
+
+  return (
+    <div className="space-y-4">
+      {/* Search */}
+      <div className="relative">
+        <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2"
+          style={{ color: C.muted }} />
+        <input value={query} onChange={e => setQuery(e.target.value)}
+          placeholder="Sök dokument..."
+          className="w-full pl-9 pr-4 py-3 rounded-xl border text-sm focus:outline-none transition-colors"
+          style={{ background: C.bgCard, borderColor: C.border, color: C.dark }} />
+      </div>
+
+      {/* Cats */}
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        {PDF_CATS.map(c => (
+          <button key={c} onClick={() => setCat(c)}
+            className="flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all"
+            style={cat === c
+              ? { background: C.orange, color: 'white' }
+              : { background: C.bgAlt, color: C.mid, border: `1px solid ${C.border}` }}>
+            {c}
+          </button>
+        ))}
+      </div>
+
+      {/* Count */}
+      <p className="text-xs" style={{ color: C.muted }}>
+        {filtered.length} dokument{cat !== 'Alla' ? ` i ${cat}` : ''}
+      </p>
+
+      {/* Grid */}
+      <div className="grid grid-cols-1 gap-2">
+        <AnimatePresence>
+          {filtered.map((doc, i) => (
+            <motion.a key={doc.title} href={doc.url} download
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              transition={{ delay: i * 0.03 }}
+              className="flex items-center gap-3 px-4 py-3.5 rounded-xl border group transition-all hover:border-orange-200 hover:bg-orange-50"
+              style={{ background: C.bgCard, borderColor: C.border }}>
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: C.orangeL }}>
+                <FileText size={15} style={{ color: C.orange }} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-sm truncate" style={{ color: C.dark }}>{doc.title}</p>
+                <p className="text-xs mt-0.5" style={{ color: C.muted }}>{doc.cat} · {doc.size}</p>
+              </div>
+              <Download size={14} className="flex-shrink-0 transition-colors group-hover:text-orange-400"
+                style={{ color: C.muted }} />
+            </motion.a>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {filtered.length === 0 && (
+        <div className="text-center py-10">
+          <FolderOpen size={32} className="mx-auto mb-2 opacity-30" style={{ color: C.muted }} />
+          <p className="text-sm" style={{ color: C.muted }}>Inga dokument hittades</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ── FAKTURA TAB ───────────────────────────────────────────
+const FakturaTab = () => (
   <div className="space-y-4">
-    <p className="text-white/40 text-xs uppercase tracking-wider font-semibold px-1">Fakturauppgifter</p>
-
-    <Card>
-      <div className="space-y-4">
+    <div className="rounded-2xl border overflow-hidden" style={{ borderColor: C.border }}>
+      <div className="px-5 py-4 border-b" style={{ background: C.bgAlt, borderColor: C.border }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: C.orange }}>
+          Faktura
+        </p>
+        <h3 className="font-bold" style={{ color: C.dark }}>{USER.faktura.referens}</h3>
+      </div>
+      <div className="divide-y" style={{ background: C.bgCard, borderColor: C.border }}>
         {[
-          { label: 'Fakturanummer',    value: faktura.referens },
-          { label: 'Belopp',           value: faktura.belopp },
-          { label: 'Betalningsdatum',  value: faktura.datum },
-          { label: 'Status',           value: faktura.status, highlight: true },
-          { label: 'Org.nummer',       value: faktura.org },
-          { label: 'Faktureringsadress', value: faktura.adress },
+          { label: 'Belopp',             value: USER.faktura.belopp },
+          { label: 'Betalningsdatum',    value: USER.faktura.datum },
+          { label: 'Status',             value: USER.faktura.status, highlight: true },
+          { label: 'Organisationsnr',    value: USER.faktura.org },
+          { label: 'Fakturaadress',      value: USER.faktura.adress },
         ].map(({ label, value, highlight }) => (
-          <div key={label} className="flex items-start justify-between gap-4 py-3 border-b border-white/5 last:border-0">
-            <span className="text-sm text-white/40">{label}</span>
-            <span className={`text-sm font-semibold text-right ${highlight ? 'text-[#FF5421]' : 'text-white'}`}>
-              {value}
-            </span>
+          <div key={label} className="flex items-start justify-between gap-4 px-5 py-4">
+            <span className="text-sm" style={{ color: C.muted }}>{label}</span>
+            <span className="text-sm font-semibold text-right"
+              style={{ color: highlight ? C.orange : C.dark }}>{value}</span>
           </div>
         ))}
       </div>
-    </Card>
-
-    <button
-      className="w-full py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 border border-white/10 text-white/60 hover:border-[#FF5421]/40 hover:text-white transition-all"
-    >
+    </div>
+    <button className="w-full py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 border-2 transition-all hover:border-orange-300 hover:text-orange-500"
+      style={{ borderColor: C.border, color: C.mid, background: C.bgCard }}>
       <Download size={15} /> Ladda ner faktura (PDF)
     </button>
   </div>
 );
 
-const DokumentTab = ({ documents }) => (
-  <div className="space-y-3">
-    <p className="text-white/40 text-xs uppercase tracking-wider font-semibold px-1 mb-4">Praktiska mallar & dokument</p>
-    {documents.map((doc, i) => (
-      <motion.a
-        key={i}
-        href={doc.url}
-        download
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: i * 0.06 }}
-        className="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 p-4 hover:border-[#FF5421]/30 hover:bg-[#FF5421]/8 transition-all group"
-      >
-        <div className="w-10 h-10 rounded-xl bg-white/8 flex items-center justify-center flex-shrink-0 group-hover:bg-[#FF5421]/20 transition-colors">
-          <FileText size={18} className="text-white/40 group-hover:text-[#FF5421] transition-colors" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-sm text-white truncate">{doc.title}</h4>
-          <p className="text-xs text-white/30 mt-0.5">{doc.size}</p>
-        </div>
-        <Download size={16} className="text-white/20 group-hover:text-[#FF5421] flex-shrink-0 transition-colors" />
-      </motion.a>
-    ))}
-  </div>
-);
+// ── MAIN ──────────────────────────────────────────────────
+const NAV = [
+  { id: 'overview',  label: 'Översikt',     icon: LayoutDashboard },
+  { id: 'progress',  label: 'Framsteg',     icon: CheckCircle },
+  { id: 'dokument',  label: 'Dokument',     icon: FolderOpen },
+  { id: 'faktura',   label: 'Faktura',      icon: Receipt },
+];
 
-// ─── HUVUDKOMPONENT ───────────────────────────────────────────────────────────
 export default function MinaSidor() {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [showFeedback, setShowFeedback] = useState(false);
+  const [tab, setTab]           = useState('overview');
+  const [showFeedback, setFeedback] = useState(false);
+  const [mobileNav, setMobileNav]   = useState(false);
+  const navigate                = useNavigate();
 
-  // TODO: ersätt med Supabase useSession/useUser
-  const user = MOCK_USER;
-  const progress = MOCK_PROGRESS;
-
-  const handleDownloadDiploma = () => {
-    // TODO: generera och ladda ner diplom
-    alert('Diplom laddas ner...');
-  };
-
-  const tabs = [
-    { id: 'overview',  label: 'Översikt',  icon: User },
-    { id: 'progress',  label: 'Framsteg',  icon: CheckCircle },
-    { id: 'faktura',   label: 'Faktura',   icon: FileText },
-    { id: 'dokument',  label: 'Dokument',  icon: Download },
-  ];
+  const NavItem = ({ item }) => (
+    <button onClick={() => { setTab(item.id); setMobileNav(false); }}
+      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-left"
+      style={tab === item.id
+        ? { background: C.orange, color: 'white', boxShadow: `0 4px 12px ${C.orange}30` }
+        : { color: C.mid, background: 'transparent' }}
+      onMouseEnter={e => { if (tab !== item.id) e.currentTarget.style.background = C.bgAlt; }}
+      onMouseLeave={e => { if (tab !== item.id) e.currentTarget.style.background = 'transparent'; }}>
+      <item.icon size={16} />
+      {item.label}
+    </button>
+  );
 
   return (
-    <div
-      className="min-h-screen relative"
-      style={{ background: 'linear-gradient(135deg, #0f1623 0%, #171f32 60%, #1a2540 100%)' }}
-    >
-      {/* Subtil bakgrundstextur */}
-      <div className="absolute inset-0 opacity-30"
-        style={{ backgroundImage: 'radial-gradient(circle at 20% 20%, rgba(255,84,33,0.08) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255,84,33,0.05) 0%, transparent 50%)' }}
-      />
+    <div className="min-h-screen" style={{ background: C.bg }}>
 
-      <div className="relative z-10 max-w-lg mx-auto px-4 py-8 sm:py-12">
-
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-white">Mina sidor</h1>
-            <p className="text-white/40 text-sm mt-0.5">Styrelsekörkortet</p>
+      {/* Top nav */}
+      <header className="sticky top-0 z-30 border-b bg-white"
+        style={{ borderColor: C.border }}>
+        <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate('/')}>
+            <img src="/logo.png" alt="Logo" className="w-7 h-7 object-contain" />
+            <span className="font-bold text-sm" style={{ color: C.dark }}>
+              <span style={{ color: C.orange }}>Styrelse</span>körkortet
+            </span>
           </div>
-          <button className="flex items-center gap-2 text-white/40 hover:text-white text-sm transition-colors px-3 py-2 rounded-xl hover:bg-white/8">
-            <LogOut size={15} />
-            <span className="hidden sm:inline">Logga ut</span>
+          <div className="hidden sm:flex items-center gap-3">
+            <span className="text-xs" style={{ color: C.muted }}>{USER.email}</span>
+            <button onClick={() => navigate('/')}
+              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg transition-colors hover:bg-gray-100"
+              style={{ color: C.mid }}>
+              <LogOut size={13} /> Logga ut
+            </button>
+          </div>
+          <button className="sm:hidden w-9 h-9 rounded-lg flex items-center justify-center"
+            style={{ background: C.bgAlt }} onClick={() => setMobileNav(p => !p)}>
+            <Menu size={17} style={{ color: C.dark }} />
           </button>
         </div>
+      </header>
 
-        {/* Tab-navigation */}
-        <div className="flex gap-1.5 mb-6 overflow-x-auto pb-1 scrollbar-hide">
-          {tabs.map(tab => (
-            <TabButton key={tab.id} {...tab} active={activeTab === tab.id} onClick={setActiveTab} />
-          ))}
-        </div>
+      <div className="max-w-5xl mx-auto px-4 py-6 flex gap-6 items-start">
 
-        {/* Tab-innehåll */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2 }}
-          >
-            {activeTab === 'overview' && (
-              <OverviewTab
-                user={user}
-                progress={progress}
-                onFeedback={() => setShowFeedback(true)}
-                onDownloadDiploma={handleDownloadDiploma}
-              />
-            )}
-            {activeTab === 'progress' && <ProgressTab progress={progress} />}
-            {activeTab === 'faktura'  && <FakturaTab faktura={user.faktura} />}
-            {activeTab === 'dokument' && <DokumentTab documents={MOCK_DOCUMENTS} />}
-          </motion.div>
+        {/* Desktop sidebar */}
+        <aside className="hidden sm:flex flex-col w-52 flex-shrink-0 sticky top-20">
+          {/* Profile */}
+          <div className="rounded-2xl border p-4 mb-3" style={{ background: C.bgCard, borderColor: C.border }}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm text-white flex-shrink-0"
+                style={{ background: C.orange }}>{USER.name[0]}</div>
+              <div className="min-w-0">
+                <p className="font-bold text-sm truncate" style={{ color: C.dark }}>{USER.name}</p>
+                <p className="text-xs truncate" style={{ color: C.muted }}>{USER.forening}</p>
+              </div>
+            </div>
+          </div>
+          {/* Nav */}
+          <div className="rounded-2xl border p-2 space-y-0.5 mb-3"
+            style={{ background: C.bgCard, borderColor: C.border }}>
+            {NAV.map(item => <NavItem key={item.id} item={item} />)}
+          </div>
+          <button onClick={() => navigate('/')}
+            className="flex items-center gap-2 text-xs px-4 py-2 transition-colors"
+            style={{ color: C.muted }}>
+            <LogOut size={13} /> Logga ut
+          </button>
+        </aside>
+
+        {/* Mobile nav drawer */}
+        <AnimatePresence>
+          {mobileNav && (
+            <>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm sm:hidden"
+                onClick={() => setMobileNav(false)} />
+              <motion.div initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
+                transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+                className="fixed inset-y-0 left-0 z-50 w-64 sm:hidden p-5 space-y-2"
+                style={{ background: C.bgCard }}>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm text-white"
+                    style={{ background: C.orange }}>{USER.name[0]}</div>
+                  <div>
+                    <p className="font-bold text-sm" style={{ color: C.dark }}>{USER.name}</p>
+                    <p className="text-xs" style={{ color: C.muted }}>{USER.forening}</p>
+                  </div>
+                </div>
+                {NAV.map(item => <NavItem key={item.id} item={item} />)}
+              </motion.div>
+            </>
+          )}
         </AnimatePresence>
+
+        {/* Main */}
+        <main className="flex-1 min-w-0">
+          <motion.div className="mb-5" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+            <h1 className="text-xl font-bold" style={{ color: C.dark }}>
+              {NAV.find(n => n.id === tab)?.label}
+            </h1>
+          </motion.div>
+
+          <AnimatePresence mode="wait">
+            <motion.div key={tab}
+              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }}>
+              {tab === 'overview' && <OverviewTab onFeedback={() => setFeedback(true)} />}
+              {tab === 'progress' && <ProgressTab />}
+              {tab === 'dokument' && <DokumentTab />}
+              {tab === 'faktura'  && <FakturaTab />}
+            </motion.div>
+          </AnimatePresence>
+        </main>
       </div>
 
-      {/* Feedback-modal */}
       <AnimatePresence>
-        {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
+        {showFeedback && <FeedbackModal onClose={() => setFeedback(false)} />}
       </AnimatePresence>
     </div>
   );

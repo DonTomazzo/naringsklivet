@@ -66,13 +66,7 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({
       ],
     },
     
-    {
-      title: 'Seminarier',
-      items: [
-        { label: 'Kommande event',   path: '/seminarier' },
-        { label: 'Boka plats',       path: '/seminarier#events' },
-      ],
-    },
+   
     {
       title: 'Certifiering',
       items: [
@@ -106,8 +100,8 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({
                 <img
                   src="/logo.png"
                   alt="Näringsklivet Logotyp"
-                  width={26}
-                  height={26}
+                  width={20}
+                  height={20}
                   className="object-contain opacity-90"
                 />
                 <div className="text-lg sm:text-xl font-bold" style={{ color: '#171f32' }}>
