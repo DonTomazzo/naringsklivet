@@ -60,7 +60,7 @@ const Nav = () => {
           <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate('/')}>
            <img src="/logo.png" alt="Näringsklivet" className="w-8 h-8 object-contain" />
   <span className="font-bold text-base tracking-tight" style={{ color: C.dark }}>
-    <span style={{ color: C.orange }}>Styrelse</span>körkortet®
+    <span style={{ color: C.orange }}>Närings</span>klivet®
     <span style={{ color: C.orange }}></span>
   </span>
 </div>
@@ -91,7 +91,7 @@ const Nav = () => {
               onClick={() => navigate('/seminarier')}
               className="text-sm font-bold px-4 py-2 rounded-lg text-white"
               style={{ background: C.orange }}>
-              Boka kursen
+              Boka möte
             </motion.button>
             {/* Mobile burger */}
             <button className="md:hidden w-9 h-9 flex flex-col justify-center items-center gap-1.5"

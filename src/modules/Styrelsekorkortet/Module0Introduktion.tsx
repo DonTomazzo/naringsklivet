@@ -841,7 +841,7 @@ const Module0Introduktion: React.FC = () => {
       id: 'intro',
       title: 'Välkommen',
       videoUrl: 'https://player.vimeo.com/video/123456789',
-  videoTitle: 'Välkommen till kursen',
+      videoTitle: 'Välkommen till kursen',
       component: <IntroSlide onStart={() => setCurrentIndex(1)} />,
     },
     {
