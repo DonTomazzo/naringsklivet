@@ -1,3 +1,4 @@
+// ModulesSection.jsx
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Clock, BookOpen, Play, ChevronRight, Lock } from 'lucide-react';

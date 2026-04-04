@@ -15,6 +15,7 @@ import AudioPlayer   from '../../components/AudioPlayer';
 import ModuleSlideLayout from '../../components/CourseElements/ModuleSlideLayout';
 import GdprPrinciplesSection from '../../components/CourseElements/GdprPrinciplesSection';
 import GdprMjukIntroSlide from '../../components/CourseElements/GdprMjukIntroSlide';
+import Slide5Personuppgifter from '../../components/CourseElements/Slide5Personuppgifter';
 import GdprRolesSection from '../../components/CourseElements/GdprRolesSection';
 import AudioCTA from '../../components/CourseElements/AudioCTA';
 import { gdprQuiz } from '../../data/quizzes/gdpr-quiz';
@@ -209,6 +210,8 @@ const VadArGdprSlide = () => (
   </div>
 );
 
+
+
 // ─────────────────────────────────────────────────────────
 // SLIDE 3 – GDPR I FÖRENINGEN
 // ─────────────────────────────────────────────────────────
@@ -245,6 +248,8 @@ const VilkaUppgifterSlide = () => (
     <SlideHeading icon={Database} title="Vad är en personuppgift?" />
 
     <AudioPlayer audioSrc="/audio/gdpr-vilka-uppgifter.mp3" />
+
+
 
     <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-6">
       En <strong>personuppgift</strong> är all information som direkt eller indirekt kan kopplas
@@ -624,6 +629,7 @@ const Module3Gdpr: React.FC = () => {
       title: 'Vilka uppgifter?',
       component: <VilkaUppgifterSlide />,
     },
+     { id: 'personuppgifter', title: 'Vad är en personuppgift?', component: <Slide5Personuppgifter /> }, // ← här
     {
       id: 'vad-ar-gdpr',
       title: 'Vad är GDPR?',
