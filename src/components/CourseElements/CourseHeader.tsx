@@ -85,7 +85,8 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({
       initial={{ y: 0 }}
       animate={{ y: isVisible ? 0 : -100 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-40 shadow-sm"
+      className="fixed top-0 left-0 right-0 z-40"
+style={{ background: '#0f1623', borderBottom: '1px solid rgba(255,255,255,0.08)' }}
     >
       <div
         className="transition-all duration-300 ease-in-out"
@@ -150,7 +151,7 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({
                     className={`flex items-center gap-1 px-4 py-2 rounded-lg font-medium transition-all ${
                       openMenu === menu.title
                         ? 'bg-slate-100 text-[#FF5421]'
-                        : 'text-slate-700 hover:bg-slate-50 hover:text-[#FF5421]'
+                        : 'text-white/70 hover:bg-white/10 hover:text-[#FF5421]'
                     }`}
                   >
                     {menu.title}
