@@ -5,6 +5,9 @@ import Module1Introduktion from '../modules/Styrelsekorkortet/Module1Introduktio
 import Module3Gdpr from '../modules/Styrelsekorkortet/Module3Gdpr.tsx';
 import DokumentationModule from '../modules/DocuModule.tsx';
 import Module5AiBrf from '../modules/Styrelsekorkortet/Module5AiBrf.tsx';
+import ModuleHallbarhet from '../modules/Styrelsekorkortet/ModuleHallbarhet.tsx';
+import ModuleIntressenter from '../modules/Styrelsekorkortet/ModuleIntressenter.tsx';
+
 import Module4Diskriminering from '../modules/Styrelsekorkortet/Module4Diskriminering.tsx';
 import Module0Introduktion from '../modules/Styrelsekorkortet/Module0Introduktion.tsx';
 import Module2Arsredovisning from '../modules/Styrelsekorkortet/Module2Arsredovisning';
@@ -406,7 +409,7 @@ export const modulesData = [
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
-    component: null,
+    component: ModuleIntressenter,
     instructor: INSTRUCTOR,
     learningPoints: [
       'Identifiera viktiga intressenter',
@@ -668,6 +671,52 @@ export const modulesData = [
     ],
     testimonials: [],
   },
+
+  {
+  id: 'hallbarhet',
+  slug: 'hallbarhet',
+  title: 'Hållbarhet i föreningen',
+  subtitle: 'Solceller, laddstolpar, energi och ROI – en grönare förening som lönar sig',
+  category: 'FÖRVALTNING',
+  short_description: 'Lär dig om hållbarhetsinvesteringar och hur ni räknar hem dem.',
+  long_description: 'Solceller, laddstolpar, uppvärmning, energieffektivisering, vatten och avfall – med fokus på ROI och praktiska steg för styrelsen.',
+  image_url: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1280&h=720',
+  duration: '2 timmar',
+  lessons: 8,
+  videoLessons: 0,
+  quizzes: 0,
+  rating: 5.0,
+  students: 0,
+  price: 1490,
+  priceTeam: 'Volymrabatt från 2 licenser',
+  previewVideoUrl: null,
+  component: ModuleHallbarhet,
+  instructor: INSTRUCTOR,
+  learningPoints: [
+    'Solceller – ROI, skattereduktion och processen',
+    'Laddstolpar – infrastruktur och finansiering',
+    'Uppvärmning – bergvärme, värmepumpar och EPBD',
+    'Energieffektivisering – LED, fönster och FTX',
+    'Vatten och stambyte – relining och IMD',
+    'Avfallskrav 2024 och 2027',
+    'ROI-kalkyl och bidragsöversikt',
+  ],
+  modules: [
+    { title: 'Solceller',             duration: '20 min', free: true  },
+    { title: 'Laddstolpar',           duration: '20 min', free: false },
+    { title: 'Uppvärmning',           duration: '20 min', free: false },
+    { title: 'Energieffektivisering', duration: '15 min', free: false },
+    { title: 'Vatten & avlopp',       duration: '15 min', free: false },
+    { title: 'Avfall & miljö',        duration: '15 min', free: false },
+    { title: 'ROI & Finansiering',    duration: '20 min', free: false },
+  ],
+  forWho: [
+    'Styrelser som planerar energiinvesteringar',
+    'Kassörer som ska räkna hem ett projekt',
+    'Föreningar med gamla stammar eller otidsenlig uppvärmning',
+  ],
+  testimonials: [],
+},
 
   {
     id: 'forhandlingsteknik-upphandling',

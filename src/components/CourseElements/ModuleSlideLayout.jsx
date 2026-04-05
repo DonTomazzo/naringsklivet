@@ -299,9 +299,9 @@ const ModuleSlideLayout = ({
 
             {/* Knapp-rad */}
             <div
-              className="w-full px-4 pb-2 flex items-center gap-2 pointer-events-auto"
-              style={{ background: 'rgba(0,0,0,0.0)' }}
-            >
+  className="w-full px-4 pb-2 flex items-center gap-2 pointer-events-auto"
+  style={{ background: '#0f1623' }}
+>
               {/* ── Vänster: nav + volym + räknare ── */}
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button
