@@ -15,6 +15,7 @@ import CourseHeader      from '../../components/CourseElements/CourseHeader';
 import GlobalSidebar     from '../../components/GlobalSidebar';
 import FloatingFAQ       from '../../components/CourseElements/FloatingFAQ';
 import ModuleSlideLayout from '../../components/CourseElements/ModuleSlideLayout';
+import SplitSlide, { StegLista, CheckLista, InfoRuta } from '../../components/CourseElements/SplitSlide';
 import InlineQuiz        from '../../components/CourseElements/InlineQuiz';
 import GdprQuizOverlay   from '../../components/CourseElements/GdprQuizOverlay';
 
@@ -35,17 +36,12 @@ const IMGS = {
   fasad:       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&q=80',
 };
 
-// ─── Slide-skal med bakgrundsbild ────────────────────────
-const BgSlide = ({
-  bild, children, overlay = 'rgba(15,22,35,0.82)'
-}: {
-  bild: string; children: React.ReactNode; overlay?: string;
-}) => (
+const BgSlide = ({ bild, children, overlay = 'rgba(15,22,35,0.82)' }) => (
   <div className="h-full relative overflow-hidden">
     <img src={bild} alt="" className="absolute inset-0 w-full h-full object-cover" />
     <div className="absolute inset-0" style={{ background: overlay }} />
     <div className="relative z-10 h-full overflow-y-auto">
-      <div className="max-w-3xl mx-auto px-5 sm:px-8 py-10 pb-28">
+      <div className="min-h-full flex flex-col justify-center max-w-3xl mx-auto px-5 sm:px-8 py-10 pb-28">
         {children}
       </div>
     </div>
@@ -402,58 +398,24 @@ const Quiz1Slide = ({ onComplete, isDone }: { onComplete: (id: string) => void; 
 // SLIDE 5 – RESULTATRÄKNING
 // ═══════════════════════════════════════════════════════════
 const ResultatSlide = () => (
-  <BgSlide bild={IMGS.ekonomi}>
-    <Badge text="Avsnitt 03 · Resultaträkning" />
-    <Heading icon={TrendingUp} title="Resultaträkningen – intäkter och kostnader" />
-    <p className="text-white/70 text-base leading-relaxed mb-6">
-      Resultaträkningen visar alla intäkter och kostnader för hela räkenskapsperioden.
-      Det viktigaste att förstå: <span className="text-white font-bold">betalning ≠ kostnad.</span>
-    </p>
-
-    {/* Exempel-box */}
-    <div className="rounded-2xl p-5 border mb-6"
-      style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
-      <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: O }}>
-        Praktiskt exempel – periodisering
-      </p>
-      <p className="text-white/80 text-sm leading-relaxed">
-        En försäkring betalas i <strong className="text-white">april 2024</strong> och täcker perioden
-        maj 2024 – april 2025. Betalningen hamnar på april 2024, men kostnaden fördelas
-        månadsvis. I april 2024 finns <strong className="text-white">ingen kostnad</strong> för försäkringen
-        i resultaträkningen – den periodiseras.
-      </p>
-    </div>
-
-    {/* K2 vs K3 */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-      <div className="rounded-xl p-4 border" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#60a5fa' }}>
-          K2 (t.o.m. 2025)
-        </p>
-        <p className="text-white font-bold text-sm mb-1">Underhåll = direkt kostnad</p>
-        <p className="text-white/60 text-xs leading-relaxed">
-          Stambytet på 2 mkr hamnar som en kostnad i resultaträkningen direkt. Ger ofta stort underskott det år arbetet utförs.
-        </p>
-      </div>
-      <div className="rounded-xl p-4 border" style={{ background: `${O}15`, border: `1px solid ${O}30` }}>
-        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>
-          K3 (från 2026)
-        </p>
-        <p className="text-white font-bold text-sm mb-1">Underhåll = tillgång + avskrivning</p>
-        <p className="text-white/60 text-xs leading-relaxed">
-          Stambytet aktiveras som en fastighetsförbättring och skrivs av under sin ekonomiska livslängd (t.ex. 50 år). Jämnare resultat.
-        </p>
-      </div>
-    </div>
-
-    <div className="rounded-xl p-4 border-l-4" style={{ borderColor: O, background: 'rgba(255,84,33,0.1)' }}>
-      <p className="text-white text-sm leading-relaxed">
-        <span className="font-bold" style={{ color: O }}>Viktigt: </span>
-        Avskrivningar är bokföringsmässiga kostnader – inga pengar lämnar kontot.
-        En förening kan ha negativt resultat men ändå ha god likviditet.
-      </p>
-    </div>
-  </BgSlide>
+  <SplitSlide
+    badge="Avsnitt 03 · Resultaträkning"
+    title="Resultaträkningen –<br/>intäkter och <span style='color:#FF5421'>kostnader</span>"
+    ingress="Det viktigaste att förstå: betalning och kostnad är inte samma sak."
+    bild="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80"
+    badge2="Kom ihåg"
+    badge2Sub="Avskrivningar = ingen kassapåverkan"
+  >
+    <StegLista steg={[
+      { nr: '01', titel: 'Betalning sker i april', desc: 'En försäkring betalas i april men täcker maj–april nästa år.' },
+      { nr: '02', titel: 'Kostnaden periodiseras', desc: 'I april finns ingen kostnad — den fördelas månadsvis.' },
+      { nr: '03', titel: 'K2: underhåll = direkt kostnad', desc: 'Stambytet på 2 mkr syns direkt i resultaträkningen.' },
+      { nr: '04', titel: 'K3: underhåll = tillgång', desc: 'Aktiveras och skrivs av under livslängden. Jämnare resultat.' },
+    ]} />
+    <InfoRuta>
+      Negativt resultat behöver inte vara alarmerande — avskrivningar är bokföringsmässiga kostnader utan kassapåverkan.
+    </InfoRuta>
+  </SplitSlide>
 );
 
 // ═══════════════════════════════════════════════════════════
@@ -896,11 +858,13 @@ const Module6Arsredovisning: React.FC = () => {
       id: 'intro',
       title: 'Introduktion',
       component: <IntroSlide />,
+       audioSrc: '/audio/k3.mp3',
     },
     {
       id: 'delar',
       title: 'Årsredovisningens delar',
       component: <DelarnasSlide />,
+       audioSrc: '/audio/k3.mp3',
     },
     {
       id: 'forvaltning',

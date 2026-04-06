@@ -15,7 +15,9 @@ import CourseHeader      from '../../components/CourseElements/CourseHeader';
 import GlobalSidebar     from '../../components/GlobalSidebar';
 import FloatingFAQ       from '../../components/CourseElements/FloatingFAQ';
 import ModuleSlideLayout from '../../components/CourseElements/ModuleSlideLayout';
+import SplitSlide, { StegLista, InfoRuta } from '../../components/CourseElements/SplitSlide';
 import InlineQuiz        from '../../components/CourseElements/InlineQuiz';
+import ModuleIntroSlide from '../../components/CourseElements/ModuleIntroSlide';
 import GdprQuizOverlay   from '../../components/CourseElements/GdprQuizOverlay';
 
 const O  = '#FF5421';
@@ -188,43 +190,24 @@ const MODULE_FAQ = [
 // ═══════════════════════════════════════════════════════════
 // SLIDE 1 – INTRO
 // ═══════════════════════════════════════════════════════════
-const IntroSlide = () => (
-  <BgSlide bild={IMGS.dokument}>
-    <Badge text="Ekonomi · Avsnitt 06" />
-    <Heading icon={FileText} title="Årsredovisningen – lär dig tyda" />
-    <p className="text-white/70 text-lg leading-relaxed mb-8">
-      Årsredovisningen är föreningens viktigaste dokument – och en av de vanligaste
-      källorna till oro och missförstånd i styrelserummet. I den här modulen lär du
-      dig tyda den med säkerhet.
-    </p>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-      {[
-        { icon: '📋', title: 'Förvaltningsberättelse', desc: 'Vad styrelsen redovisar om föreningen' },
-        { icon: '📊', title: 'Resultat & balans', desc: 'Intäkter, kostnader och tillgångar' },
-        { icon: '🔍', title: 'Noter & kassaflöde', desc: 'Detaljer och pengarörelser' },
-        { icon: '✅', title: 'Revisionsberättelse', desc: 'Revisorns granskning och rekommendationer' },
-      ].map((item, i) => (
-        <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 + i * 0.08 }}
-          className="rounded-xl p-4 border flex items-start gap-3"
-          style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
-          <span className="text-2xl">{item.icon}</span>
-          <div>
-            <p className="text-white font-bold text-sm">{item.title}</p>
-            <p className="text-white/50 text-xs mt-0.5">{item.desc}</p>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-    <div className="rounded-xl p-4 border" style={{ background: `${O}18`, borderColor: `${O}30` }}>
-      <p className="text-white text-sm leading-relaxed">
-        <span className="font-bold" style={{ color: O }}>Kom ihåg: </span>
-        Årsredovisningen är en offentlig handling reglerad i lag – men den är också
-        en säljhandling och ersätter delvis den ekonomiska planen som bild av föreningens hälsa.
-        Den gäller normalt 12 månader men kan avse upp till 18.
-      </p>
-    </div>
-  </BgSlide>
+const IntroSlide = ({ onStart }: { onStart: () => void }) => (
+  <ModuleIntroSlide
+    kategori="EKONOMI"
+    titel="Årsredovisningen – lär dig tyda"
+    ingress="Årsredovisningen är föreningens viktigaste dokument – och en av de vanligaste källorna till oro i styrelserummet. Lär dig tyda den med säkerhet, utan ekonomibakgrund."
+    bild="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80"
+    längd="2.5 timmar"
+    avsnitt={11}
+    onStart={onStart}
+    vadLärDuDig={[
+      'Förvaltningsberättelsens fem obligatoriska delar',
+      'Läsa resultaträkning och balansräkning',
+      'Vad soliditet och likviditet innebär i praktiken',
+      'Skillnaden mellan K2 och K3-redovisning',
+      'Sex signaler att titta efter i varje årsredovisning',
+      'Revisionsberättelsens roll – och vad en anmärkning innebär',
+    ]}
+  />
 );
 
 // ═══════════════════════════════════════════════════════════
@@ -290,58 +273,46 @@ const DelarnasSlide = () => {
 };
 
 // ═══════════════════════════════════════════════════════════
-// SLIDE 3 – FÖRVALTNINGSBERÄTTELSE (fördjupning)
+// SLIDE 3 – FÖRVALTNINGSBERÄTTELSEN (SplitSlide)
 // ═══════════════════════════════════════════════════════════
 const FörvaltningSlide = () => (
-  <BgSlide bild={IMGS.möte}>
-    <Badge text="Avsnitt 02 · Fördjupning" />
-    <Heading icon={FileText} title="Förvaltningsberättelsen i detalj" />
-    <p className="text-white/70 text-base leading-relaxed mb-6">
-      Det är styrelsens egen röst i årsredovisningen. Här rapporterar ni vad ni gjort,
-      hur ekonomin sett ut och vad som hänt under året.
-    </p>
-    <div className="space-y-4">
-      {[
-        {
-          rubrik: 'Beskrivning av föreningen',
-          detalj: 'Storlek, leverantörer, styrelse och revisor. En faktasammanställning om föreningen.',
-          icon: '🏢',
-        },
-        {
-          rubrik: 'Väsentliga händelser',
-          detalj: 'Utförda underhållsarbeten, styrelsens möten och verksamhet under året.',
-          icon: '📅',
-        },
-        {
-          rubrik: 'Flerårsöversikt',
-          detalj: 'Nyckeltal, nettoomsättning, soliditet och resultat efter finansiella poster (K2). Från 2026 tillkommer obligatoriska nyckeltal i K3.',
-          icon: '📈',
-        },
-        {
-          rubrik: 'Förändring eget kapital',
-          detalj: 'Vinst/förlust, avsättning till fond och eventuella nya medlemsinsatser.',
-          icon: '💰',
-        },
-        {
-          rubrik: 'Resultatdisposition',
-          detalj: 'Eventuell avsättning eller ianspråkstagande av yttre fond – styrs av stadgarna.',
-          icon: '⚖️',
-        },
-      ].map((item, i) => (
-        <motion.div key={i}
-          initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-          className="flex items-start gap-4 p-4 rounded-xl border"
-          style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
-          <span className="text-2xl flex-shrink-0">{item.icon}</span>
-          <div>
-            <p className="text-white font-bold text-sm sm:text-base mb-1">{item.rubrik}</p>
-            <p className="text-white/60 text-sm leading-relaxed">{item.detalj}</p>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  </BgSlide>
+  <SplitSlide
+    badge="Avsnitt 02 · Fördjupning"
+    title="Förvaltnings-<br/>berättelsen i <span style='color:#FF5421'>detalj</span>"
+    ingress="Det är styrelsens egen röst i årsredovisningen. Här rapporterar ni vad ni gjort, hur ekonomin sett ut och vad som hänt under året."
+    bild="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80"
+    bildPosition="right"
+    badge2="5 obligatoriska delar"
+    badge2Sub="Alla måste finnas med"
+  >
+    <StegLista steg={[
+      {
+        nr: '🏢',
+        titel: 'Beskrivning av föreningen',
+        desc: 'Storlek, leverantörer, styrelse och revisor. En faktasammanställning.',
+      },
+      {
+        nr: '📅',
+        titel: 'Väsentliga händelser',
+        desc: 'Utförda underhållsarbeten, styrelsens möten och verksamhet under året.',
+      },
+      {
+        nr: '📈',
+        titel: 'Flerårsöversikt',
+        desc: 'Nyckeltal, nettoomsättning, soliditet och resultat. Från 2026 tillkommer obligatoriska K3-nyckeltal.',
+      },
+      {
+        nr: '💰',
+        titel: 'Förändring eget kapital',
+        desc: 'Vinst/förlust, avsättning till fond och eventuella nya medlemsinsatser.',
+      },
+      {
+        nr: '⚖️',
+        titel: 'Resultatdisposition',
+        desc: 'Eventuell avsättning eller ianspråkstagande av yttre fond – styrs av stadgarna.',
+      },
+    ]} />
+  </SplitSlide>
 );
 
 // ═══════════════════════════════════════════════════════════
@@ -402,117 +373,67 @@ const Quiz1Slide = ({ onComplete, isDone }: { onComplete: (id: string) => void; 
 // SLIDE 5 – RESULTATRÄKNING
 // ═══════════════════════════════════════════════════════════
 const ResultatSlide = () => (
-  <BgSlide bild={IMGS.ekonomi}>
-    <Badge text="Avsnitt 03 · Resultaträkning" />
-    <Heading icon={TrendingUp} title="Resultaträkningen – intäkter och kostnader" />
-    <p className="text-white/70 text-base leading-relaxed mb-6">
-      Resultaträkningen visar alla intäkter och kostnader för hela räkenskapsperioden.
-      Det viktigaste att förstå: <span className="text-white font-bold">betalning ≠ kostnad.</span>
-    </p>
-
-    {/* Exempel-box */}
-    <div className="rounded-2xl p-5 border mb-6"
-      style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
-      <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: O }}>
-        Praktiskt exempel – periodisering
-      </p>
-      <p className="text-white/80 text-sm leading-relaxed">
-        En försäkring betalas i <strong className="text-white">april 2024</strong> och täcker perioden
-        maj 2024 – april 2025. Betalningen hamnar på april 2024, men kostnaden fördelas
-        månadsvis. I april 2024 finns <strong className="text-white">ingen kostnad</strong> för försäkringen
-        i resultaträkningen – den periodiseras.
-      </p>
-    </div>
-
-    {/* K2 vs K3 */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-      <div className="rounded-xl p-4 border" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#60a5fa' }}>
-          K2 (t.o.m. 2025)
-        </p>
-        <p className="text-white font-bold text-sm mb-1">Underhåll = direkt kostnad</p>
-        <p className="text-white/60 text-xs leading-relaxed">
-          Stambytet på 2 mkr hamnar som en kostnad i resultaträkningen direkt. Ger ofta stort underskott det år arbetet utförs.
-        </p>
-      </div>
-      <div className="rounded-xl p-4 border" style={{ background: `${O}15`, border: `1px solid ${O}30` }}>
-        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>
-          K3 (från 2026)
-        </p>
-        <p className="text-white font-bold text-sm mb-1">Underhåll = tillgång + avskrivning</p>
-        <p className="text-white/60 text-xs leading-relaxed">
-          Stambytet aktiveras som en fastighetsförbättring och skrivs av under sin ekonomiska livslängd (t.ex. 50 år). Jämnare resultat.
-        </p>
-      </div>
-    </div>
-
-    <div className="rounded-xl p-4 border-l-4" style={{ borderColor: O, background: 'rgba(255,84,33,0.1)' }}>
-      <p className="text-white text-sm leading-relaxed">
-        <span className="font-bold" style={{ color: O }}>Viktigt: </span>
-        Avskrivningar är bokföringsmässiga kostnader – inga pengar lämnar kontot.
-        En förening kan ha negativt resultat men ändå ha god likviditet.
-      </p>
-    </div>
-  </BgSlide>
+  <SplitSlide
+    badge="Avsnitt 03 · Resultaträkning"
+    title="Resultaträkningen –<br/>intäkter och <span style='color:#FF5421'>kostnader</span>"
+    ingress="Det viktigaste att förstå: betalning och kostnad är inte samma sak."
+    bild="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80"
+    badge2="Kom ihåg"
+    badge2Sub="Avskrivningar = ingen kassapåverkan"
+  >
+    <StegLista steg={[
+      { nr: '01', titel: 'Betalning sker i april', desc: 'En försäkring betalas i april men täcker maj–april nästa år.' },
+      { nr: '02', titel: 'Kostnaden periodiseras', desc: 'I april finns ingen kostnad — den fördelas månadsvis.' },
+      { nr: '03', titel: 'K2: underhåll = direkt kostnad', desc: 'Stambytet på 2 mkr syns direkt i resultaträkningen.' },
+      { nr: '04', titel: 'K3: underhåll = tillgång', desc: 'Aktiveras och skrivs av under livslängden. Jämnare resultat.' },
+    ]} />
+    <InfoRuta>
+      Negativt resultat behöver inte vara alarmerande — avskrivningar är bokföringsmässiga kostnader utan kassapåverkan.
+    </InfoRuta>
+  </SplitSlide>
 );
 
-// ═══════════════════════════════════════════════════════════
-// SLIDE 6 – BALANSRÄKNING
-// ═══════════════════════════════════════════════════════════
 const BalansSlide = () => (
-  <BgSlide bild={IMGS.bygg}>
-    <Badge text="Avsnitt 04 · Balansräkning" />
-    <Heading icon={BarChart2} title="Balansräkningen – vad föreningen äger och är skyldig" />
-    <p className="text-white/70 text-base leading-relaxed mb-6">
-      En ögonblicksbild per sista dagen i räkenskapsperioden. Alltid två sidor som
-      ska gå ihop – därav namnet.
-    </p>
-
-    {/* Balansräkningstabell */}
-    <div className="rounded-2xl overflow-hidden border mb-6" style={{ border: '1px solid rgba(255,255,255,0.15)' }}>
-      <div className="grid grid-cols-2">
-        <div className="p-5" style={{ background: 'rgba(255,255,255,0.08)' }}>
-          <p className="text-xs font-bold uppercase tracking-widest mb-3 text-center" style={{ color: O }}>
-            Tillgångar
-          </p>
-          <p className="text-white/50 text-xs text-center mb-3 italic">Vad föreningen äger</p>
-          {['Anläggningstillgångar (fastighet)', 'Kassa och bank', 'Kund- och avgiftsfordringar'].map((t, i) => (
-            <div key={i} className="flex items-center gap-2 mb-2">
-              <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: O }} />
-              <p className="text-white text-sm">{t}</p>
-            </div>
-          ))}
-        </div>
-        <div className="p-5 border-l" style={{ background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)' }}>
-          <p className="text-xs font-bold uppercase tracking-widest mb-3 text-center" style={{ color: '#60a5fa' }}>
-            Skuld & eget kapital
-          </p>
-          <p className="text-white/50 text-xs text-center mb-3 italic">Hur det finansierats</p>
-          {['Eget kapital (insatser)', 'Lån', 'Leverantörsfakturor'].map((t, i) => (
-            <div key={i} className="flex items-center gap-2 mb-2">
-              <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#60a5fa' }} />
-              <p className="text-white text-sm">{t}</p>
-            </div>
-          ))}
-        </div>
+  <SplitSlide
+    badge="Avsnitt 04 · Balansräkning"
+    title="Tillgångar möter<br/><span style='color:#FF5421'>skulder</span>"
+    ingress="En ögonblicksbild per sista dagen. Två sidor som alltid ska gå ihop – därav namnet balansräkning."
+    bild="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=80"
+    bildPosition="left"
+    badge2="Soliditet"
+    badge2Sub="Eget kapital / Totalt kapital"
+  >
+    {/* T-kontomodell */}
+    <div className="grid grid-cols-2 gap-3 mb-5">
+      <div className="rounded-2xl p-4 border-2" style={{ borderColor: '#FF5421', background: '#FFF0EB' }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#FF5421' }}>Tillgångar</p>
+        <p className="text-xs text-gray-400 mb-3 italic">Vad föreningen äger</p>
+        {['Fastighet', 'Kassa och bank', 'Avgiftsfordringar'].map((t, i) => (
+          <div key={i} className="flex items-center gap-2 mb-1.5">
+            <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#FF5421' }} />
+            <p className="text-sm text-gray-700">{t}</p>
+          </div>
+        ))}
+      </div>
+      <div className="rounded-2xl p-4 border-2 border-blue-200 bg-blue-50">
+        <p className="text-xs font-bold uppercase tracking-widest mb-1 text-blue-600">Skuld & kapital</p>
+        <p className="text-xs text-gray-400 mb-3 italic">Hur det finansierats</p>
+        {['Eget kapital', 'Lån', 'Leverantörsfakturor'].map((t, i) => (
+          <div key={i} className="flex items-center gap-2 mb-1.5">
+            <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-blue-400" />
+            <p className="text-sm text-gray-700">{t}</p>
+          </div>
+        ))}
       </div>
     </div>
 
     {/* Soliditet */}
-    <div className="rounded-2xl p-5 border" style={{ background: `${O}15`, border: `1px solid ${O}30` }}>
-      <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>
-        Nyckeltalet Soliditet
-      </p>
-      <p className="text-white font-black text-xl mb-2">
-        Soliditet = Eget kapital / Totalt kapital
-      </p>
-      <p className="text-white/70 text-sm leading-relaxed">
-        Visar hur stor del av finansieringen som ni och era medlemmar själva står för –
-        och hur stor del som är lån från banken. Hög soliditet = finansiellt starkt.
-        BRF:er med soliditet under 10% bör ha en plan.
-      </p>
+    <div className="rounded-2xl p-4 border-l-4" style={{ borderColor: '#FF5421', background: '#FFF0EB' }}>
+      <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#FF5421' }}>Nyckeltalet soliditet</p>
+      <p className="text-lg font-black text-gray-900 mb-1">Eget kapital ÷ Totalt kapital</p>
+      <p className="text-sm text-gray-600">Hög soliditet = finansiellt starkt. BRF:er under 10% bör ha en plan.</p>
     </div>
-  </BgSlide>
+  </SplitSlide>
 );
 
 // ═══════════════════════════════════════════════════════════
@@ -893,10 +814,10 @@ const Module2Arsredovisning: React.FC = () => {
   const slides = [
     // ── Block 1: Introduktion ──────────────────────────────
     {
-      id: 'intro',
-      title: 'Introduktion',
-      component: <IntroSlide />,
-    },
+  id: 'intro',
+  title: 'Introduktion',
+  component: <IntroSlide onStart={() => setCurrentIndex(1)} />,
+},
     {
       id: 'delar',
       title: 'Årsredovisningens delar',
