@@ -6,6 +6,7 @@ import allQuizzes from './data/quizzes/index.js';
 import DynamicQuizPage from './components/DynamicQuizPage';
 import VideoPopupHero from './components/VideoPopupHero';
 import SeminarierPage from './pages/SeminarierPage';
+import StyrelsesupportPage from './pages/StyrelsesupportPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import NewsCards from './components/blog/NewsCards';
@@ -14,6 +15,7 @@ import FinalQuiz from './pages/FinalQuiz'
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetailPage';
 import NetflixPage from './pages/NetflixPage.jsx';
+import NetflixPage2 from './pages/NetflixPage2.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LandingPage from './pages/LandingPage';
@@ -42,6 +44,7 @@ import WhatYouGet from './components/WhatYouGet';
 import QuizSalesPage from './pages/QuizSalesPage';
 import VillkorPage from './pages/VillkorPage'
 import IntegritetspolicyPage from './pages/IntegritetspolicyPage'
+import StyrelsekorkortetLanding from './pages/StyrelsekorkortetLanding';
 import OmOssPage from './pages/OmOssPage'
 
 // Landing page section components
@@ -326,6 +329,8 @@ const AppRoutes = () => {
       <Route path="/om-oss" element={<OmOssPage />} />
       <Route path="/seminarier" element={<SeminarierPage />} />
       <Route path="/kurs/:slug" element={<CoursePage />} />
+      <Route path="/styrelsesupport" element={<StyrelsesupportPage />} />
+      <Route path="/styrelsekörkortet" element={<StyrelsekorkortetLanding />} />
 
       {/* Auth routes */}
       <Route path="/register" element={<TeamCodeRegister />} />
@@ -375,6 +380,7 @@ const AppRoutes = () => {
 
       {/* Ovriga sidor */}
       <Route path="/netflix" element={<NetflixPage />} />
+      <Route path="/netflix2" element={<NetflixPage2 />} />
       <Route path="/demo4" element={<DemoPage4 />} />
       <Route path="/styrelsekorkortet" element={<Styrelsekorkortet />} />
       <Route path="/aktiekorkortet" element={<Aktiekorkortet />} />

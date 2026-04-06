@@ -3,7 +3,7 @@ import Bostadsrattsforeningen from '../modules/Styrelsekorkortet/BRFModule.tsx';
 
 import Module1Introduktion from '../modules/Styrelsekorkortet/Module1Introduktion.tsx';
 import Module3Gdpr from '../modules/Styrelsekorkortet/Module3Gdpr.tsx';
-import DokumentationModule from '../modules/DocuModule.tsx';
+import ModuleDokumentation from '../modules/Styrelsekorkortet/ModuleDokumentation';
 import Module5AiBrf from '../modules/Styrelsekorkortet/Module5AiBrf.tsx';
 import ModuleHallbarhet from '../modules/Styrelsekorkortet/ModuleHallbarhet.tsx';
 import ModuleIntressenter from '../modules/Styrelsekorkortet/ModuleIntressenter.tsx';
@@ -367,7 +367,7 @@ export const modulesData = [
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
-    component: DokumentationModule,
+    component: ModuleDokumentation, 
     instructor: INSTRUCTOR,
     learningPoints: [
       'Skriva korrekta protokoll',

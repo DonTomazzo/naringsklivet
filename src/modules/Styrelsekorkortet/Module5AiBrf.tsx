@@ -16,7 +16,94 @@ import FloatingFAQ       from '../../components/CourseElements/FloatingFAQ';
 import AudioPlayer       from '../../components/AudioPlayer';
 import ModuleSlideLayout from '../../components/CourseElements/ModuleSlideLayout';
 import AudioCTA          from '../../components/CourseElements/AudioCTA';
-import GdprQuizOverlay   from '../../components/CourseElements/GdprQuizOverlay';
+import GdprQuizOverlay from '../../components/CourseElements/GdprQuizOverlay';
+import InlineQuiz from '../../components/CourseElements/InlineQuiz';
+import { aiBrfQuiz1, aiBrfQuiz2, aiBrfQuizSlut } from '../../data/quizzes/ai-brf-quiz';
+
+const QuizSlide = ({
+  titel, beskrivning, quizFragor, onComplete, isDone, quizNr,
+}: {
+  titel: string;
+  beskrivning: string;
+  quizFragor: typeof aiBrfQuiz1.questions;
+  onComplete: (id: string) => void;
+  isDone: boolean;
+  quizNr: string;
+}) => {
+  const [quizOpen, setQuizOpen] = useState(false);
+ 
+  return (
+    <div className="min-h-full flex items-center relative overflow-hidden">
+      <img src="/t2.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
+      <div className="absolute inset-0" style={{ background: 'rgba(15,22,35,0.90)' }} />
+ 
+      <div className="max-w-md mx-auto px-4 w-full relative z-10 py-16 pb-28">
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+ 
+          <div className="inline-flex items-center gap-2 bg-[#FF5421]/20 text-[#FF5421] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6">
+            <Zap className="w-3 h-3" /> Kunskapstest {quizNr}
+          </div>
+ 
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 leading-tight">{titel}</h2>
+          <p className="text-white/50 text-sm mb-8 leading-relaxed max-w-xs mx-auto">{beskrivning}</p>
+ 
+          <div className="grid grid-cols-3 gap-3 mb-8">
+            {[
+              { val: `${quizFragor.length}`, label: 'Frågor' },
+              { val: 'Direkt', label: 'Feedback' },
+              { val: `${quizFragor.reduce((s, q) => s + q.points, 0)}`, label: 'Max poäng' },
+            ].map((s, i) => (
+              <div key={i} className="bg-white/8 border border-white/10 rounded-2xl py-4 px-2">
+                <div className="text-xl font-bold text-white">{s.val}</div>
+                <div className="text-xs text-white/40 mt-0.5">{s.label}</div>
+              </div>
+            ))}
+          </div>
+ 
+          {/* Klar-badge */}
+          <AnimatePresence>
+            {isDone && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                className="bg-[#FF5421]/15 border border-[#FF5421]/30 rounded-2xl p-4 mb-4 flex items-center gap-3"
+              >
+                <CheckCircle className="w-6 h-6 text-[#FF5421] flex-shrink-0" />
+                <div className="text-left">
+                  <p className="text-white font-bold text-sm">Avklarat!</p>
+                  <p className="text-white/40 text-xs">Gör om när du vill för repetition</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+ 
+          <motion.button
+            whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            onClick={() => setQuizOpen(true)}
+            className="w-full py-4 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2 shadow-xl"
+            style={{ background: isDone ? 'rgba(255,84,33,0.5)' : 'linear-gradient(135deg,#FF5421,#E04619)' }}
+          >
+            <HelpCircle className="w-5 h-5" />
+            {isDone ? 'Gör om testet' : 'Starta kunskapstest'}
+          </motion.button>
+ 
+          <p className="text-white/20 text-xs mt-4">
+            Lärande-läge · Direkt feedback · Inga poängkrav
+          </p>
+        </motion.div>
+      </div>
+ 
+      {/* Lärande-läge: passingPercent=0 → alltid "klar" */}
+      <GdprQuizOverlay
+        isOpen={quizOpen}
+        onClose={() => setQuizOpen(false)}
+        questions={quizFragor}
+        passingPercent={0}
+        onComplete={() => onComplete(`quiz-${quizNr}`)}
+      />
+    </div>
+  );
+};
+ 
 
 // ─────────────────────────────────────────────────────────
 // FAQ
@@ -1042,6 +1129,71 @@ const Module5AiBrf: React.FC = () => {
       title: 'Spara tid med AI',
       component: <SparaTidSlide />,
     },
+ {
+  id: 'quiz-1',
+  title: '🧠 Kunskapstest 1',
+  component: (
+    <SlideShell dark>
+      <SlidePhaseBadge text="Kunskapstest · Avsnitt 1–3" dark />
+      <SlideHeading icon={HelpCircle} title="Grunderna – vad är AI?" dark />
+      <p className="text-white/60 text-sm mb-6">
+        Tre snabba frågor innan vi går vidare.
+      </p>
+      <InlineQuiz
+        dark
+        onComplete={() => handleComplete('quiz-1')}
+        questions={[
+          {
+            id: 'q1',
+            question_text: "Vad menas med att en AI hallucinerar?",
+            question_type: 'single_choice',
+            question_order: 1,
+            options: { choices: [
+              'AI:n är för långsam',
+              'AI:n presenterar felaktig information med stor säkerhet',
+              'AI:n svarar på fel språk',
+              'AI:n vägrar svara',
+            ]},
+            correct_answer: 'AI:n presenterar felaktig information med stor säkerhet',
+            explanation: 'Hallucination innebär att AI hittar på saker som låter trovärdiga. Kontrollera alltid juridik, datum och siffror.',
+            points: 100,
+          },
+          {
+            id: 'q2',
+            question_text: "Vilken uppgift är AI bäst lämpad för i en BRF-styrelse?",
+            question_type: 'single_choice',
+            question_order: 2,
+            options: { choices: [
+              'Fatta formella beslut',
+              'Skriva utkast och sammanfatta dokument',
+              'Ersätta revisorns granskning',
+              'Registrera ändringar hos Bolagsverket',
+            ]},
+            correct_answer: 'Skriva utkast och sammanfatta dokument',
+            explanation: 'AI är utmärkt på att skriva, sammanfatta och strukturera. Beslut och juridik kräver alltid mänsklig bedömning.',
+            points: 100,
+          },
+          {
+            id: 'q3',
+            question_text: "Vad är ett kontextfönster?",
+            question_type: 'single_choice',
+            question_order: 3,
+            options: { choices: [
+              'En säkerhetsfunktion för personuppgifter',
+              'Hur mycket text AI:n kan hantera i ett samtal',
+              'En inställning för att dölja känslig info',
+              'Tidsfönstret då AI:n är tillgänglig',
+            ]},
+            correct_answer: 'Hur mycket text AI:n kan hantera i ett samtal',
+            explanation: 'Kontextfönstret är AI:ns arbetsminne. Moderna modeller klarar långa dokument men minnet nollställs vid ny chatt.',
+            points: 100,
+          },
+        ]}
+      />
+    </SlideShell>
+  ),
+},
+
     {
       id: 'valj-verktyg',
       title: 'Välj rätt verktyg',
@@ -1057,6 +1209,66 @@ const Module5AiBrf: React.FC = () => {
       title: 'Protokoll på 10 min',
       component: <ProtokolSlide />,
     },
+    {
+      id: 'quiz-2',
+      title: '🧠 Kunskapstest 2',
+      component: (
+        <SlideShell dark>
+          <SlidePhaseBadge text="Kunskapstest · Avsnitt 4–6" dark />
+          <SlideHeading icon={HelpCircle} title="Verktyg & promptning" dark />
+          <p className="text-white/60 text-sm mb-6">
+            Tre frågor om AI-verktyg och hur du skriver bra prompter.
+          </p>
+          <InlineQuiz
+            dark
+            onComplete={() => handleComplete('quiz-2')}
+            questions={[
+              {
+                id: 'q1',
+                question_text: "Vilket AI-verktyg rekommenderas för känsliga BRF-dokument?",
+                question_type: 'single_choice',
+                question_order: 1,
+                options: { choices: ['ChatGPT', 'Claude', 'Microsoft Copilot', 'Google Bard'] },
+                correct_answer: 'Claude',
+                explanation: 'Claude har bättre standardinställningar för integritet.',
+                points: 100,
+              },
+              {
+                id: 'q2',
+                question_text: "Vilka fyra delar ingår i prompt-formeln?",
+                question_type: 'single_choice',
+                question_order: 2,
+                options: { choices: [
+                  'Språk, längd, datum och ämne',
+                  'Roll, uppgift, kontext och format',
+                  'Titel, paragraf, bilaga och signatur',
+                  'Fråga, svar, kontroll och arkivering',
+                ]},
+                correct_answer: 'Roll, uppgift, kontext och format',
+                explanation: 'Roll, uppgift, kontext och format ger alltid bättre svar.',
+                points: 100,
+              },
+              {
+                id: 'q3',
+                question_text: "Vad ska alltid göras med ett AI-genererat protokollutkast?",
+                question_type: 'single_choice',
+                question_order: 3,
+                options: { choices: [
+                  'Publiceras direkt på anslagstavlan',
+                  'Skickas till Bolagsverket',
+                  'Granskas – kontrollera beslut, datum och namn',
+                  'Arkiveras utan granskning',
+                ]},
+                correct_answer: 'Granskas – kontrollera beslut, datum och namn',
+                explanation: 'AI levererar råmaterialet – sekreteraren ansvarar.',
+                points: 100,
+              },
+            ]}
+          />
+        </SlideShell>
+      ),
+    },
+
     {
       id: 'kommunikation',
       title: 'Kommunikation',

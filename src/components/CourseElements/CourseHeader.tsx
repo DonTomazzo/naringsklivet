@@ -105,8 +105,8 @@ style={{ background: '#0f1623', borderBottom: '1px solid rgba(255,255,255,0.08)'
                   height={20}
                   className="object-contain opacity-90"
                 />
-                <div className="text-lg sm:text-xl font-bold" style={{ color: '#171f32' }}>
-                  <span className="text-[#FF5421]">Närings</span>klivet®
+                <div className="text-lg sm:text-xl font-bold" style={{ color: '#FFFFFF' }}>
+                  <span className="text-[#FF5421]">Styrelse</span>körkortet®
                 </div>
               </motion.div>
             </Link>

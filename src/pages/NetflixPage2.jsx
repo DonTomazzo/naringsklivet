@@ -1,3 +1,4 @@
+// netflix2
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -60,7 +61,7 @@ const Nav = () => {
           <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate('/')}>
            <img src="/logo.png" alt="Näringsklivet" className="w-8 h-8 object-contain" />
   <span className="font-bold text-base tracking-tight" style={{ color: C.dark }}>
-    <span style={{ color: C.orange }}>Närings</span>klivet®
+    <span style={{ color: C.orange }}>Styrelse</span>körkortet®
     <span style={{ color: C.orange }}></span>
   </span>
 </div>
@@ -149,7 +150,7 @@ const Hero = () => {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-8"
           style={{ background: C.orangeL, color: C.orange }}>
           <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: C.orange }} />
-          AI-utbildning för yrkesverksamma
+          TRÄNINGSPROGRAM FÖR FÖRTROENDEVALDA I BOSTADSRÄTTSFÖRENINGAR
         </motion.div>
 
         {/* Grid */}
@@ -160,15 +161,13 @@ const Hero = () => {
             transition={{ duration: 0.7, delay: 0.08 }}>
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight mb-8"
               style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>
-              Lär dig<br />
-              <span style={{ color: C.orange }}>använda AI</span><br />
-              på riktigt.
+              Bli tryggare i<br />
+              <span style={{ color: C.orange }}>din</span><br />
+              styrelseroll.
             </h1>
             <p className="text-lg sm:text-xl leading-relaxed mb-8 max-w-lg"
               style={{ color: C.mid }}>
-              Träningsprogram, workshops och föreläsningar som ger
-              konkreta resultat – inte buzzwords. För medarbetare,
-              chefer och egenföretagare som vill ligga steget före.
+              Komplett utbildning i allt styrelsearbete kräver — juridik, ekonomi, protokoll och ansvar. På din tid, i din takt. Med diplom när du är klar."
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <motion.button whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}

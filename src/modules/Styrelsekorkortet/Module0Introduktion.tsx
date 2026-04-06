@@ -850,20 +850,71 @@ const Module0Introduktion: React.FC = () => {
   audioSrc: '/audio/lagandringar.mp3',
   component: <ValbarhetsSlide />,
 },
+{
+  id: 'intro-video',
+  title: 'Se introduktionsfilmen',
+  component: (
+    <div className="min-h-full relative overflow-hidden" style={{ background: '#0f1623' }}>
+      {/* Bakgrundsbild med overlay */}
+      <img
+        src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&q=80"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover opacity-20"
+      />
+
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-full px-4 py-12 pb-28">
+
+        {/* Rubrik */}
+        <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: 'rgba(255,84,33,0.7)' }}>
+          Introduktion
+        </p>
+        <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8">
+          Välkommen till styrelseuppdraget
+        </h2>
+
+        {/* Video – 16:9 inbäddad */}
+        <div className="w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+          <div className="relative" style={{ paddingBottom: '56.25%' }}>
+            <iframe
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              title="Introduktionsfilm"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+            />
+          </div>
+        </div>
+
+        {/* Undertext */}
+        <p className="text-white/40 text-sm mt-6 text-center max-w-md">
+          En kort genomgång av vad styrelseuppdraget innebär och vad du kommer lära dig i den här kursen.
+        </p>
+      </div>
+    </div>
+  ),
+},
     {
       id: 'lagändringar',
       title: 'Aktuella lagändringar',
       component: (
-        <div className="min-h-full relative overflow-hidden">
+        <div className="h-full relative overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&q=80"
             alt=""
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/55" />
-          <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-8 py-10 sm:py-14 pb-24">
-            <div className="mb-6 text-center">
-  <p className="font-bold text-white text-xl sm:text-2xl mb-1">Aktuella lagändringar 2023–2027</p>
+          <div className="relative z-10 flex flex-col items-center justify-center min-h-full max-w-4xl mx-auto px-4 sm:px-8 py-10 pb-24">
+ <div className="mb-6 text-center">
+  <p
+    className="font-black text-4xl sm:text-5xl lg:text-6xl mb-4"
+    style={{ color: '#FF5421' }}
+  >
+    Håll dig uppdaterad
+  </p>
+  <p className="font-bold text-white text-xl sm:text-2xl mb-1">
+    Aktuella lagändringar 2023–2027
+  </p>
   <p className="text-white/60 text-sm">Klicka på varje cirkel för att läsa mer</p>
 </div>
             <LagandringarSection />
@@ -888,7 +939,7 @@ const Module0Introduktion: React.FC = () => {
         className="absolute inset-0 w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-black/55" />
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-8 py-10 sm:py-14 pb-24">
+      <div className="relative z-10 flex flex-col justify-center min-h-full max-w-4xl mx-auto px-4 sm:px-8 py-10 pb-24">
         <div className="mb-6">
           <p className="font-bold text-white text-xl sm:text-2xl mb-1">
             10 vanliga misstag i BRF-styrelsen
