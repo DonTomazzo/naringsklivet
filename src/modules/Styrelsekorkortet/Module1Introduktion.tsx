@@ -178,18 +178,16 @@ const IntroSlide = ({ onStart }: { onStart: () => void }) => (
     längd="2 timmar"
     avsnitt={11}
     onStart={onStart}
-    // HÄR LÄGGER DU TILL LJUDET:
-    audio={
-      <AudioPlayer 
-        src="/audio/k3.mp3" 
-        title="Introduktion till GDPR" 
-      />
-    }
+    videoUrl="https://www.youtube.com/embed/NO-Lq3w94Tg"
+    videoTitel="Introduktion till bostadsrättsföreningen"
     vadLärDuDig={[
       'Styrelsens tre kärnuppgifter enligt lag',
-      'Rollerna – ordförande, sekreterare, kassör och ledamot',
-      'Hur styrelsen fattar beslut och när enhällighet krävs',
-      
+  'Rollerna – ordförande, sekreterare, kassör och ledamot',
+  'Hur styrelsen fattar beslut och när enhällighet krävs',
+  '', // ← tom rad = extra avstånd
+  'Protokollets juridiska betydelse och vem som får läsa det',
+  'Jäv, bordläggning och återremiss i praktiken',
+  'Vad som händer om styrelsen inte sköter sig',
     ]}
   />
 );
