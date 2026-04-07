@@ -14,6 +14,11 @@ import CourseHeader      from '../../components/CourseElements/CourseHeader';
 import GlobalSidebar     from '../../components/GlobalSidebar';
 import FloatingFAQ       from '../../components/CourseElements/FloatingFAQ';
 import ModuleSlideLayout from '../../components/CourseElements/ModuleSlideLayout';
+import ModuleIntroSlide from '../../components/CourseElements/ModuleIntroSlide';
+import BrfFlödesdiagramSlide from '../../components/CourseElements/BrfFlödesdiagramSlide';
+import BuildingCrossSectionSection from '../../components/CourseElements/IntressenterSection';
+import SplitSlide, { StegLista, InfoRuta } from '../../components/CourseElements/SplitSlide';
+import AudioPlayer from '../../components/AudioPlayer';
 import InlineQuiz        from '../../components/CourseElements/InlineQuiz';
 import GdprQuizOverlay   from '../../components/CourseElements/GdprQuizOverlay';
 
@@ -164,45 +169,29 @@ const MODULE_FAQ = [
   { question: 'Vad är skillnaden på bordläggning och återremiss?', answer: 'Bordläggning skjuter upp en fråga utan att utreda den vidare. Återremiss innebär att styrelsen får tillbaka en fråga som behöver utredas ytterligare innan beslut fattas.' },
 ];
 
-// ═══════════════════════════════════════════════════════════
-// SLIDE 1 – INTRO
-// ═══════════════════════════════════════════════════════════
-const IntroSlide = () => (
-  <BgSlide bild={IMGS.möte}>
-    <Badge text="Juridik · Styrelsens arbete" />
-    <H icon={Users} title="Styrelsens arbete" />
-    <p className="text-white/70 text-lg leading-relaxed mb-8">
-      Styrelsearbetet regleras av lagen om ekonomiska föreningar, bostadsrättslagen
-      och föreningens stadgar. Det är ett förtroendeuppdrag med reellt juridiskt ansvar
-      — men också en möjlighet att göra verklig skillnad för dina grannar.
-    </p>
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-      {[
-        { icon: '👥', title: 'Roller & ansvar', desc: 'Ordförande, sekreterare, kassör och ledamöter' },
-        { icon: '📋', title: 'Möten & beslut', desc: 'Dagordning, protokoll, majoritet och jäv' },
-        { icon: '⚖️', title: 'Juridik & konsekvenser', desc: 'Vad händer om styrelsen inte sköter sig?' },
-      ].map((item, i) => (
-        <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 + i * 0.1 }}
-          className="rounded-xl p-4 border flex items-start gap-3"
-          style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
-          <span className="text-2xl">{item.icon}</span>
-          <div>
-            <p className="text-white font-bold text-sm">{item.title}</p>
-            <p className="text-white/50 text-xs mt-0.5">{item.desc}</p>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-    <div className="rounded-xl p-4 border" style={{ background: `${O}18`, borderColor: `${O}30` }}>
-      <p className="text-white text-sm leading-relaxed">
-        <span className="font-bold" style={{ color: O }}>Styrelsens tre kärnuppgifter: </span>
-        (1) Hålla fastigheter och tillgångar i gott skick.
-        (2) Sköta ekonomin enligt lag.
-        (3) Hantera löpande frågor — utom de som kräver stämmobeslut.
-      </p>
-    </div>
-  </BgSlide>
+const IntroSlide = ({ onStart }: { onStart: () => void }) => (
+  <ModuleIntroSlide
+    kategori="JURIDIK"
+    titel="Välkommen till <span style='color:#FF5421'>bostadsrättsföreningen</span>"
+    ingress="I det här avsnittet kommer vi att kika närmre på hur bostadsrättsföreningen fungerar"
+    bild="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80"
+    längd="2 timmar"
+    avsnitt={11}
+    onStart={onStart}
+    // HÄR LÄGGER DU TILL LJUDET:
+    audio={
+      <AudioPlayer 
+        src="/audio/k3.mp3" 
+        title="Introduktion till GDPR" 
+      />
+    }
+    vadLärDuDig={[
+      'Styrelsens tre kärnuppgifter enligt lag',
+      'Rollerna – ordförande, sekreterare, kassör och ledamot',
+      'Hur styrelsen fattar beslut och när enhällighet krävs',
+      
+    ]}
+  />
 );
 
 // ═══════════════════════════════════════════════════════════
@@ -252,12 +241,28 @@ const RollernaSlide = () => {
       body: 'Valberedningen väljs av stämman och föreslår vilka som ska väljas in i styrelsen. De ska ha god kontakt med många medlemmar och veta vilka kompetenser som behövs. En välfungerande valberedning tänker på ålder, bakgrund och kön för en balanserad styrelse.',
       tips: 'Valberedningen arbetar på förtroende från medlemmarna — inte på uppdrag av styrelsen. De ska vara oberoende.',
     },
+    {
+  id: 'revisor',
+  nr: 'Extern',
+  label: 'Revisorn',
+  color: '#171f32', // <--- Lägg till denna rad
+  short: 'Granskar styrelsens förvaltning och årsredovisning.',
+  // ... resten av objektet
+},
+{
+  id: 'valberedning',
+  nr: 'Extern',
+  label: 'Valberedning',
+  color: '#171f32', // <--- Lägg till denna rad
+  short: 'Föreslår nya ledamöter till styrelsen.',
+  // ... resten av objektet
+},
   ];
 
   return (
     <BgSlide bild={IMGS.team}>
       <Badge text="Block 1 · Avsnitt 01" />
-      <H icon={Users} title="Rollerna i styrelsen" />
+      <H icon={Users} title="De olika rollerna i föreningen" />
       <p className="text-white/70 text-base leading-relaxed mb-4">
         Klicka på varje roll för att förstå ansvar och befogenheter.
       </p>
@@ -566,6 +571,47 @@ const MötesteknikSlide = () => {
 };
 
 // ═══════════════════════════════════════════════════════════
+// SLIDE 8b – PER CAPSULAM
+// ═══════════════════════════════════════════════════════════
+const PerCapsulamSlide = () => (
+  <SplitSlide
+    badge="Avsnitt 05 · Fördjupning"
+    title="Per <span style='color:#FF5421'>capsulam</span>"
+    ingress="Beslut utan fysiskt möte — juridiskt giltigt men med strikta krav. Används när ett möte inte hinner kallas."
+    bild="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&q=80"
+    bildPosition="right"
+    badge2="Krav: enhällighet"
+    badge2Sub="Ett nej stoppar beslutet"
+  >
+    <StegLista steg={[
+      {
+        nr: '01',
+        titel: 'Skicka skriftligt underlag',
+        desc: 'Ordföranden skickar ett tydligt beslutsunderlag till alla ledamöter via e-post.',
+      },
+      {
+        nr: '02',
+        titel: 'Inhämta skriftlig bekräftelse',
+        desc: 'Varje ledamot svarar skriftligt — ja eller nej. Alla måste svara för att beslutet ska vara giltigt.',
+      },
+      {
+        nr: '03',
+        titel: 'Enhällighet krävs',
+        desc: 'Till skillnad från ett vanligt möte räcker det inte med majoritet — alla ledamöter måste vara eniga.',
+      },
+      {
+        nr: '04',
+        titel: 'Protokollför i efterhand',
+        desc: 'Beslutet måste protokollföras och justeras precis som ett vanligt styrelsebeslut.',
+      },
+    ]} />
+    <InfoRuta>
+      Använd per capsulam för tidskänsliga och okomplicerade beslut. För komplexa frågor — kalla alltid till möte.
+    </InfoRuta>
+  </SplitSlide>
+);
+
+// ═══════════════════════════════════════════════════════════
 // SLIDE 9 – VAD SKA DU TÄNKA PÅ? (6 signaler)
 // ═══════════════════════════════════════════════════════════
 const SignalerSlide = () => {
@@ -800,14 +846,38 @@ const Module1Introduktion: React.FC = () => {
     setCompletedLessons(prev => new Set([...prev, id]));
 
   const slides = [
-    { id: 'intro',      title: 'Introduktion',        component: <IntroSlide /> },
+    { 
+      id: 'intro', 
+      title: 'Introduktion', 
+      // 1. Detta visar spelaren i navigationsfältet längst ner:
+      audioSrc: '/audio/k3.mp3', 
+      // 2. Detta skickar in spelaren till själva slide-ytan (den stora vyn):
+      component: (
+        <IntroSlide 
+          onStart={() => setCurrentIndex(1)} 
+          onQuizOpen={() => setQuizOpen(true)} 
+        />
+      ) 
+    },
+     {
+    id: 'byggnad',
+    title: 'Fastigheten',
+    component: (
+      <BuildingCrossSectionSection
+        isCompleted={completedLessons.has('byggnad')}
+        onComplete={handleComplete}
+      />
+    ),
+  },
     { id: 'rollerna',   title: 'Rollerna i styrelsen', component: <RollernaSlide /> },
+    { id: 'brf-struktur', title: 'Så fungerar BRF:en', component: <BrfFlödesdiagramSlide /> },
     { id: 'ansvar',     title: 'Styrelsens ansvar',    component: <AnsvarSlide /> },
     { id: 'quiz-1',     title: '🧠 Kunskapstest 1',    component: <Quiz1Slide onComplete={handleComplete} isDone={completedLessons.has('quiz-1')} /> },
     { id: 'motet',      title: 'Styrelsemötet',        component: <MötetSlide /> },
     { id: 'protokoll',  title: 'Protokollet',          component: <ProtokollSlide /> },
     { id: 'quiz-2',     title: '🧠 Kunskapstest 2',    component: <Quiz2Slide onComplete={handleComplete} isDone={completedLessons.has('quiz-2')} /> },
     { id: 'motesteknik',title: 'Mötesteknik',          component: <MötesteknikSlide /> },
+    { id: 'per-capsulam',   title: 'Per capsulam',     component: <PerCapsulamSlide /> },
     { id: 'signaler',   title: 'Vad ska du tänka på?', component: <SignalerSlide /> },
     { id: 'quiz-3',     title: '🧠 Kunskapstest 3',    component: <Quiz3Slide onComplete={handleComplete} isDone={completedLessons.has('quiz-3')} /> },
     { id: 'slutprov',   title: '🎯 Sluttest',          component: <SlutprovSlide isDone={completedLessons.has('slutprov')} onComplete={handleComplete} /> },

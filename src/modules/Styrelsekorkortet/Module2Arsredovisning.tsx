@@ -193,7 +193,7 @@ const MODULE_FAQ = [
 const IntroSlide = ({ onStart }: { onStart: () => void }) => (
   <ModuleIntroSlide
     kategori="EKONOMI"
-    titel="Årsredovisningen – lär dig tyda"
+    titel="<span style='color:#FF5421'>Årsredovisningen</span> – lär dig tyda"
     ingress="Årsredovisningen är föreningens viktigaste dokument – och en av de vanligaste källorna till oro i styrelserummet. Lär dig tyda den med säkerhet, utan ekonomibakgrund."
     bild="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80"
     längd="2.5 timmar"
@@ -262,7 +262,7 @@ const DelarnasSlide = () => {
   return (
     <BgSlide bild={IMGS.dokument}>
       <Badge text="Block 1 · Avsnitt 01–02" />
-      <Heading icon={BookOpen} title="Årsredovisningens sex delar" />
+      
       <p className="text-white/70 text-base leading-relaxed mb-6">
         En BRF-årsredovisning består alltid av dessa sex delar. Klicka på varje del
         för att lära dig mer.
