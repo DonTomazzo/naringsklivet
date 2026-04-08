@@ -14,9 +14,9 @@ const NODER = [
     id: 'medlemmar',
     label: 'Medlemmar',
     icon: '👥',
-    beskrivning: 'Alla bostadsrättsägare är medlemmar och föreningens yttersta ägare. De utövar sin makt på föreningsstämman — en röst per lägenhet, oavsett storlek.',
+    beskrivning: 'Alla bostadsrättsägare är medlemmar och föreregergregregergergegergegergegegegegergergergergergergregergergreghgngngfngfnfnfgnfgngfngfngfnfngfngfngfnningens yttersta ägare. De utövar sin makt på föreningsstämman — en röst per lägenhet, oavsett storlek.',
     ansvar: ['Betalar årsavgift', 'Röstar på stämman', 'Följer stadgar och ordningsregler'],
-    audioUrl: '/audio/k3.mp3',
+    audioUrl: '/audio/medlemmarna.mp3',
   },
   {
     id: 'stamma',
@@ -24,7 +24,7 @@ const NODER = [
     icon: '🗳️',
     beskrivning: 'Föreningens högsta beslutande organ. Hålls minst en gång per år på våren. Här godkänns årsredovisning, väljs styrelse och revisorer och fattas viktiga beslut.',
     ansvar: ['Väljer styrelse och revisorer', 'Godkänner årsredovisning', 'Beslutar om avgifter och stadgar'],
-    audioUrl: '/audio/k3.mp3',
+    audioUrl: '/audio/foreningsstamman.mp3',
     sido: { label: 'Valberedning', icon: '📋', text: 'Föreslår kandidater till styrelsen. Väljs av stämman och arbetar självständigt.' },
   },
   {
@@ -33,7 +33,7 @@ const NODER = [
     icon: '⚙️',
     beskrivning: 'Leder föreningens löpande arbete mellan stämmorna. Ansvarar juridiskt för fastigheten och ekonomin. Väljs av stämman för 1–2 år.',
     ansvar: ['Förvaltar fastighet och ekonomi', 'Fattar löpande beslut', 'Bär juridiskt ansvar'],
-    audioUrl: '/audio/k3.mp3',
+    audioUrl: '/audio/styrelsen.mp3',
     sido: { label: 'Revisor', icon: '🔍', text: 'Granskar styrelsens arbete och räkenskaper. Rapporterar till stämman — inte styrelsen.' },
   },
   {
@@ -62,7 +62,7 @@ function useAutoAudio(url) {
 // ── Desktop nivå-diagram ──────────────────────────────────
 function OrgChart({ aktiv, setAktiv }) {
   return (
-    <div className="w-full space-y-1">
+    <div className="w-full space-y-0">
       {NODER.map((nod, i) => {
         const isAktiv = aktiv === nod.id;
         return (
@@ -240,7 +240,7 @@ export default function BrfFlödesdiagramSlide() {
 
           {/* Diagram */}
           <div className="flex-1 flex items-center justify-center">
-            <div className="w-full max-w-sm">
+            <div className="w-full max-w-lg">
               <OrgChart aktiv={aktiv} setAktiv={setAktiv} />
             </div>
           </div>
@@ -313,7 +313,7 @@ export default function BrfFlödesdiagramSlide() {
           <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>
             Grunderna · BRF-struktur
           </p>
-          <h2 className="text-2xl font-black text-white mb-1"
+          <h2 className="text-4xl font-black text-white mb-1"
             style={{ fontFamily: "'Nunito', sans-serif" }}>
             Så fungerar <span style={{ color: O }}>BRF:en</span>
           </h2>

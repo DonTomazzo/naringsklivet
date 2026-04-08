@@ -56,7 +56,10 @@ const ModuleIntroSlide: React.FC<ModuleIntroSlideProps> = ({
     <>
       <div
         className="h-full overflow-hidden grid grid-cols-1 lg:grid-cols-2"
-        style={{ background: '#FAFAF8', paddingTop: 'var(--header-height, 60px)' }}
+        style={{ 
+  background: 'linear-gradient(180deg, #F3F4F6 0%, #FAFAF8 100%)', 
+  paddingTop: 'var(--header-height, 60px)' 
+}}
       >
         {/* ── Vänster: text ─────────────────────────────── */}
         <div className="overflow-y-auto h-full">
@@ -77,7 +80,7 @@ const ModuleIntroSlide: React.FC<ModuleIntroSlideProps> = ({
 
             {/* Ingress */}
             <motion.p {...fadeUp(0.3)}
-              className="text-base sm:text-lg text-gray-500 leading-relaxed mb-5 max-w-md">
+  className="text-sm text-gray-500 leading-relaxed mb-5">
               {ingress}
             </motion.p>
 
@@ -152,7 +155,7 @@ const ModuleIntroSlide: React.FC<ModuleIntroSlideProps> = ({
   className="border rounded-2xl p-5 mb-6"
   style={{ borderColor: '#E5E7EB', background: 'white' }}>
   <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: O }}>
-    Vad lär du dig?
+    Vad kommer du att lära dig?
   </p>
   <div className="grid grid-cols-2 gap-x-6 gap-y-2.5 text-left">
   {vadLärDuDig.map((p, i) => (

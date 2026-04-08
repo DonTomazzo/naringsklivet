@@ -178,16 +178,15 @@ const IntroSlide = ({ onStart }: { onStart: () => void }) => (
     längd="2 timmar"
     avsnitt={11}
     onStart={onStart}
-    videoUrl="https://www.youtube.com/embed/NO-Lq3w94Tg"
+   videoUrl="/video/intro-brf.mp4"
     videoTitel="Introduktion till bostadsrättsföreningen"
     vadLärDuDig={[
-      'Styrelsens tre kärnuppgifter enligt lag',
-  'Rollerna – ordförande, sekreterare, kassör och ledamot',
-  'Hur styrelsen fattar beslut och när enhällighet krävs',
-  '', // ← tom rad = extra avstånd
-  'Protokollets juridiska betydelse och vem som får läsa det',
-  'Jäv, bordläggning och återremiss i praktiken',
-  'Vad som händer om styrelsen inte sköter sig',
+      'Styrelsens tre kärnuppgifter ',
+  'Rollerna – ordförande,  ',
+  'Hur styrelsen fattar beslut och ',
+  'Protokollets juridiska betydelse t',
+  'Jäv, bordläggning och',
+  'Vad som händer om styrelsen ',
     ]}
   />
 );
@@ -240,9 +239,9 @@ const RollernaSlide = () => {
       tips: 'Valberedningen arbetar på förtroende från medlemmarna — inte på uppdrag av styrelsen. De ska vara oberoende.',
     },
     {
-  id: 'revisor',
+  id: 'Suppleanterna',
   nr: 'Extern',
-  label: 'Revisorn',
+  label: 'Suppleanterna',
   color: '#171f32', // <--- Lägg till denna rad
   short: 'Granskar styrelsens förvaltning och årsredovisning.',
   // ... resten av objektet
@@ -259,13 +258,24 @@ const RollernaSlide = () => {
 
   return (
     <BgSlide bild={IMGS.team}>
+    {/* Denna div sköter centreringen */}
+    <div className="flex flex-col items-center justify-center text-center h-full max-w-4xl mx-auto px-6">
+      
       <Badge text="Block 1 · Avsnitt 01" />
+      
       <H icon={Users} title="De olika rollerna i föreningen" />
-      <p className="text-white/70 text-base leading-relaxed mb-4">
+      
+      <p className="text-white/70 text-base leading-relaxed mb-8 max-w-2xl">
         Klicka på varje roll för att förstå ansvar och befogenheter.
       </p>
-      <KortGrid items={roller} />
-    </BgSlide>
+
+      {/* Grid-komponenten behöver ofta w-full för att inte krympa ihop i flex-boxen */}
+      <div className="w-full">
+        <KortGrid items={roller} />
+      </div>
+      
+    </div>
+  </BgSlide>
   );
 };
 
