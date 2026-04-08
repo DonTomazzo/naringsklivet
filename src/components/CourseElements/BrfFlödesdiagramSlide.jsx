@@ -247,9 +247,23 @@ export default function BrfFlödesdiagramSlide() {
         </div>
 
         {/* Höger: förklaring täcker hela ytan */}
-        <div className="h-full overflow-y-auto flex flex-col justify-center px-10 lg:px-14 py-12 pb-28"
-          style={{ background: '#FAFAF8' }}>
+{/* 1. Här lade vi till 'relative' i className */}
+<div 
+  className="h-full overflow-y-auto flex flex-col justify-center px-10 lg:px-14 py-12 pb-28 relative"
+  style={{ background: '#FAFAF8' }}
+>
 
+  {/* 2. HÄR klistrar du in bakgrundsbilden */}
+  <div 
+    className="absolute inset-0 z-0 pointer-events-none"
+    style={{ 
+      backgroundImage: 'url("https://images.unsplash.com/photo-1560514446-440a34b41a38?q=80&w=1000&auto=format&fit=crop")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      filter: 'grayscale(100%) brightness(1.05) contrast(0.9)',
+      opacity: 0.15,
+    }}
+  />
           <AnimatePresence mode="wait">
             {aktivNod && (
               <motion.div key={aktivNod.id}

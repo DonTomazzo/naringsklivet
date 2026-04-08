@@ -255,7 +255,7 @@ const ModuleSlideLayout = ({
         </AnimatePresence>
       </div>
 
-      {/* ─── KONTROLLBAR – YouTube/SVTPlay-stil ─── */}
+     {/* ─── KONTROLLBAR – YouTube/SVTPlay-stil ─── */}
       <AnimatePresence>
         {barVisible && (
           <motion.div
@@ -265,7 +265,7 @@ const ModuleSlideLayout = ({
             transition={{ duration: 0.2 }}
             onMouseEnter={() => { setHovering(true);  clearTimeout(hideTimer.current); }}
             onMouseLeave={() => { setHovering(false); if (isFullscreen) hideTimer.current = setTimeout(() => setBarVisible(false), 2000); }}
-            className="fixed bottom-0 right-0 z-50 pointer-events-none"
+            className="fixed bottom-0 right-0 z-50 pointer-events-none w-full"
             style={{ left: isFullscreen ? '0px' : 'var(--sidebar-width, 0px)' }}
           >
             {/* Gradient fade upp */}
@@ -274,7 +274,7 @@ const ModuleSlideLayout = ({
               style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)' }}
             />
 
-            {/* Slidebar */}
+            {/* Slidebar / Progress (Klickbar linje) */}
             <div className="w-full px-4 pb-1 pointer-events-auto">
               <div className="relative h-1 group cursor-pointer rounded-full bg-white/20 hover:h-2 transition-all duration-150"
                 onClick={(e) => {
@@ -284,12 +284,10 @@ const ModuleSlideLayout = ({
                   navigate(Math.max(0, Math.min(total - 1, idx)));
                 }}
               >
-                {/* Redan sedd */}
                 <div
                   className="absolute left-0 top-0 h-full bg-[#FF5421] rounded-full transition-all duration-300"
                   style={{ width: `${progressPct}%` }}
                 />
-                {/* Tumme */}
                 <div
                   className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 bg-[#FF5421] rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
                   style={{ left: `${progressPct}%` }}
@@ -299,19 +297,31 @@ const ModuleSlideLayout = ({
 
             {/* Knapp-rad */}
             <div
-  className="w-full px-4 pb-2 flex items-center gap-2 pointer-events-auto"
-  style={{ background: '#0f1623' }}
->
-              {/* ── Vänster: nav + volym + räknare ── */}
+              className="w-full px-4 pb-2 flex items-center gap-4 pointer-events-auto"
+              style={{ background: '#0f1623' }}
+            >
+              {/* ── VÄNSTER: Play + Nav + Volym ── */}
               <div className="flex items-center gap-2 flex-shrink-0">
+                
+                {/* NY: VIT PLAY-KNAPP */}
+                <button
+                  onClick={() => {
+                    const audio = document.querySelector('audio');
+                    if (audio) audio.paused ? audio.play() : audio.pause();
+                  }}
+                  className={`${btnBase} w-10 h-10`}
+                  style={{ color: '#FFFFFF' }}
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
+
                 <button
                   onClick={prev}
                   disabled={!canPrev}
-                  title="Föregående (←)"
                   className={`${btnBase} w-8 h-8`}
-                  style={canPrev
-                    ? { color: 'rgba(255,255,255,0.85)' }
-                    : { color: 'rgba(255,255,255,0.2)', cursor: 'default', pointerEvents: 'none' }}
+                  style={canPrev ? { color: 'rgba(255,255,255,0.85)' } : { color: 'rgba(255,255,255,0.2)', pointerEvents: 'none' }}
                 >
                   <SkipBack size={16} strokeWidth={2} />
                 </button>
@@ -319,11 +329,8 @@ const ModuleSlideLayout = ({
                 <button
                   onClick={next}
                   disabled={!canNext}
-                  title="Nästa (→)"
                   className={`${btnBase} w-8 h-8`}
-                  style={canNext
-                    ? { color: 'rgba(255,255,255,0.85)' }
-                    : { color: 'rgba(255,255,255,0.2)', cursor: 'default', pointerEvents: 'none' }}
+                  style={canNext ? { color: 'rgba(255,255,255,0.85)' } : { color: 'rgba(255,255,255,0.2)', pointerEvents: 'none' }}
                 >
                   <SkipForward size={16} strokeWidth={2} />
                 </button>
@@ -332,7 +339,6 @@ const ModuleSlideLayout = ({
                   <button
                     onClick={() => setMuted(m => !m)}
                     onMouseEnter={() => setShowVolume(true)}
-                    title={muted ? 'Ljud på (M)' : 'Ljud av (M)'}
                     className={`${btnBase} w-8 h-8`}
                     style={{ color: 'rgba(255,255,255,0.85)' }}
                   >
@@ -344,8 +350,6 @@ const ModuleSlideLayout = ({
                         initial={{ opacity: 0, width: 0 }}
                         animate={{ opacity: 1, width: 70 }}
                         exit={{ opacity: 0, width: 0 }}
-                        onMouseEnter={() => setShowVolume(true)}
-                        onMouseLeave={() => setShowVolume(false)}
                         className="overflow-hidden flex items-center"
                       >
                         <input
@@ -364,46 +368,26 @@ const ModuleSlideLayout = ({
                   </AnimatePresence>
                 </div>
 
-                <span
-                  className="text-xs font-semibold tabular-nums select-none"
-                  style={{ color: 'rgba(255,255,255,0.4)' }}
-                >
+                <span className="text-xs font-semibold tabular-nums opacity-40 select-none">
                   {currentIndex + 1} / {total}
                 </span>
               </div>
 
-              {/* ── Mitten: AudioPlayer ── */}
-              <div className="flex-1 flex justify-center px-2">
-                <AnimatePresence mode="wait">
-                  {currentSlide.audioSrc ? (
-                    <motion.div
-                      key={currentSlide.id + '-audio'}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }}
-                      className="w-full max-w-xs pointer-events-auto"
-                    >
-                      <AudioPlayerCompact audioSrc={currentSlide.audioSrc} />
-                    </motion.div>
-                  ) : (
-                    <motion.div key="no-audio" className="w-full max-w-xs" />
-                  )}
-                </AnimatePresence>
-              </div>
+              {/* ── MITTEN: AudioPlayer (Dold men aktiv) ── */}
+<div className="flex-1 flex justify-center px-2 pointer-events-none opacity-0">
+  {currentSlide.audioSrc && (
+    <AudioPlayerCompact audioSrc={currentSlide.audioSrc} />
+  )}
+</div>
 
-              {/* ── Höger: fullscreen ── */}
+              {/* ── HÖGER: Fullscreen ── */}
               <div className="flex-shrink-0">
                 <button
                   onClick={toggleFullscreen}
-                  title={isFullscreen ? 'Avsluta helskärm (F / Esc)' : 'Helskärm (F)'}
                   className={`${btnBase} w-8 h-8`}
                   style={{ color: 'rgba(255,255,255,0.85)' }}
                 >
-                  {isFullscreen
-                    ? <Minimize2 size={15} strokeWidth={2} />
-                    : <Maximize2 size={15} strokeWidth={2} />
-                  }
+                  {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
                 </button>
               </div>
             </div>
