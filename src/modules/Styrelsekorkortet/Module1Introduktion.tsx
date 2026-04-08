@@ -178,7 +178,7 @@ const IntroSlide = ({ onStart }: { onStart: () => void }) => (
     längd="2 timmar"
     avsnitt={11}
     onStart={onStart}
-   videoUrl="/video/intro-brf.mp4"
+   videoUrl="/video/intro-brf2.mp4"
     videoTitel="Introduktion till bostadsrättsföreningen"
     vadLärDuDig={[
       'Styrelsens tre kärnuppgifter ',
