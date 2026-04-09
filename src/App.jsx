@@ -10,6 +10,7 @@ import StyrelsesupportPage from './pages/StyrelsesupportPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import NewsCards from './components/blog/NewsCards';
+import ModuleRouter from './components/ModuleRouter';
 import CoursePage from './pages/CoursePage';
 import FinalQuiz from './pages/FinalQuiz'
 import Events from './pages/Events';
@@ -331,6 +332,7 @@ const AppRoutes = () => {
       <Route path="/kurs/:slug" element={<CoursePage />} />
       <Route path="/styrelsesupport" element={<StyrelsesupportPage />} />
       <Route path="/styrelsekörkortet" element={<StyrelsekorkortetLanding />} />
+      <Route path="/module/:slug" element={<ModuleRouter />} />
 
       {/* Auth routes */}
       <Route path="/register" element={<TeamCodeRegister />} />

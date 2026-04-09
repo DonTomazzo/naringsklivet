@@ -1,8 +1,13 @@
+// ModulesPage.jsx
 import { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, Play, Lock, Clock, BookOpen, Search } from 'lucide-react';
-import { modulesData, categories } from '../../data/modules2.jsx';
+import { modulesData as brf } from '../../data/modules2.jsx';
+import { modulesData as nk }  from '../../data/naringsklivetData';
+
+const modulesData = [...brf, ...nk];
+const categories  = ['ALLA', ...new Set([...brf, ...nk].map(m => m.category))];
 
 // ── Brand tokens (matchar NaringsklivetLanding) ───────────
 const C = {

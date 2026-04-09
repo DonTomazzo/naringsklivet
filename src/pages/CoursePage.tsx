@@ -11,7 +11,10 @@ import {
   Zap, BookOpen, Lock, Shield
 } from 'lucide-react';
 import DatePicker from '../components/DatePicker';
-import { getModuleBySlug } from '../data/modules2';
+import { getModuleBySlug } from '../data/coursesData';
+import { getModuleBySlug as getNKCourseBySlug } from '../data/naringsklivetData';
+
+
 
 // ── Brand ─────────────────────────────────────────────────
 const C = {
@@ -154,7 +157,7 @@ const NotFound = ({ navigate }) => (
 export default function CoursePage() {
   const { slug }  = useParams();
   const navigate  = useNavigate();
-  const course    = getModuleBySlug(slug);
+  const course    = getModuleBySlug(slug) ?? getNKCourseBySlug(slug);
 
   const [activeTab, setActiveTab]   = useState('om');
   const [showSticky, setShowSticky] = useState(false);
