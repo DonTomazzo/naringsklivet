@@ -5,15 +5,13 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ChevronLeft, ChevronRight,
   Maximize2, Minimize2,
   Volume2, VolumeX, Volume1,
   SkipBack, SkipForward,
 } from 'lucide-react';
-import AudioPlayerCompact from '../AudioPlayerCompact';
 
 // ─────────────────────────────────────────────
-// PROGRESSBAR (tunn linje längst upp)
+// PROGRESSBAR
 // ─────────────────────────────────────────────
 export const SlideProgressBar = ({ total, current }) => (
   <div className="w-full h-1 bg-white/10 flex-shrink-0">
@@ -65,8 +63,8 @@ const slideVariants = {
 // ─────────────────────────────────────────────
 const VolumeIcon = ({ volume, muted }) => {
   if (muted || volume === 0) return <VolumeX size={16} strokeWidth={2} />;
-  if (volume < 0.5)          return <Volume1  size={16} strokeWidth={2} />;
-  return                            <Volume2  size={16} strokeWidth={2} />;
+  if (volume < 0.5)          return <Volume1 size={16} strokeWidth={2} />;
+  return                            <Volume2 size={16} strokeWidth={2} />;
 };
 
 // ─────────────────────────────────────────────
@@ -79,23 +77,28 @@ const ModuleSlideLayout = ({
   children,
   showHeader,
 }) => {
-  const [direction, setDirection]       = useState(1);
+  const [direction, setDirection]   = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [volume, setVolume]             = useState(1);
-  const [muted, setMuted]               = useState(false);
-  const [showVolume, setShowVolume]     = useState(false);
-  const [barVisible, setBarVisible]     = useState(true);
-  const [hovering, setHovering]         = useState(false);
-
+  const [volume, setVolume]         = useState(1);
+  const [muted, setMuted]           = useState(false);
+  const [showVolume, setShowVolume] = useState(false);
+  const [barVisible, setBarVisible] = useState(true);
+  const [hovering, setHovering]     = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const touchStartX  = useRef(null);
   const touchStartY  = useRef(null);
   const containerRef = useRef(null);
   const hideTimer    = useRef(null);
   const volumeRef    = useRef(null);
+  const audioRef     = useRef(null); // ← plain JSX ref, no TypeScript generic
 
   const total   = slides.length;
   const canPrev = currentIndex > 0;
   const canNext = currentIndex < total - 1;
+
+  // currentSlide definieras HÄR — före alla useEffects som använder den
+  const currentSlide = slides[currentIndex];
+  const progressPct  = ((currentIndex + 1) / total) * 100;
 
   // ── Navigering ──────────────────────────────
   const navigate = useCallback((newIndex) => {
@@ -105,6 +108,32 @@ const ModuleSlideLayout = ({
 
   const prev = useCallback(() => { if (canPrev) navigate(currentIndex - 1); }, [canPrev, navigate, currentIndex]);
   const next = useCallback(() => { if (canNext) navigate(currentIndex + 1); }, [canNext, navigate, currentIndex]);
+
+  useEffect(() => {
+  if (audioRef.current) {
+    audioRef.current.pause();
+    audioRef.current = null;
+  }
+  setIsPlaying(false);
+  if (!currentSlide.audioSrc) return;
+  const timer = setTimeout(() => {
+    const audio = new Audio(currentSlide.audioSrc);
+    audioRef.current = audio;
+    audio.volume = muted ? 0 : volume;
+    audio.onplay  = () => setIsPlaying(true);
+    audio.onpause = () => setIsPlaying(false);
+    audio.onended = () => setIsPlaying(false);
+    audio.play().catch(() => {});
+  }, 1000);
+  return () => {
+    clearTimeout(timer);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    setIsPlaying(false);
+  };
+}, [currentIndex]);
 
   // ── Tangentbord ─────────────────────────────
   useEffect(() => {
@@ -131,7 +160,6 @@ const ModuleSlideLayout = ({
     const handler = () => {
       const fs = !!document.fullscreenElement;
       setIsFullscreen(fs);
-      // Dölj CourseHeader i fullscreen
       const header = document.querySelector('[data-course-header]');
       if (header) header.style.display = fs ? 'none' : '';
     };
@@ -139,7 +167,7 @@ const ModuleSlideLayout = ({
     return () => document.removeEventListener('fullscreenchange', handler);
   }, []);
 
-  // ── Auto-hide kontrollbar i fullscreen ──────
+  // ── Auto-hide kontrollbar ──────────────────
   const showBar = () => {
     setBarVisible(true);
     clearTimeout(hideTimer.current);
@@ -186,19 +214,14 @@ const ModuleSlideLayout = ({
     touchStartY.current = null;
   };
 
-  // ── Volymkontroll på globala AudioPlayer:s ──
+  // ── Synka volym med audioRef ────────────────
   useEffect(() => {
-    const audios = document.querySelectorAll('audio');
-    audios.forEach(a => {
-      a.volume = muted ? 0 : volume;
-      a.muted  = muted;
-    });
+    if (audioRef.current) {
+      audioRef.current.volume = muted ? 0 : volume;
+      audioRef.current.muted  = muted;
+    }
   }, [volume, muted]);
 
-  const currentSlide = slides[currentIndex];
-  const progressPct  = ((currentIndex + 1) / total) * 100;
-
-  // Stil för kontrollknappar
   const btnBase = "pointer-events-auto flex items-center justify-center rounded-full transition-all duration-150 hover:scale-110 active:scale-95";
 
   return (
@@ -208,7 +231,7 @@ const ModuleSlideLayout = ({
       onMouseMove={showBar}
       onClick={showBar}
     >
-      {/* Tunn progress-linje längst upp */}
+      {/* Progress-linje */}
       <SlideProgressBar total={total} current={currentIndex} />
 
       {/* Slide-titel + dots */}
@@ -255,7 +278,7 @@ const ModuleSlideLayout = ({
         </AnimatePresence>
       </div>
 
-     {/* ─── KONTROLLBAR – YouTube/SVTPlay-stil ─── */}
+      {/* ─── KONTROLLBAR ─── */}
       <AnimatePresence>
         {barVisible && (
           <motion.div
@@ -263,20 +286,21 @@ const ModuleSlideLayout = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.2 }}
-            onMouseEnter={() => { setHovering(true);  clearTimeout(hideTimer.current); }}
+            onMouseEnter={() => { setHovering(true); clearTimeout(hideTimer.current); }}
             onMouseLeave={() => { setHovering(false); if (isFullscreen) hideTimer.current = setTimeout(() => setBarVisible(false), 2000); }}
             className="fixed bottom-0 right-0 z-50 pointer-events-none w-full"
-            style={{ left: isFullscreen ? '0px' : 'var(--sidebar-width, 0px)' }}
+            style={{ left: isFullscreen ? '0px' : 'var(--sidebar-width, 320px)' }}
           >
-            {/* Gradient fade upp */}
+            {/* Gradient */}
             <div
               className="w-full h-16 pointer-events-none"
               style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)' }}
             />
 
-            {/* Slidebar / Progress (Klickbar linje) */}
+            {/* Progress-bar */}
             <div className="w-full px-4 pb-1 pointer-events-auto">
-              <div className="relative h-1 group cursor-pointer rounded-full bg-white/20 hover:h-2 transition-all duration-150"
+              <div
+                className="relative h-1 group cursor-pointer rounded-full bg-white/20 hover:h-2 transition-all duration-150"
                 onClick={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
                   const pct  = (e.clientX - rect.left) / rect.width;
@@ -300,22 +324,27 @@ const ModuleSlideLayout = ({
               className="w-full px-4 pb-2 flex items-center gap-4 pointer-events-auto"
               style={{ background: '#0f1623' }}
             >
-              {/* ── VÄNSTER: Play + Nav + Volym ── */}
+              {/* VÄNSTER */}
               <div className="flex items-center gap-2 flex-shrink-0">
-                
-                {/* NY: VIT PLAY-KNAPP */}
                 <button
-                  onClick={() => {
-                    const audio = document.querySelector('audio');
-                    if (audio) audio.paused ? audio.play() : audio.pause();
-                  }}
-                  className={`${btnBase} w-10 h-10`}
-                  style={{ color: '#FFFFFF' }}
-                >
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </button>
+  onClick={() => {
+    if (audioRef.current) {
+      audioRef.current.paused ? audioRef.current.play() : audioRef.current.pause();
+    }
+  }}
+  className={`${btnBase} w-10 h-10`}
+  style={{ color: '#FFFFFF' }}
+>
+  {isPlaying ? (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  )}
+</button>
 
                 <button
                   onClick={prev}
@@ -373,23 +402,23 @@ const ModuleSlideLayout = ({
                 </span>
               </div>
 
-              {/* ── MITTEN: AudioPlayer (Dold men aktiv) ── */}
-<div className="flex-1 flex justify-center px-2 pointer-events-none opacity-0">
-  {currentSlide.audioSrc && (
-    <AudioPlayerCompact audioSrc={currentSlide.audioSrc} />
-  )}
-</div>
+              {/* MITTEN: spacer */}
+              <div className="flex-1" />
 
-              {/* ── HÖGER: Fullscreen ── */}
-              <div className="flex-shrink-0">
-                <button
-                  onClick={toggleFullscreen}
-                  className={`${btnBase} w-8 h-8`}
-                  style={{ color: 'rgba(255,255,255,0.85)' }}
-                >
-                  {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
-                </button>
-              </div>
+             {/* MITTEN: spacer */}
+  <div className="flex-1" />
+
+  {/* HÖGER: Fullscreen */}
+  <div className="flex-shrink-0">
+    <button
+      onClick={toggleFullscreen}
+      className={`${btnBase} w-8 h-8`}
+      style={{ color: 'rgba(255,255,255,0.85)' }}
+    >
+      {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+    </button>
+  </div>
+
             </div>
           </motion.div>
         )}

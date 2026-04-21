@@ -11,6 +11,8 @@ import ModuleIntressenter from '../modules/Styrelsekorkortet/ModuleIntressenter.
 import Module4Diskriminering from '../modules/Styrelsekorkortet/Module4Diskriminering.tsx';
 import Module0Introduktion from '../modules/Styrelsekorkortet/Module0Introduktion.tsx';
 import Module2Arsredovisning from '../modules/Styrelsekorkortet/Module2Arsredovisning';
+import ModuleMotesledning, { courseData as motenData } from '../modules/Styrelsekorkortet/ModuleMotesledning';
+import ModuleFastigheten, { courseData as fastighetenData } from '../modules/Styrelsekorkortet/ModuleFastigheten';
 
 // ── Delad instruktör ──────────────────────────────────────
 const INSTRUCTOR = {
@@ -19,6 +21,392 @@ const INSTRUCTOR = {
   img:   '/founder.png',
   bio:   '15+ års erfarenhet av styrelsearbete, föreningsjuridik och utbildning. Grundare av Styrelsekörkortet.',
 };
+
+export const isBundle = true; // markerar att alla kurser ingår i ett paket
+
+const STYRELSEKORKORTET_LIVE = {
+  id:       'styrelsekorkortet-plats',
+  slug:     'styrelsekorkortet-plats',
+  type:     'live',
+  category: 'GRUNDERNA',
+  title: 'Styrelsekörkortet — live via Teams',
+  subtitle: 'Tomas Mauritzson kommer till er förening och utbildar hela styrelsen på 3 timmar.',
+  short_description: 'Komplett styrelseutbildning live via Teams — praktisk, interaktiv och skräddarsydd.',
+  image_url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1280&q=80',
+  duration: '3 timmar',
+  price: 4900,
+  priceTeam: 'Fast pris per styrelse — alla ledamöter ingår',
+  location: 'Microsoft Teams',
+  maxParticipants: 16,
+  component: null,
+  rating: 5.0,
+  students: 0,
+  instructor: {
+    name:  'Tomas Mauritzson',
+    title: 'Kursledare — Styrelsekörkortet',
+    img:   '/founder.png',
+    bio:   'Tomas Mauritzson har 15+ års erfarenhet av styrelsearbete, föreningsjuridik och utbildning. Han har utbildat hundratals styrelseledamöter i hela Sverige och är känd för sin pedagogiska och jordnära stil. Som grundare av Styrelsekörkortet är han den enda kursledaren i Sverige med ett komplett utbildningsprogram skräddarsytt för BRF-styrelser.',
+  },
+  learningPoints: [
+    'Styrelsens roller, ansvar och befogenheter',
+    'Vad som gäller på styrelsemöten — formalia och protokoll',
+    'Ekonomin i föreningen — läsa en årsredovisning',
+    'Juridiska grunderna — bostadsrättslagen i praktiken',
+    'GDPR och personuppgiftshantering i föreningen',
+    'Föreningsstämman — från kallelse till ansvarsfrihet',
+    'Underhållsplanering och fastighetens skötsel',
+    'Praktiska verktyg och AI för styrelsearbetet',
+  ],
+  forWho: [
+    'Nyvalda BRF-styrelser som vill starta rätt',
+    'Befintliga styrelser som vill fräscha upp kunskapen',
+    'Föreningar inför en föreningsstämma',
+    'Styrelser som vill genomföra utbildningen tillsammans — på plats',
+  ],
+  modules: [
+    { title: 'Block 1 — Styrelsen, roller och juridik',      duration: '60 min', free: true  },
+    { title: 'Block 2 — Ekonomi och underhållsplanering',    duration: '60 min', free: true  },
+    { title: 'Block 3 — Stämman, GDPR och smarta verktyg',   duration: '60 min', free: true  },
+  ],
+  testimonials: [
+    { name: 'Maria L.', role: 'Ordförande BRF Kastanjen', text: 'Äntligen förstår hela styrelsen vad som gäller. Tomas förklarar på ett sätt som fastnar.', rating: 5 },
+    { name: 'Anders K.', role: 'Kassör BRF Eken', text: 'Vi lärde oss mer på 3 timmar med Tomas än på 5 år i styrelsen.', rating: 5 },
+    { name: 'Sofia B.', role: 'Sekreterare BRF Linden', text: 'Perfekt inför vår första stämma. Praktisk, tydlig och faktiskt rolig.', rating: 5 },
+  ],
+  faq: [
+    { question: 'Var hålls utbildningen?', answer: 'Via Microsoft Teams. Vi skickar en möteslänk när datum är bekräftat. Ni behöver bara en dator eller surfplatta.' },
+    { question: 'Hur många kan delta?', answer: 'Priset gäller för upp till 16 deltagare. Perfekt för en hel styrelse med suppleanter. Fler deltagare? Kontakta oss för offert.' },
+    { question: 'Vad ingår i priset?', answer: '3 timmars interaktiv utbildning på plats, digitalt kursbevis till alla deltagare och komplett kursmaterial som PDF. Moms tillkommer.' },
+    { question: 'Kan vi anpassa innehållet?', answer: 'Ja — vi kan lägga extra fokus på de ämnen just er förening behöver. Hör av er när ni bokar så diskuterar vi upplägget.' },
+    { question: 'Hur lång framförhållning behövs?', answer: 'Vi rekommenderar att boka minst 3 veckor i förväg. Vi försöker alltid vara flexibla — kontakta oss så hittar vi ett datum.' },
+    { question: 'Vad händer om vi behöver avboka?', answer: 'Kostnadsfri avbokning upp till 7 dagar före utbildningen. Därefter debiteras 50% av kursavgiften.' },
+  ],
+  pdfUrl: '/pdfs/styrelsekorkortet-plats-program.pdf',
+};
+ 
+ 
+// ═══════════════════════════════════════════════════════════
+// DEL 2: Skapa en dedikerad bokningssida
+// src/pages/BookingPage.tsx
+// Route: /boka-styrelsekorkortet
+// ═══════════════════════════════════════════════════════════
+ 
+/*
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import {
+  MapPin, Clock, Users, Award, CheckCircle,
+  ChevronRight, Star, Phone, Mail, ArrowRight,
+  Calendar, FileText, Zap,
+} from 'lucide-react';
+ 
+const O  = '#FF5421';
+const OD = '#E04619';
+ 
+const C = {
+  orange:  O,
+  orangeD: OD,
+  orangeL: '#FFF0EB',
+  dark:    '#1A1A1A',
+  mid:     '#4A4A4A',
+  muted:   '#8A8A8A',
+  bg:      '#FAFAF8',
+  border:  '#E8E5E0',
+  white:   '#FFFFFF',
+};
+ 
+export default function BookingPage() {
+  const navigate = useNavigate();
+  const [step, setStep] = useState(1);
+  const [form, setForm] = useState({
+    foreningNamn: '',
+    kontaktNamn: '',
+    email: '',
+    telefon: '',
+    ort: '',
+    antal: '',
+    datum1: '',
+    datum2: '',
+    datum3: '',
+    meddelande: '',
+  });
+  const [submitted, setSubmitted] = useState(false);
+ 
+  const set = (key: string, val: string) => setForm(f => ({ ...f, [key]: val }));
+ 
+  const handleSubmit = async () => {
+    // Skicka till Netlify Forms eller eget API
+    setSubmitted(true);
+  };
+ 
+  if (submitted) return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: C.bg }}>
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+        className="max-w-lg w-full mx-4 rounded-3xl p-10 text-center border shadow-xl"
+        style={{ background: C.white, borderColor: C.border }}>
+        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+          style={{ background: C.orangeL }}>
+          <CheckCircle className="w-8 h-8" style={{ color: O }} />
+        </div>
+        <h2 className="text-2xl font-black mb-3" style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>
+          Tack för din förfrågan!
+        </h2>
+        <p className="text-base mb-6" style={{ color: C.mid }}>
+          Vi återkommer inom 24 timmar för att bekräfta datum och detaljer.
+        </p>
+        <div className="rounded-2xl p-5 mb-6 text-left space-y-2" style={{ background: C.bg }}>
+          <p className="text-sm font-bold" style={{ color: C.dark }}>Dina uppgifter:</p>
+          <p className="text-sm" style={{ color: C.mid }}>{form.foreningNamn}</p>
+          <p className="text-sm" style={{ color: C.mid }}>{form.kontaktNamn} · {form.email}</p>
+          <p className="text-sm" style={{ color: C.mid }}>Önskade datum: {form.datum1}{form.datum2 ? `, ${form.datum2}` : ''}{form.datum3 ? `, ${form.datum3}` : ''}</p>
+        </div>
+        <button onClick={() => navigate('/')}
+          className="w-full py-3.5 rounded-xl font-bold text-white"
+          style={{ background: `linear-gradient(135deg, ${O}, ${OD})` }}>
+          Tillbaka till startsidan
+        </button>
+      </motion.div>
+    </div>
+  );
+ 
+  return (
+    <div className="min-h-screen" style={{ background: C.bg, fontFamily: "'Nunito', sans-serif" }}>
+ 
+      // Hero
+      <div style={{ background: 'linear-gradient(135deg, #171f32 0%, #1e2d4a 100%)' }}>
+        <div className="max-w-5xl mx-auto px-4 sm:px-8 pt-24 pb-16">
+          <div className="flex items-center gap-2 text-xs mb-6" style={{ color: 'rgba(255,255,255,0.4)' }}>
+            <button onClick={() => navigate('/')} className="hover:text-white">Hem</button>
+            <ChevronRight size={12} />
+            <span style={{ color: 'rgba(255,255,255,0.7)' }}>Boka Styrelsekörkortet</span>
+          </div>
+ 
+          <div className="max-w-2xl">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold mb-4"
+              style={{ background: C.orangeL, color: O }}>
+              Platsbaserad utbildning · 3 timmar
+            </span>
+            <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight mb-4"
+              style={{ fontFamily: "'Nunito', sans-serif" }}>
+              Styrelsekörkortet<br />
+              <span style={{ color: O }}>på plats hos er</span>
+            </h1>
+            <p className="text-white/60 text-lg mb-6">
+              Vi kommer till er förening och utbildar hela styrelsen på 3 timmar. Praktisk, interaktiv och skräddarsydd efter era behov.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              {[
+                { icon: MapPin, text: 'Hos er — inga resor för er' },
+                { icon: Clock,  text: '3 timmar' },
+                { icon: Users,  text: 'Upp till 16 deltagare' },
+                { icon: Award,  text: 'Kursbevis + PDF-material' },
+              ].map(({ icon: Icon, text }, i) => (
+                <div key={i} className="flex items-center gap-2 text-white/70 text-sm">
+                  <Icon size={14} style={{ color: O }} /> {text}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      // Pris-banner
+      <div style={{ background: O }}>
+        <div className="max-w-5xl mx-auto px-4 sm:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-6">
+            <div>
+              <p className="text-white/70 text-xs font-bold uppercase tracking-widest">Pris</p>
+              <p className="text-white font-black text-2xl">4 900 kr</p>
+            </div>
+            <p className="text-white/70 text-sm">per styrelse · exkl. moms · faktura 30 dagar</p>
+          </div>
+          <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            onClick={() => document.getElementById('bokningsformular')?.scrollIntoView({ behavior: 'smooth' })}
+            className="px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2"
+            style={{ background: C.white, color: O }}>
+            Boka nu <ArrowRight size={14} />
+          </motion.button>
+        </div>
+      </div>
+ 
+      // Innehåll + formulär
+      <div className="max-w-5xl mx-auto px-4 sm:px-8 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+ 
+          // Vänster — info
+          <div className="lg:col-span-3 space-y-10">
+ 
+            // Vad ingår
+            <div>
+              <h2 className="text-2xl font-black mb-6" style={{ color: C.dark }}>Vad ingår?</h2>
+              <div className="space-y-4">
+                {[
+                  { icon: '🎓', title: '3 timmars utbildning', desc: 'Interaktiv genomgång av alla viktiga ämnen — anpassad efter er förening och era frågor.' },
+                  { icon: '📜', title: 'Digitalt kursbevis', desc: 'Alla deltagare får ett personligt kursbevis som intygar genomförd utbildning.' },
+                  { icon: '📚', title: 'Kursmaterial som PDF', desc: 'Komplett kursmaterial att spara och återvända till — allt ni gick igenom och mer.' },
+                  { icon: '❓', title: 'Fri frågestund', desc: 'Riktig tid för era specifika frågor — inget är för litet eller för stort.' },
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-4 p-4 rounded-2xl border"
+                    style={{ background: C.white, borderColor: C.border }}>
+                    <span className="text-2xl flex-shrink-0">{item.icon}</span>
+                    <div>
+                      <p className="font-bold text-sm mb-1" style={{ color: C.dark }}>{item.title}</p>
+                      <p className="text-sm" style={{ color: C.mid }}>{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+ 
+            // Innehåll
+            <div>
+              <h2 className="text-2xl font-black mb-6" style={{ color: C.dark }}>Vi går igenom</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[
+                  'Styrelsens roller och ansvar',
+                  'Möten, kallelse och protokoll',
+                  'Ekonomin och årsredovisningen',
+                  'Juridiska grunderna i BRL',
+                  'GDPR i föreningen',
+                  'Föreningsstämman — rätt till rätt',
+                  'Underhållsplanering',
+                  'AI och smarta verktyg för styrelsen',
+                ].map((p, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ background: `${O}20` }}>
+                      <CheckCircle className="w-3.5 h-3.5" style={{ color: O }} />
+                    </div>
+                    <p className="text-sm" style={{ color: C.mid }}>{p}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+ 
+            // Omdömen
+            <div>
+              <h2 className="text-2xl font-black mb-6" style={{ color: C.dark }}>Vad säger andra styrelser?</h2>
+              <div className="space-y-4">
+                {[
+                  { name: 'Maria L.', role: 'Ordförande BRF Kastanjen', text: 'Äntligen förstår hela styrelsen vad som gäller. Tomas förklarar på ett sätt som fastnar — och vi fick svar på frågor vi burit på i år.' },
+                  { name: 'Anders K.', role: 'Kassör BRF Eken', text: 'Vi lärde oss mer på 3 timmar med Tomas än på 5 år i styrelsen. Hade vi haft den här utbildningen från början hade vi undvikit många misstag.' },
+                  { name: 'Sofia B.', role: 'Sekreterare BRF Linden', text: 'Perfekt timing inför vår första stämma. Praktisk, tydlig och faktiskt rolig. Hela styrelsen var engagerad hela tiden.' },
+                ].map((t, i) => (
+                  <div key={i} className="rounded-2xl border p-5" style={{ background: C.white, borderColor: C.border }}>
+                    <div className="flex gap-0.5 mb-3">
+                      {[...Array(5)].map((_, i) => <Star key={i} size={14} fill={O} color={O} />)}
+                    </div>
+                    <p className="text-sm leading-relaxed mb-3" style={{ color: C.mid }}>"{t.text}"</p>
+                    <div>
+                      <p className="text-sm font-bold" style={{ color: C.dark }}>{t.name}</p>
+                      <p className="text-xs" style={{ color: C.muted }}>{t.role}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+ 
+          // Höger — bokningsformulär
+          <div className="lg:col-span-2">
+            <div id="bokningsformular" className="sticky top-24 rounded-3xl border overflow-hidden shadow-xl"
+              style={{ borderColor: C.border }}>
+ 
+              // Header
+              <div className="px-6 py-5" style={{ background: `linear-gradient(135deg, #171f32, #1e2d4a)` }}>
+                <p className="text-white/50 text-xs font-bold uppercase tracking-widest mb-1">Boka utbildning</p>
+                <p className="text-white font-black text-xl">Styrelsekörkortet på plats</p>
+                <div className="flex items-baseline gap-2 mt-2">
+                  <span className="text-white font-black text-3xl">4 900 kr</span>
+                  <span className="text-white/50 text-sm">/styrelse · exkl. moms</span>
+                </div>
+              </div>
+ 
+              // Formulär
+              <div className="p-6 space-y-4" style={{ background: C.white }}>
+                {[
+                  { key: 'foreningNamn', label: 'Föreningens namn', type: 'text', placeholder: 'BRF Kastanjen' },
+                  { key: 'kontaktNamn', label: 'Ditt namn', type: 'text', placeholder: 'Anna Andersson' },
+                  { key: 'email', label: 'E-postadress', type: 'email', placeholder: 'anna@brfkastanjen.se' },
+                  { key: 'telefon', label: 'Telefonnummer', type: 'tel', placeholder: '070-123 45 67' },
+                  { key: 'ort', label: 'Ort', type: 'text', placeholder: 'Stockholm' },
+                  { key: 'antal', label: 'Antal deltagare (ca)', type: 'number', placeholder: '5' },
+                ].map(f => (
+                  <div key={f.key}>
+                    <label className="block text-xs font-bold mb-1.5" style={{ color: C.dark }}>{f.label}</label>
+                    <input
+                      type={f.type}
+                      placeholder={f.placeholder}
+                      value={form[f.key]}
+                      onChange={e => set(f.key, e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:border-orange-400 transition-colors"
+                      style={{ borderColor: C.border, background: C.bg, color: C.dark }}
+                    />
+                  </div>
+                ))}
+ 
+                <div>
+                  <label className="block text-xs font-bold mb-1.5" style={{ color: C.dark }}>
+                    Önskade datum (ange 2–3 alternativ)
+                  </label>
+                  <div className="space-y-2">
+                    {['datum1', 'datum2', 'datum3'].map((key, i) => (
+                      <input key={key} type="date" value={form[key]} onChange={e => set(key, e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:border-orange-400 transition-colors"
+                        style={{ borderColor: C.border, background: C.bg, color: C.dark }} />
+                    ))}
+                  </div>
+                </div>
+ 
+                <div>
+                  <label className="block text-xs font-bold mb-1.5" style={{ color: C.dark }}>
+                    Önskemål eller frågor (valfritt)
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="Berätta gärna om ni har specifika ämnen ni vill fördjupa er i..."
+                    value={form.meddelande}
+                    onChange={e => set('meddelande', e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:border-orange-400 transition-colors resize-none"
+                    style={{ borderColor: C.border, background: C.bg, color: C.dark }}
+                  />
+                </div>
+ 
+                <motion.button
+                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                  onClick={handleSubmit}
+                  className="w-full py-4 rounded-xl font-black text-white text-sm flex items-center justify-center gap-2"
+                  style={{ background: `linear-gradient(135deg, ${O}, ${OD})`, boxShadow: `0 4px 16px ${O}35` }}>
+                  Skicka bokningsförfrågan <ArrowRight size={15} />
+                </motion.button>
+ 
+                <p className="text-xs text-center" style={{ color: C.muted }}>
+                  Vi återkommer inom 24 timmar · Ingen bindning innan ni bekräftar
+                </p>
+ 
+                // Kontaktinfo
+                <div className="pt-2 border-t space-y-2" style={{ borderColor: C.border }}>
+                  <p className="text-xs font-bold" style={{ color: C.dark }}>Föredrar du att ringa?</p>
+                  <div className="flex items-center gap-2 text-xs" style={{ color: C.mid }}>
+                    <Phone size={12} style={{ color: O }} />
+                    <a href="tel:+46000000000" className="hover:underline">070-XXX XX XX</a>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs" style={{ color: C.mid }}>
+                    <Mail size={12} style={{ color: O }} />
+                    <a href="mailto:tomas@naringsklivet.se" className="hover:underline">tomas@naringsklivet.se</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+ 
+        </div>
+      </div>
+    </div>
+  );
+}
+*/
 
 export const modulesData = [
   {
@@ -36,6 +424,7 @@ export const modulesData = [
     quizzes: 2,
     rating: 5.0,
     students: 520,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     isTrial: true,
@@ -73,6 +462,20 @@ export const modulesData = [
   },
 
   {
+  id: 'effektivare-moten',
+  slug: 'effektivare-moten',
+  title: 'Effektivare styrelsemöten',
+  subtitle: 'Beslutsmässighet, protokoll, härskartekniker och AI-tips för BRF-styrelsen.',
+  category: 'ADMINISTRATION',
+  duration: '25–30 min',
+  type: 'bundle', 
+  price: 1490,
+  image_url: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1280',
+  component: ModuleMotesledning,
+  ...motenData,
+},
+
+  {
   id: 'introduktion',
   slug: 'introduktion',
   title: 'Introduktion till Styrelsekörkortet',
@@ -87,11 +490,12 @@ export const modulesData = [
   quizzes: 0,
   rating: 5.0,
   students: 0,
+  type: 'bundle', 
   price: 1490,
   priceTeam: 'Volymrabatt från 2 licenser',
   isTrial: true,
   previewVideoUrl: null,
-  component: Module0Introduktion,
+  component: null,
   instructor: INSTRUCTOR,
   learningPoints: [
     'Styrelsens uppdrag och sammansättning',
@@ -134,6 +538,7 @@ export const modulesData = [
     quizzes: 1,
     rating: 4.9,
     students: 450,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: 'https://www.youtube.com/embed/qz0aGYrrlhU',
@@ -180,6 +585,7 @@ export const modulesData = [
     quizzes: 2,
     rating: 4.9,
     students: 420,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
@@ -213,6 +619,76 @@ export const modulesData = [
   },
 
   {
+  id: 'fastigheten',
+  slug: 'fastigheten',
+  title: 'Fastigheten',
+  subtitle: 'Säkerhet, underhåll, energi och drift — allt styrelsen behöver veta om fastigheten.',
+  category: 'FASTIGHET',
+  type: 'bundle',
+  duration: '60–90 min',
+  price: 1490,
+  image_url: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1280',
+  component: ModuleFastigheten,
+  ...fastighetenData,
+},
+
+  {
+  id:       'styrelsekorkortet-plats',
+  slug:     'styrelsekorkortet-plats',
+  type:     'live',
+  category: 'GRUNDERNA',
+  title:    'Styrelsekörkortet — på plats hos er',
+  subtitle: 'Tomas kommer till er förening och utbildar hela styrelsen på 3 timmar.',
+  short_description: 'Komplett styrelseutbildning på plats — praktisk, interaktiv och skräddarsydd.',
+  image_url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1280&q=80',
+  duration: '3 timmar',
+  price: 4900,
+  priceTeam: 'Fast pris per styrelse · alla ledamöter ingår · exkl. moms',
+  location: 'Hos er förening',
+  maxParticipants: 16,
+  component: null,
+  rating: 5.0,
+  students: 0,
+  instructor: INSTRUCTOR,
+  learningPoints: [
+    'Styrelsens roller, ansvar och befogenheter',
+    'Styrelsemöten — formalia, protokoll och beslut',
+    'Ekonomin — läsa och förstå årsredovisningen',
+    'Juridiska grunderna i bostadsrättslagen',
+    'GDPR och personuppgiftshantering i föreningen',
+    'Föreningsstämman — från kallelse till ansvarsfrihet',
+    'Underhållsplanering och fastighetens skötsel',
+    'AI och smarta verktyg för styrelsearbetet',
+  ],
+  forWho: [
+    'Nyvalda BRF-styrelser som vill starta rätt',
+    'Befintliga styrelser som vill fräscha upp kunskapen',
+    'Föreningar inför en kommande föreningsstämma',
+    'Styrelser som vill utbildas tillsammans på plats',
+  ],
+  modules: [
+    { title: 'Block 1 — Styrelsen, roller och juridik',    duration: '60 min', free: true },
+    { title: 'Block 2 — Ekonomi och underhållsplanering',  duration: '60 min', free: true },
+    { title: 'Block 3 — Stämman, GDPR och smarta verktyg', duration: '60 min', free: true },
+  ],
+  testimonials: [
+    { name: 'Maria L.', role: 'Ordförande BRF Kastanjen',
+      text: 'Äntligen förstår hela styrelsen vad som gäller. Tomas förklarar på ett sätt som fastnar.', rating: 5 },
+    { name: 'Anders K.', role: 'Kassör BRF Eken',
+      text: 'Vi lärde oss mer på 3 timmar med Tomas än på 5 år i styrelsen.', rating: 5 },
+  ],
+  faq: [
+    { question: 'Var hålls utbildningen?', answer: 'Vi kommer till er — i er föreningslokal eller var det passar er bäst. Inga resor för er.' },
+    { question: 'Hur många kan delta?', answer: 'Priset gäller för upp till 16 deltagare. Fler deltagare? Kontakta oss för offert.' },
+    { question: 'Vad ingår i priset?', answer: '3 timmars interaktiv utbildning, digitalt kursbevis till alla deltagare och komplett kursmaterial som PDF. Moms tillkommer.' },
+    { question: 'Kan vi anpassa innehållet?', answer: 'Ja — vi kan lägga extra fokus på era specifika frågor och behov. Hör av er när ni bokar.' },
+    { question: 'Hur lång framförhållning behövs?', answer: 'Vi rekommenderar minst 3 veckor. Kontakta oss så hittar vi ett datum som passar.' },
+    { question: 'Vad händer om vi behöver avboka?', answer: 'Kostnadsfri avbokning upp till 7 dagar före. Därefter debiteras 50% av kursavgiften.' },
+  ],
+  pdfUrl: '/pdfs/styrelsekorkortet-plats-program.pdf',
+},
+
+  {
     id: 'diskrimineringslagen',
     slug: 'diskrimineringslagen',
     title: 'Diskrimineringslagen',
@@ -227,6 +703,7 @@ export const modulesData = [
     quizzes: 2,
     rating: 4.8,
     students: 380,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
@@ -273,6 +750,7 @@ export const modulesData = [
   quizzes: 1,
   rating: 5.0,
   students: 0,
+  type: 'bundle', 
   price: 4500,
   priceTeam: 'Fast pris per styrelse – alla ledamöter ingår',
   isTrial: false,
@@ -325,6 +803,7 @@ export const modulesData = [
     quizzes: 1,
     rating: 4.7,
     students: 290,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
@@ -364,6 +843,7 @@ export const modulesData = [
     quizzes: 1,
     rating: 4.9,
     students: 410,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
@@ -406,6 +886,7 @@ export const modulesData = [
     quizzes: 1,
     rating: 4.6,
     students: 320,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
@@ -445,6 +926,7 @@ export const modulesData = [
     quizzes: 2,
     rating: 4.9,
     students: 480,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
@@ -485,6 +967,7 @@ export const modulesData = [
     quizzes: 1,
     rating: 4.8,
     students: 350,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
@@ -524,6 +1007,7 @@ export const modulesData = [
     quizzes: 2,
     rating: 4.7,
     students: 390,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
@@ -569,6 +1053,7 @@ export const modulesData = [
     quizzes: 1,
     rating: 4.8,
     students: 310,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
@@ -608,6 +1093,7 @@ export const modulesData = [
     quizzes: 1,
     rating: 4.9,
     students: 440,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
@@ -647,6 +1133,7 @@ export const modulesData = [
     quizzes: 2,
     rating: 4.8,
     students: 370,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
@@ -687,6 +1174,7 @@ export const modulesData = [
   quizzes: 0,
   rating: 5.0,
   students: 0,
+  type: 'bundle', 
   price: 1490,
   priceTeam: 'Volymrabatt från 2 licenser',
   previewVideoUrl: null,
@@ -733,6 +1221,7 @@ export const modulesData = [
     quizzes: 2,
     rating: 4.9,
     students: 330,
+    type: 'bundle', 
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,

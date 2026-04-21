@@ -192,7 +192,7 @@ const ModuleIntroSlide: React.FC<ModuleIntroSlideProps> = ({
                   style={{ background: `linear-gradient(135deg, ${O}, #E04619)`, boxShadow: `0 8px 24px ${O}35` }}
                 >
                   <Play size={16} className="fill-white" />
-                  Starta modulen
+                  Starta avsnittet
                 </motion.button>
               </motion.div>
             )}

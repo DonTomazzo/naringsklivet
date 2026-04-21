@@ -1,518 +1,388 @@
-// src/components/CourseElements/IntressenterElevatorSection.jsx
+// src/components/CourseElements/BrfFlödesdiagramSlide.jsx
+// Centrerad hiss-panel med modaler
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Volume2, VolumeX } from 'lucide-react';
+import { X } from 'lucide-react';
 
-// ============================================
-// 1. DATA
-// ============================================
+const O = '#FF5421';
 
-const SECTION_ID = 'intressenter';
-
-const INTRESSENTER = [
+const NODER = [
   {
-    id: 1, label: 'Förvaltaren', floor: '16', color: '#FF5421',
-    description: 'Förvaltaren sköter den löpande administrativa och tekniska förvaltningen av fastigheten på uppdrag av styrelsen. Det kan vara en extern firma eller en person anställd av föreningen.',
-    examples: ['Hanterar hyresavier och avgifter', 'Sköter felanmälningar', 'Upprättar årsredovisning', 'Hanterar kontakter med myndigheter'],
-    audioUrl: '/audio/intressent-forvaltaren.mp3',
+    id: 'medlemmar', label: 'Medlemmar', floor: '4', icon: '👥', color: '#FF5421',
+    beskrivning: 'Alla bostadsrättsägare är medlemmar och föreningens yttersta ägare. De utövar sin makt på föreningsstämman — en röst per lägenhet, oavsett storlek.',
+    ansvar: ['Betalar årsavgift', 'Röstar på stämman', 'Följer stadgar och ordningsregler'],
+    audioUrl: '/audio/medlemmarna.mp3', sidoNoder: [],
   },
   {
-    id: 2, label: 'Fastighetsskötare', floor: '15', color: '#F59E0B',
-    description: 'Fastighetsskötaren ansvarar för det praktiska underhållet av fastigheten – allt från att byta glödlampor till att sköta värmesystemet och hålla ordning i gemensamma utrymmen.',
-    examples: ['Rondering och tillsyn', 'Felavhjälpning', 'Skötsel av utemiljö', 'Kontroll av tekniska installationer'],
-    audioUrl: '/audio/intressent-fastighetsskotare.mp3',
+    id: 'stamma', label: 'Stämman', floor: '3', icon: '🗳️', color: '#818CF8',
+    beskrivning: 'Föreningens högsta beslutande organ. Hålls minst en gång per år på våren. Här godkänns årsredovisning, väljs styrelse och revisorer och fattas viktiga beslut.',
+    ansvar: ['Väljer styrelse och revisorer', 'Godkänner årsredovisning', 'Beslutar om avgifter och stadgar'],
+    audioUrl: '/audio/foreningsstamman.mp3',
+    sidoNoder: [
+      { id: 'valberedning', label: 'Valberedning', icon: '📋', color: '#A78BFA',
+        beskrivning: 'Valberedningen väljs av stämman och föreslår vilka som ska väljas in i styrelsen. De arbetar självständigt och tänker på mångfald och kompetens.',
+        ansvar: ['Föreslår kandidater till styrelsen', 'Arbetar självständigt', 'Tänker på mångfald och kompetens'],
+        audioUrl: '/audio/brf-valberedning.mp3' },
+    ],
   },
   {
-    id: 3, label: 'Revisorer', floor: '14', color: '#10B981',
-    description: 'Revisorn granskar styrelsens förvaltning och föreningens räkenskaper. Revisorn väljs av föreningsstämman och rapporterar direkt till medlemmarna.',
-    examples: ['Granskar årsredovisningen', 'Kontrollerar bokföringen', 'Lämnar revisionsberättelse', 'Kan anmärka på styrelsens arbete'],
-    audioUrl: '/audio/intressent-revisorer.mp3',
+    id: 'styrelse', label: 'Styrelsen', floor: '2', icon: '⚙️', color: '#34D399',
+    beskrivning: 'Leder föreningens löpande arbete mellan stämmorna. Ansvarar juridiskt för fastigheten och ekonomin. Väljs av stämman för 1–2 år.',
+    ansvar: ['Förvaltar fastighet och ekonomi', 'Fattar löpande beslut', 'Bär juridiskt ansvar'],
+    audioUrl: '/audio/brf-styrelse.mp3',
+    sidoNoder: [
+      { id: 'revisor', label: 'Revisorn', icon: '🔍', color: '#38BDF8',
+        beskrivning: 'Revisorn väljs av föreningsstämman — inte av styrelsen. Revisorn granskar att årsredovisningen ger en rättvisande bild av ekonomin och uttalar sig om styrelsens förvaltning.',
+        ansvar: ['Granskar årsredovisningen', 'Rapporterar till stämman', 'Oberoende granskare'],
+        audioUrl: '/audio/brf-revisor.mp3' },
+    ],
   },
   {
-    id: 4, label: 'Bank', floor: '13', color: '#0EA5E9',
-    description: 'Banken är en viktig intressent som hanterar föreningens lån, konton och finansiella transaktioner. Föreningens lån mot fastigheten påverkar direkt medlemmarnas månadsavgifter.',
-    examples: ['Fastighetslån', 'Driftskonto och likviditetshantering', 'Ränteförhandlingar', 'Finansiella råd'],
-    audioUrl: '/audio/intressent-bank.mp3',
-  },
-  {
-    id: 5, label: 'Försäkringsbolag', floor: '12', color: '#8B5CF6',
-    description: 'Föreningen måste ha en fastighetsförsäkring som täcker byggnaden och gemensamma utrymmen. Försäkringsbolaget är en viktig partner vid skador och olyckor.',
-    examples: ['Fastighetsförsäkring', 'Skadehantering', 'Riskbedömning', 'Bostadsrättstillägg för medlemmar'],
-    audioUrl: '/audio/intressent-forsakringsbolag.mp3',
-  },
-  {
-    id: 6, label: 'Leverantörer', floor: '11', color: '#EC4899',
-    description: 'Leverantörer tillhandahåller varor och tjänster till föreningen – allt från el och vatten till byggmaterial och städtjänster. Styrelsen ansvarar för att upphandla på ett affärsmässigt sätt.',
-    examples: ['El- och fjärrvärmeleverantörer', 'Hisservice', 'Städfirmor', 'Byggentreprenörer'],
-    audioUrl: '/audio/intressent-leverantorer.mp3',
-  },
-  {
-    id: 7, label: 'Skatteverket', floor: '10', color: '#6366F1',
-    description: 'Skatteverket är en myndighet som BRF:en har skyldigheter gentemot. Föreningen kan behöva betala skatt på vissa intäkter och måste lämna in skattedeklaration.',
-    examples: ['Arbetsgivaravgifter om anställda finns', 'Moms på vissa tjänster', 'Inkomstdeklaration', 'Fastighetstaxering'],
-    audioUrl: '/audio/intressent-skatteverket.mp3',
-  },
-  {
-    id: 8, label: 'Bolagsverket', floor: '9', color: '#F97316',
-    description: 'Bolagsverket registrerar och övervakar ekonomiska föreningar, inklusive bostadsrättsföreningar. Styrelseförändringar och stadgeändringar måste anmälas hit.',
-    examples: ['Registrering av föreningen', 'Anmälan av styrelseledamöter', 'Stadgeändringar', 'Årsredovisning inlämning'],
-    audioUrl: '/audio/intressent-bolagsverket.mp3',
-  },
-  {
-    id: 9, label: 'Boverket', floor: '8', color: '#14B8A6',
-    description: 'Boverket är den statliga myndigheten för samhällsplanering, byggande och boende. De ger ut föreskrifter och allmänna råd som påverkar hur fastigheter får byggas och förvaltas.',
-    examples: ['Byggregler och BBR', 'Tillgänglighetskrav', 'Energikrav', 'Radon och inomhusmiljö'],
-    audioUrl: '/audio/intressent-boverket.mp3',
-  },
-  {
-    id: 10, label: 'Bokföringsnämnden', floor: '7', color: '#EF4444',
-    description: 'Bokföringsnämnden (BFN) ger ut normgivning för hur föreningens bokföring och årsredovisning ska upprättas. Föreningen måste följa K2- eller K3-regelverket.',
-    examples: ['K2-regelverket för mindre föreningar', 'K3 för större föreningar', 'Redovisningsprinciper', 'Årsredovisningslagen'],
-    audioUrl: '/audio/intressent-bokforingsnamnden.mp3',
-  },
-  {
-    id: 11, label: 'Hyresnämnd', floor: '6', color: '#84CC16',
-    description: 'Hyresnämnden är en statlig nämnd som hanterar tvister mellan bostadsrättsföreningen och dess medlemmar, samt ärenden om andrahandsuthyrning och tillstånd.',
-    examples: ['Andrahandsuthyrning', 'Tillstånd för åtgärder i lägenhet', 'Tvister om avgifter', 'Uteslutning av medlem'],
-    audioUrl: '/audio/intressent-hyresnamnden.mp3',
-  },
-  {
-    id: 12, label: 'Lagstiftaren', floor: '5', color: '#FF5421',
-    description: 'Riksdagen och regeringen skapar de lagar och regler som styr bostadsrättsföreningens verksamhet. De viktigaste lagarna är Bostadsrättslagen och Lagen om ekonomiska föreningar.',
-    examples: ['Bostadsrättslagen (BRL)', 'Lagen om ekonomiska föreningar', 'Plan- och bygglagen', 'Miljöbalken'],
-    audioUrl: '/audio/intressent-lagstiftaren.mp3',
-  },
-  {
-    id: 13, label: 'Byggherre', floor: '4', color: '#F59E0B',
-    description: 'En byggherre är den som låter utföra byggnads- eller anläggningsarbeten. BRF:en är byggherre vid om- och tillbyggnader, och har då ett tydligt ansvar för att regler följs.',
-    examples: ['Renovering av gemensamma ytor', 'Påbyggnad av fastigheten', 'Ansvar för bygglov', 'Kontakt med byggnadsinspektionen'],
-    audioUrl: '/audio/intressent-byggherre.mp3',
-  },
-  {
-    id: 14, label: 'Mäklare', floor: '3', color: '#10B981',
-    description: 'När en bostadsrätt säljs är mäklaren en viktig part. Mäklaren begär ut information från föreningen och förmedlar denna till köparen. Styrelsen har informationsplikt.',
-    examples: ['Begär årsredovisning och stadgar', 'Frågar om kommande renoveringar', 'Kontrollerar skuldfrihet', 'Överlåtelseavgift till föreningen'],
-    audioUrl: '/audio/intressent-maklare.mp3',
-  },
-  {
-    id: 15, label: 'Grannar', floor: '2', color: '#0EA5E9',
-    description: 'Grannfastigheter och grannar är intressenter vid t.ex. byggnadsarbeten, bullerstörningar och gemensamma gränser. God grannrelation är viktig för föreningens rykte och trivsel.',
-    examples: ['Gränsmarkeringar och servitut', 'Bullerklagomål vid renovering', 'Gemensamma parkeringslösningar', 'Grannsamverkan mot inbrott'],
-    audioUrl: '/audio/intressent-grannar.mp3',
-  },
-  {
-    id: 16, label: 'Samfällighet', floor: '1', color: '#8B5CF6',
-    description: 'En samfällighet är mark eller anläggningar som ägs gemensamt av flera fastigheter, t.ex. gemensamma vägar, VA-anläggningar eller grönområden. BRF:en kan vara delägare i en samfällighetsförening.',
-    examples: ['Gemensam parkering', 'Delade VA-ledningar', 'Samfällda grönområden', 'Kostnadsfördelning mellan fastigheter'],
-    audioUrl: '/audio/intressent-samfallighet.mp3',
-  },
-  {
-    id: 17, label: 'Myndigheter', floor: 'M', color: '#6366F1',
-    description: 'Utöver de specifika myndigheterna finns ett brett spektrum av myndigheter som kan beröra föreningens verksamhet, från kommunen till länsstyrelsen och miljömyndigheter.',
-    examples: ['Kommunens byggnadsnämnd', 'Länsstyrelsen', 'Miljöförvaltningen', 'Räddningstjänsten'],
-    audioUrl: '/audio/intressent-myndigheter.mp3',
+    id: 'forvaltare', label: 'Förvaltare', floor: '1', icon: '🏢', color: '#FBBF24',
+    beskrivning: 'Sköter den dagliga driften på styrelsens uppdrag — bokföring, felanmälningar och leverantörskontakter. Styrelsen kan aldrig delegera bort sitt juridiska ansvar.',
+    ansvar: ['Ekonomisk och teknisk förvaltning', 'Hanterar felanmälningar', 'Leverantörskontakter'],
+    audioUrl: '/audio/forvaltaren.mp3', sidoNoder: [],
   },
 ];
 
-// ============================================
-// 2. AUDIO HOOK
-// ============================================
+function findNod(id) {
+  for (const n of NODER) {
+    if (n.id === id) return n;
+    for (const s of (n.sidoNoder || [])) { if (s.id === id) return s; }
+  }
+  return null;
+}
 
-const useAudio = (url) => {
-  const audioRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
-  useEffect(() => { return () => { if (audioRef.current) audioRef.current.pause(); }; }, []);
-  const toggle = () => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio(url);
-      audioRef.current.onended = () => setPlaying(false);
-    }
-    if (playing) { audioRef.current.pause(); audioRef.current.currentTime = 0; setPlaying(false); }
-    else { audioRef.current.play().catch(() => {}); setPlaying(true); }
-  };
-  return { playing, toggle };
-};
-
-// ============================================
-// 3. MODAL – endast #FF5421
-// ============================================
-
-const IntressentModal = ({ item, onClose }) => {
-  const { playing, toggle } = useAudio(item.audioUrl);
-
+// ── Modal ─────────────────────────────────────────────────
+function NodModal({ nod, onClose }) {
+  const huvud = NODER.find(n => n.id === nod.id);
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = 'unset'; };
   }, []);
-
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50"
-        style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         onClick={onClose}
-      />
+        style={{ position: 'fixed', inset: 0, zIndex: 50, background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)' }} />
       <motion.div
-        initial={{ opacity: 0, scale: 0.88, y: 32 }}
+        initial={{ opacity: 0, scale: 0.88, y: 40 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.88, y: 32 }}
-        transition={{ type: 'spring', damping: 22, stiffness: 300 }}
-        className="fixed inset-4 sm:inset-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-w-md z-50 flex flex-col"
-        style={{ maxHeight: '88vh' }}
+        exit={{ opacity: 0, scale: 0.9, y: 30 }}
+        transition={{ type: 'spring', damping: 22, stiffness: 280 }}
+        style={{
+          position: 'fixed', zIndex: 51,
+          top: 'var(--header-height, 60px)', left: 0, right: 0, bottom: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '16px',
+        }}
       >
-        <div
-          className="flex flex-col rounded-2xl overflow-hidden border border-white/10 h-full"
-          style={{ background: 'rgba(13,19,35,0.98)', backdropFilter: 'blur(24px)' }}
-        >
-          {/* Header – orange */}
-          <div
-            className="p-5 flex items-center justify-between flex-shrink-0 border-b border-white/8"
-            style={{ background: 'linear-gradient(135deg, #FF542118, #FF542108)' }}
-          >
-            <div className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white text-lg flex-shrink-0"
-                style={{ background: '#FF5421', boxShadow: '0 0 20px #FF542160' }}
-              >
-                {item.floor}
+        <div style={{
+          width: '100%', maxWidth: 560, maxHeight: '85vh',
+          borderRadius: 24, overflow: 'hidden',
+          background: 'linear-gradient(160deg, #0f1623 0%, #171f32 100%)',
+          border: `1px solid ${nod.color}30`,
+          boxShadow: `0 32px 80px rgba(0,0,0,0.8), 0 0 40px ${nod.color}15`,
+          display: 'flex', flexDirection: 'column',
+        }}>
+          {/* Modal header */}
+          <div style={{
+            padding: '28px 28px 24px',
+            background: `linear-gradient(135deg, ${nod.color}20, ${nod.color}08)`,
+            borderBottom: `1px solid ${nod.color}20`,
+            flexShrink: 0,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                <div style={{
+                  width: 68, height: 68, borderRadius: 18, flexShrink: 0,
+                  background: `${nod.color}20`, border: `2px solid ${nod.color}50`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32,
+                  boxShadow: `0 0 24px ${nod.color}30`,
+                }}>{nod.icon}</div>
+                <div>
+                  <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2.5, textTransform: 'uppercase', color: nod.color, marginBottom: 5 }}>
+                    {huvud ? `Nivå ${huvud.floor} · BRF-hierarki` : 'Extern roll'}
+                  </p>
+                  <h3 style={{ fontSize: 28, fontWeight: 900, color: '#fff', fontFamily: "'Nunito', sans-serif", lineHeight: 1.1 }}>{nod.label}</h3>
+                </div>
               </div>
-              <div>
-                <p className="text-white/40 text-xs uppercase tracking-wider">Intressent</p>
-                <h3 className="text-lg font-bold text-white leading-tight">{item.label}</h3>
-              </div>
+              <button onClick={onClose} style={{
+                width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+                background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                color: 'rgba(255,255,255,0.5)',
+              }}><X size={18} /></button>
             </div>
-            <button
-              onClick={onClose}
-              className="w-9 h-9 rounded-xl bg-white/8 hover:bg-white/15 flex items-center justify-center transition-colors"
-            >
-              <X size={18} className="text-white/60" />
-            </button>
           </div>
 
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-4">
-            <p className="text-white/75 text-sm leading-relaxed">{item.description}</p>
-
-            <div className="bg-white/4 border border-white/8 rounded-xl p-4">
-              <h4 className="text-xs font-bold text-white/35 uppercase tracking-wider mb-3">Exempel på kontakter</h4>
-              <ul className="space-y-2">
-                {item.examples.map((ex, i) => (
-                  <li key={i} className="flex items-center gap-2.5 text-sm text-white/60">
-                    {/* Orange punkt */}
-                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-[#FF5421]" />
-                    {ex}
-                  </li>
+          {/* Modal body */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: '24px 28px 28px' }}>
+            <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 15, lineHeight: 1.75, marginBottom: 24 }}>
+              {nod.beskrivning}
+            </p>
+            <div style={{ borderRadius: 16, padding: 20, borderLeft: `4px solid ${nod.color}`, background: 'rgba(255,255,255,0.04)' }}>
+              <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', color: nod.color, marginBottom: 14 }}>Ansvar & roll</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {nod.ansvar.map((a, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: nod.color, flexShrink: 0, marginTop: 7 }} />
+                    <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.5 }}>{a}</p>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
-          </div>
-
-          {/* Footer – orange ljudknapp */}
-          <div className="p-5 border-t border-white/8 flex-shrink-0">
-            <button
-              onClick={toggle}
-              className="w-full py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all"
-              style={playing
-                ? { background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.1)' }
-                : { background: '#FF5421', color: '#fff', boxShadow: '0 4px 20px #FF542150' }
-              }
-            >
-              {playing
-                ? <><VolumeX size={16} /> Stoppa ljudet</>
-                : <><Volume2 size={16} /> Lyssna på förklaring</>
-              }
-            </button>
           </div>
         </div>
       </motion.div>
     </>
   );
-};
+}
 
-// ============================================
-// 4. ELEVATOR PANEL – behåller unika färger
-// ============================================
-
-const ElevatorButton = ({ item, isVisited, onClick }) => {
+// ── Huvud-knapp ───────────────────────────────────────────
+function HissKnapp({ nod, isAktiv, isVisited, onClick }) {
   const [pressed, setPressed] = useState(false);
-
-  const handleClick = () => {
-    setPressed(true);
-    setTimeout(() => setPressed(false), 200);
-    onClick(item);
-  };
-
+  const handleClick = () => { setPressed(true); setTimeout(() => setPressed(false), 220); onClick(nod.id); };
   return (
-    <motion.button
-      onClick={handleClick}
-      whileTap={{ scale: 0.92 }}
-      className="relative flex flex-col items-center gap-1.5 group"
-      title={item.label}
-    >
-      <div
-        className="relative rounded-lg transition-all duration-150"
-        style={{
-          width: '56px', height: '56px',
-          background: 'linear-gradient(145deg, #3a3a3a, #222)',
-          boxShadow: pressed
-            ? 'inset 2px 2px 5px rgba(0,0,0,0.8), inset -1px -1px 3px rgba(255,255,255,0.05)'
-            : '3px 3px 8px rgba(0,0,0,0.6), -1px -1px 4px rgba(255,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.08)',
-          border: isVisited ? `2px solid ${item.color}` : '2px solid rgba(255,255,255,0.06)',
-        }}
-      >
-        <div
-          className="absolute inset-2 rounded-md flex items-center justify-center transition-all duration-150"
-          style={{
-            background: isVisited
-              ? `radial-gradient(circle at 35% 35%, ${item.color}dd, ${item.color}88)`
-              : pressed
-                ? 'radial-gradient(circle at 35% 35%, #2a2a2a, #1a1a1a)'
-                : 'radial-gradient(circle at 35% 35%, #484848, #2c2c2c)',
-            boxShadow: isVisited
-              ? `0 0 12px ${item.color}80, inset 0 1px 0 rgba(255,255,255,0.3)`
-              : pressed
-                ? 'inset 2px 2px 4px rgba(0,0,0,0.6)'
-                : 'inset 0 1px 0 rgba(255,255,255,0.12), 1px 1px 3px rgba(0,0,0,0.4)',
-          }}
-        >
-          <span
-            className="font-bold text-sm select-none"
-            style={{
-              color: isVisited ? '#fff' : 'rgba(255,255,255,0.6)',
-              textShadow: isVisited ? `0 0 8px ${item.color}, 0 1px 2px rgba(0,0,0,0.5)` : '0 1px 3px rgba(0,0,0,0.8)',
-              fontFamily: 'monospace',
-            }}
-          >
-            {item.floor}
-          </span>
+    <motion.button onClick={handleClick} whileTap={{ scale: 0.91 }}
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}>
+      <div style={{
+        width: 76, height: 76, borderRadius: 15, position: 'relative',
+        background: 'linear-gradient(145deg, #4c4c4c 0%, #1c1c1c 55%, #383838 100%)',
+        boxShadow: pressed
+          ? 'inset 5px 5px 14px rgba(0,0,0,0.97), inset -1px -1px 3px rgba(255,255,255,0.03)'
+          : '5px 5px 14px rgba(0,0,0,0.85), -2px -2px 6px rgba(255,255,255,0.055), inset 0 1px 0 rgba(255,255,255,0.10)',
+        border: isAktiv ? `2px solid ${nod.color}` : '2px solid rgba(255,255,255,0.07)',
+        padding: 7, transition: 'box-shadow 0.12s, border-color 0.15s',
+      }}>
+        <div style={{
+          width: '100%', height: '100%', borderRadius: 9,
+          background: isAktiv
+            ? `radial-gradient(circle at 38% 32%, ${nod.color}ff, ${nod.color}99)`
+            : pressed ? 'radial-gradient(circle at 38% 32%, #232323, #141414)'
+            : 'radial-gradient(circle at 38% 32%, #525252, #2a2a2a)',
+          boxShadow: isAktiv
+            ? `0 0 28px ${nod.color}90, 0 0 8px ${nod.color}60, inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.4)`
+            : pressed ? 'inset 3px 3px 9px rgba(0,0,0,0.95)'
+            : 'inset 0 2px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.5), 2px 2px 4px rgba(0,0,0,0.4)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 2,
+          transition: 'all 0.12s',
+        }}>
+          <span style={{ fontSize: 24, lineHeight: 1, filter: isAktiv ? 'drop-shadow(0 0 8px rgba(255,255,255,0.9)) brightness(1.3)' : 'brightness(0.7)', transition: 'filter 0.15s' }}>{nod.icon}</span>
+          <span style={{ fontFamily: 'monospace', fontSize: 12, fontWeight: 900, letterSpacing: 1,
+            color: isAktiv ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.28)',
+            textShadow: isAktiv ? `0 0 10px ${nod.color}, 0 1px 3px rgba(0,0,0,0.9)` : '0 1px 3px rgba(0,0,0,0.9)',
+            transition: 'color 0.15s' }}>{nod.floor}</span>
         </div>
-
-        <div
-          className="absolute top-1 left-1 right-1 h-3 rounded-t-md pointer-events-none"
-          style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.07) 0%, transparent 100%)' }}
-        />
-
-        {isVisited && (
-          <motion.div
-            className="absolute -inset-1 rounded-lg pointer-events-none"
-            animate={{ opacity: [0.4, 0.8, 0.4] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            style={{ boxShadow: `0 0 10px ${item.color}60`, border: `1px solid ${item.color}40` }}
-          />
+        {isAktiv && (
+          <motion.div style={{ position: 'absolute', inset: -4, borderRadius: 18, border: `1px solid ${nod.color}55`, pointerEvents: 'none' }}
+            animate={{ opacity: [0.4, 1, 0.4], boxShadow: [`0 0 10px ${nod.color}40`, `0 0 24px ${nod.color}70`, `0 0 10px ${nod.color}40`] }}
+            transition={{ duration: 1.8, repeat: Infinity }} />
         )}
+        {isVisited && !isAktiv && (
+          <div style={{ position: 'absolute', top: -4, right: -4, width: 18, height: 18, borderRadius: '50%',
+            background: nod.color, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 9, fontWeight: 900, color: '#fff', boxShadow: `0 0 8px ${nod.color}80` }}>✓</div>
+        )}
+        <div style={{ position: 'absolute', top: 7, left: 7, right: 7, height: 14, borderRadius: '8px 8px 0 0',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)', pointerEvents: 'none' }} />
       </div>
-
-      <span
-        className="text-center leading-tight transition-colors"
-        style={{
-          fontSize: '9px', maxWidth: '56px',
-          color: isVisited ? item.color : 'rgba(255,255,255,0.35)',
-          fontWeight: isVisited ? '700' : '400',
-        }}
-      >
-        {item.label}
-      </span>
+      <span style={{ fontSize: 10, maxWidth: 76, color: isAktiv ? nod.color : isVisited ? `${nod.color}80` : 'rgba(255,255,255,0.28)',
+        fontWeight: isAktiv ? 800 : 500, textAlign: 'center', lineHeight: 1.2,
+        fontFamily: "'Nunito', sans-serif", transition: 'color 0.15s' }}>{nod.label}</span>
     </motion.button>
   );
-};
+}
 
-const ElevatorPanel = ({ onButtonClick, visitedIds }) => {
-  const rows = [];
-  for (let i = 0; i < INTRESSENTER.length; i += 2) rows.push(INTRESSENTER.slice(i, i + 2));
-  rows.reverse();
-
+// ── Sido-knapp ────────────────────────────────────────────
+function SidoKnapp({ nod, isAktiv, isVisited, onClick }) {
+  const [pressed, setPressed] = useState(false);
   return (
-    <div
-      className="relative rounded-2xl overflow-hidden mx-auto"
-      style={{
-        maxWidth: '280px',
-        background: 'linear-gradient(160deg, #2a2a2a 0%, #1a1a1a 40%, #222 100%)',
-        boxShadow: '0 24px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06)',
-        border: '1px solid rgba(255,255,255,0.06)',
-        padding: '24px 28px 20px',
-      }}
-    >
-      <div
-        className="absolute inset-0 pointer-events-none opacity-30"
-        style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.01) 2px, rgba(255,255,255,0.01) 4px)' }}
-      />
+    <motion.button onClick={() => { setPressed(true); setTimeout(() => setPressed(false), 180); onClick(nod.id); }}
+      whileTap={{ scale: 0.91 }}
+      style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px', borderRadius: 10, cursor: 'pointer',
+        background: isAktiv ? `linear-gradient(135deg, ${nod.color}28, ${nod.color}12)` : pressed ? 'rgba(0,0,0,0.5)' : 'linear-gradient(145deg, #3c3c3c, #1e1e1e)',
+        border: isAktiv ? `1.5px solid ${nod.color}` : '1.5px solid rgba(255,255,255,0.07)',
+        boxShadow: isAktiv ? `0 0 14px ${nod.color}40, inset 0 1px 0 rgba(255,255,255,0.1)` : pressed ? 'inset 2px 2px 7px rgba(0,0,0,0.9)' : '3px 3px 8px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.07)',
+        fontSize: 11, fontWeight: 700, color: isAktiv ? nod.color : 'rgba(255,255,255,0.38)',
+        whiteSpace: 'nowrap', transition: 'all 0.12s', backdropFilter: 'blur(8px)',
+      }}>
+      <span style={{ fontSize: 14 }}>{nod.icon}</span>
+      <span style={{ fontFamily: "'Nunito', sans-serif" }}>{nod.label}</span>
+      {isVisited && !isAktiv && <span style={{ fontSize: 9, color: nod.color }}>✓</span>}
+    </motion.button>
+  );
+}
 
-      <div className="text-center mb-5 relative">
-        <div
-          className="inline-block px-3 py-1 rounded text-xs font-bold tracking-widest uppercase"
-          style={{ background: 'rgba(0,0,0,0.4)', color: 'rgba(255,255,255,0.3)', border: '1px solid rgba(255,255,255,0.06)', fontFamily: 'monospace' }}
-        >
-          FÖRENINGENS INTRESSENTER
-        </div>
-        <div className="flex justify-center gap-1 mt-2">
+// ── Hiss-panel (centrerad) ────────────────────────────────
+function HissPanel({ aktiv, visited, onKlick }) {
+  const totalNoder = NODER.length + NODER.flatMap(n => n.sidoNoder || []).length;
+  return (
+    <div style={{
+      borderRadius: 28, padding: '30px 28px 24px',
+      background: 'linear-gradient(160deg, #333 0%, #181818 45%, #252525 100%)',
+      boxShadow: '0 44px 88px rgba(0,0,0,0.92), inset 0 2px 0 rgba(255,255,255,0.07), inset 0 -2px 0 rgba(0,0,0,0.6)',
+      border: '1px solid rgba(255,255,255,0.07)',
+      position: 'relative', overflow: 'hidden',
+      display: 'inline-block',
+    }}>
+      {/* Borstad metall-textur */}
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', borderRadius: 28, opacity: 0.5,
+        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.013) 2px, rgba(255,255,255,0.013) 4px)' }} />
+
+      {/* Skylt */}
+      <div style={{ textAlign: 'center', marginBottom: 22 }}>
+        <div style={{ display: 'inline-block', padding: '5px 18px', borderRadius: 6,
+          background: 'rgba(0,0,0,0.55)', border: '1px solid rgba(255,255,255,0.06)',
+          fontFamily: 'monospace', fontSize: 10, fontWeight: 700, letterSpacing: 3,
+          color: 'rgba(255,255,255,0.2)', textTransform: 'uppercase',
+          boxShadow: 'inset 1px 1px 4px rgba(0,0,0,0.7)' }}>BRF · HIERARKI</div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 7, marginTop: 9 }}>
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="w-1 h-1 rounded-full" style={{ background: 'rgba(255,255,255,0.15)' }} />
+            <div key={i} style={{ width: 7, height: 7, borderRadius: '50%',
+              background: 'radial-gradient(circle at 35% 35%, #585858, #222)',
+              boxShadow: '1px 1px 3px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.09)',
+              border: '1px solid rgba(255,255,255,0.04)' }} />
           ))}
         </div>
       </div>
 
-      <div className="relative space-y-3">
-        {rows.map((row, ri) => (
-          <div key={ri} className="flex justify-center gap-4">
-            {row.map((item) => (
-              <ElevatorButton key={item.id} item={item} isVisited={visitedIds.has(item.id)} onClick={onButtonClick} />
-            ))}
+      {/* Knapp-rader — alla centrerade */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
+        {NODER.map((nod, i) => (
+          <div key={nod.id}>
+            {/* Rad: sido (vänster) + huvud (mitten) + floor (höger) */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+
+              {/* Sido-knappar vänster */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5, alignItems: 'flex-end', minWidth: 120 }}>
+                {(nod.sidoNoder || []).map(s => (
+                  <SidoKnapp key={s.id} nod={s} isAktiv={aktiv === s.id} isVisited={visited.has(s.id)} onClick={onKlick} />
+                ))}
+              </div>
+
+              {/* Kopplingsled */}
+              {(nod.sidoNoder || []).length > 0 && (
+                <div style={{ width: 12, height: 1, flexShrink: 0,
+                  background: nod.sidoNoder[0] && aktiv === nod.sidoNoder[0].id ? nod.sidoNoder[0].color : 'rgba(255,255,255,0.1)',
+                  transition: 'background 0.2s' }} />
+              )}
+              {(nod.sidoNoder || []).length === 0 && <div style={{ width: 132, flexShrink: 0 }} />}
+
+              {/* Huvud-knapp */}
+              <HissKnapp nod={nod} isAktiv={aktiv === nod.id} isVisited={visited.has(nod.id)} onClick={onKlick} />
+
+              {/* Floor-nummer höger */}
+              <div style={{ width: 32, textAlign: 'left', flexShrink: 0,
+                fontFamily: 'monospace', fontSize: 15, fontWeight: 900,
+                color: aktiv === nod.id ? nod.color : 'rgba(255,255,255,0.13)',
+                textShadow: aktiv === nod.id ? `0 0 10px ${nod.color}` : 'none',
+                transition: 'color 0.2s' }}>{nod.floor}</div>
+            </div>
+
+            {/* Separator */}
+            {i < NODER.length - 1 && (
+              <div style={{ height: 1, margin: '14px auto', width: 76,
+                background: `linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent)` }} />
+            )}
           </div>
         ))}
       </div>
 
-      <div className="mt-6 pt-4 flex justify-center gap-3" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        {['◀▶', '🔔', '⏹'].map((sym, i) => (
-          <div key={i} className="w-10 h-10 rounded-lg flex items-center justify-center text-sm"
-            style={{ background: 'radial-gradient(circle at 35% 35%, #383838, #242424)', boxShadow: '2px 2px 5px rgba(0,0,0,0.5)', color: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.04)' }}>
-            {sym}
+      {/* Undre standard-knappar */}
+      <div style={{ marginTop: 24, paddingTop: 18, borderTop: '1px solid rgba(255,255,255,0.055)',
+        display: 'flex', justifyContent: 'center', gap: 10 }}>
+        {[{ s: '▲', l: 'UPP' }, { s: '▼', l: 'NER' }, { s: '🔔', l: '' }, { s: '⏹', l: '' }].map((b, i) => (
+          <div key={i} style={{ width: 42, height: 42, borderRadius: 10,
+            background: 'radial-gradient(circle at 35% 35%, #424242, #222)',
+            boxShadow: '2px 2px 7px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.07)',
+            border: '1px solid rgba(255,255,255,0.05)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexDirection: 'column', gap: 1, fontSize: 16, color: 'rgba(255,255,255,0.16)' }}>
+            {b.s}
+            {b.l && <span style={{ fontSize: 5, fontFamily: 'monospace', color: 'rgba(255,255,255,0.1)', letterSpacing: 0.5 }}>{b.l}</span>}
           </div>
         ))}
       </div>
 
-      <div className="mt-4 text-center">
-        <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace' }}>
-          {visitedIds.size}/{INTRESSENTER.length} BESÖKTA
+      <div style={{ marginTop: 12, textAlign: 'center' }}>
+        <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.16)', letterSpacing: 1.5, textTransform: 'uppercase' }}>
+          {visited.size}/{totalNoder} UTFORSKADE
         </span>
       </div>
     </div>
   );
-};
+}
 
-// ============================================
-// 5. HUVUDKOMPONENT
-// ============================================
+// ── Huvud-komponent ───────────────────────────────────────
+export default function BrfFlödesdiagramSlide() {
+  const [aktiv, setAktiv]     = useState(null);
+  const [visited, setVisited] = useState(new Set());
+  const [modalNod, setModalNod] = useState(null);
+  const audioRef              = useRef(null);
+  const videoRef              = useRef(null);
 
-const IntressenterElevatorSection = ({ isCompleted, onComplete }) => {
-  const [activeItem, setActiveItem] = useState(null);
-  const [visitedIds, setVisitedIds] = useState(new Set());
+  useEffect(() => {
+    if (videoRef.current) videoRef.current.play().catch(() => {});
+  }, []);
 
-  const handleButtonClick = (item) => {
-    setActiveItem(item);
-    setVisitedIds(prev => new Set([...prev, item.id]));
+  const handleKlick = (id) => {
+    if (!id) return;
+    const nod = findNod(id);
+    setVisited(prev => new Set([...prev, id]));
+    setAktiv(id);
+    setModalNod(nod);
+
+    // Spela om video
+    if (videoRef.current) { videoRef.current.currentTime = 0; videoRef.current.play().catch(() => {}); }
+
+    // Ljud
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.currentTime = 0; }
+    if (nod?.audioUrl) { const a = new Audio(nod.audioUrl); audioRef.current = a; a.play().catch(() => {}); }
   };
 
-  const allVisited = visitedIds.size >= INTRESSENTER.length;
+  const handleCloseModal = () => {
+    setModalNod(null);
+    setAktiv(null);
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.currentTime = 0; }
+  };
 
   return (
-    <section
-      data-section={SECTION_ID}
-      className="min-h-screen relative py-16 sm:py-24"
-      style={{ background: 'linear-gradient(135deg, #0f1623 0%, #171f32 60%, #1a2540 100%)' }}
-    >
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,84,33,0.05) 0%, transparent 50%), radial-gradient(circle at 80% 30%, rgba(99,102,241,0.04) 0%, transparent 50%)' }}
-      />
+    <div style={{ height: '100%', overflow: 'hidden', position: 'relative', paddingTop: 'var(--header-height, 60px)' }}>
+      <video ref={videoRef} src="/video/hiss.mp4" muted playsInline
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
+        onEnded={e => e.target.pause()} />
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(15,22,35,0.80)', zIndex: 1 }} />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
+      {/* Innehåll — centrerat */}
+      <div style={{ position: 'relative', height: '100%', overflowY: 'auto', zIndex: 2,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ padding: '24px 20px 80px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 28 }}>
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <div className="inline-block bg-[#FF5421] text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
-            Föreningens omvärld
+          {/* Rubrik */}
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: 3, textTransform: 'uppercase', color: O, marginBottom: 8 }}>
+              Grunderna · BRF-struktur
+            </p>
+            <h2 style={{ fontSize: 'clamp(22px, 4vw, 36px)', fontWeight: 900, color: '#fff', fontFamily: "'Nunito', sans-serif", lineHeight: 1.15, marginBottom: 8 }}>
+              Så fungerar <span style={{ color: O }}>bostadsrättsföreningen</span>
+            </h2>
+            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)' }}>
+              Klicka på varje nivå — en ruta öppnas med förklaring och ljud
+            </p>
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
-            Föreningens intressenter
-          </h2>
-          <p className="text-white/50 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-            En bostadsrättsförening har kontakt med många olika aktörer. Tryck på varje våning för att lära dig mer om respektive intressent.
-          </p>
-        </motion.div>
 
-        {/* Layout */}
-        <div className="flex flex-col lg:flex-row items-start justify-center gap-10 lg:gap-16">
+          {/* Hiss-panel centrerad */}
+          <HissPanel aktiv={aktiv} visited={visited} onKlick={handleKlick} />
 
-          <motion.div
-            initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-            className="w-full lg:w-auto flex justify-center flex-shrink-0"
-          >
-            <ElevatorPanel onButtonClick={handleButtonClick} visitedIds={visitedIds} />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-            className="flex-1 max-w-sm mx-auto lg:mx-0"
-          >
-            {/* Instruktioner */}
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 mb-6">
-              <h3 className="font-bold text-white text-base mb-2">Hur det fungerar</h3>
-              <p className="text-white/50 text-sm leading-relaxed mb-4">
-                Varje knapp på panelen representerar en av föreningens intressenter. Tryck på en knapp för att läsa beskrivning och lyssna på en kort förklaring.
-              </p>
-              <div className="flex items-center gap-3 text-sm text-white/40">
-                <div className="w-4 h-4 rounded" style={{ background: '#FF5421', boxShadow: '0 0 8px #FF5421' }} />
-                <span>Knappen lyser när du besökt intressenten</span>
-              </div>
-            </div>
-
-            {/* Framsteg */}
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 mb-6">
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="font-bold text-white text-sm">Framsteg</h3>
-                <span className="text-[#FF5421] font-bold text-sm">{visitedIds.size}/{INTRESSENTER.length}</span>
-              </div>
-              <div className="h-2 bg-white/10 rounded-full overflow-hidden mb-4">
-                <motion.div
-                  className="h-full rounded-full bg-[#FF5421]"
-                  animate={{ width: `${(visitedIds.size / INTRESSENTER.length) * 100}%` }}
-                  transition={{ duration: 0.4 }}
-                />
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {INTRESSENTER.map(item => (
-                  <motion.div
-                    key={item.id}
-                    animate={visitedIds.has(item.id) ? { scale: [1.3, 1] } : {}}
-                    className="text-xs px-2 py-1 rounded-lg font-medium transition-all"
-                    style={{
-                      background: visitedIds.has(item.id) ? `${item.color}25` : 'rgba(255,255,255,0.04)',
-                      color: visitedIds.has(item.id) ? item.color : 'rgba(255,255,255,0.2)',
-                      border: `1px solid ${visitedIds.has(item.id) ? item.color + '40' : 'rgba(255,255,255,0.06)'}`,
-                    }}
-                  >
-                    {item.label}
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* Slutför */}
-            {!isCompleted && (
-              <button
-                onClick={() => allVisited && onComplete?.(SECTION_ID)}
-                disabled={!allVisited}
-                className="w-full py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all"
-                style={allVisited
-                  ? { background: 'linear-gradient(135deg, #FF5421, #E04619)', color: '#fff', boxShadow: '0 4px 20px rgba(255,84,33,0.3)' }
-                  : { background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.25)', cursor: 'not-allowed' }
-                }
-              >
-                {allVisited ? '✓ Slutför lektion (+100 poäng)' : `Besök alla ${INTRESSENTER.length} intressenter`}
-              </button>
-            )}
-
-            {isCompleted && (
-              <div className="rounded-2xl border border-[#FF5421]/20 bg-[#FF5421]/8 p-4 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#FF5421]/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-[#FF5421] font-bold">✓</span>
-                </div>
-                <span className="font-semibold text-white text-sm">Avsnitt slutfört! +100 poäng</span>
-              </div>
-            )}
-          </motion.div>
         </div>
       </div>
 
+      {/* Modal */}
       <AnimatePresence>
-        {activeItem && <IntressentModal item={activeItem} onClose={() => setActiveItem(null)} />}
+        {modalNod && <NodModal nod={modalNod} onClose={handleCloseModal} />}
       </AnimatePresence>
-    </section>
+    </div>
   );
-};
-
-export default IntressenterElevatorSection;
+}

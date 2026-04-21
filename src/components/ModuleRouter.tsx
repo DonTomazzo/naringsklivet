@@ -11,6 +11,7 @@ import { useParams, Navigate } from 'react-router-dom';
 // ── Styrelsekörkortet ────────────────────────────────────────────────────────
 import Bostadsrattsforeningen  from '../modules/Styrelsekorkortet/BRFModule';
 import Module0Introduktion     from '../modules/Styrelsekorkortet/Module0Introduktion';
+import ModuleCopilotWord from '../modules/Naringsklivet/ModuleCopilotWord';
 import Module1Introduktion     from '../modules/Styrelsekorkortet/Module1Introduktion';
 import Module2Arsredovisning   from '../modules/Styrelsekorkortet/Module2Arsredovisning';
 import Module3Gdpr             from '../modules/Styrelsekorkortet/Module3Gdpr';
@@ -19,10 +20,23 @@ import Module5AiBrf            from '../modules/Styrelsekorkortet/Module5AiBrf';
 import ModuleDokumentation     from '../modules/Styrelsekorkortet/ModuleDokumentation';
 import ModuleHallbarhet        from '../modules/Styrelsekorkortet/ModuleHallbarhet';
 import ModuleIntressenter      from '../modules/Styrelsekorkortet/ModuleIntressenter';
+import ModuleTedAI           from '../modules/Naringsklivet/ModuleTedAI';
+import ModuleTedLedarskap     from '../modules/Naringsklivet/ModuleTedLedarskap';
+import ModuleTedProduktivitet from '../modules/Naringsklivet/ModuleTedProduktivitet';
+import ModuleFastigheten from '../modules/Styrelsekorkortet/ModuleFastigheten';
+
+
 
 
 // ── Näringsklivet ────────────────────────────────────────────────────────────
 import ModuleAIGrunderna       from '../modules/Naringsklivet/ModuleAIGrunderna';
+import ExempelKurs from '../modules/Naringsklivet/ExempelKurs';
+import ModuleDataskyddsombud from '../modules/Naringsklivet/ModuleDataskyddsombud';
+import ModuleDatalackor from '../modules/Naringsklivet/ModuleDatalackor';
+import ModuleJavaScript, { courseData as jsData } from '../modules/Naringsklivet/ModuleJavaScript';
+import ModuleGDPR, { courseData as gdprData } from '../modules/Naringsklivet/ModuleGDPR';
+import ModuleMejl, { courseData as mejlData } from '../modules/Naringsklivet/ModuleMejl';
+import ModuleMotesledning, { courseData as motenData } from '../modules/Styrelsekorkortet/ModuleMotesledning';
 
 // ════════════════════════════════════════════════════════════════════════════
 // MAP: slug → komponent
@@ -31,7 +45,12 @@ import ModuleAIGrunderna       from '../modules/Naringsklivet/ModuleAIGrunderna'
 const MODULE_MAP: Record<string, React.ComponentType> = {
   // ── Styrelsekörkortet ────────────────────────────────────────────────────
   'introduktion':                  Module0Introduktion,
+
   'styrelseroller':                Module1Introduktion,
+  'copilot-word':                  ModuleCopilotWord,
+  'datalackor': ModuleDatalackor,
+  'dataskyddsombud': ModuleDataskyddsombud,
+  'exempelkurs':                   ExempelKurs,
   'arsredovisningen':              Module2Arsredovisning,
   'gdpr-personuppgifter':          Module3Gdpr,
   'diskrimineringslagen':          Module4Diskriminering,
@@ -40,6 +59,14 @@ const MODULE_MAP: Record<string, React.ComponentType> = {
   'hallbarhet':                    ModuleHallbarhet,
   'foreningens-intressenter':      ModuleIntressenter,
   'bostadsrattsforeningen':        Bostadsrattsforeningen,
+  'fastigheten': ModuleFastigheten,
+  'ted-ai':           ModuleTedAI,
+'ted-ledarskap':    ModuleTedLedarskap,
+'ted-produktivitet': ModuleTedProduktivitet,
+'javascript-nybörjare': ModuleJavaScript,
+'gdpr-medarbetare': ModuleGDPR,
+'professionellt-mejl': ModuleMejl,
+'effektivare-moten': ModuleMotesledning,
   
 
   // Kurser utan komponent ännu – lägg till när de byggs:

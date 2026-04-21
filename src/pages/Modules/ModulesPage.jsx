@@ -3,11 +3,11 @@ import { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, Play, Lock, Clock, BookOpen, Search } from 'lucide-react';
-import { modulesData as brf } from '../../data/modules2.jsx';
-import { modulesData as nk }  from '../../data/naringsklivetData';
 
-const modulesData = [...brf, ...nk];
-const categories  = ['ALLA', ...new Set([...brf, ...nk].map(m => m.category))];
+import { modulesData as nk } from '../../data/modules2';
+
+const modulesData = nk;
+const categories  = ['ALLA', ...new Set(nk.map(m => m.category))];
 
 // ── Brand tokens (matchar NaringsklivetLanding) ───────────
 const C = {
@@ -37,6 +37,8 @@ const Reveal = ({ children, delay = 0, y = 20, className = '' }) => {
     </motion.div>
   );
 };
+
+
 
 // ── Module card ───────────────────────────────────────────
 const ModuleCard = ({ module, index }) => {

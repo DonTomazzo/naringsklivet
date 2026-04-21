@@ -6,9 +6,21 @@
 // Status-fält:
 //   component: null      → "Kommer snart"-kort (låst)
 //   component: <Import>  → klickbar och spelbar
-import ModuleAIGrunderna from '../modules/Naringsklivet/ModuleAIGrunderna';
 
-// ── Instruktör ───────────────────────────────────────────────────────────────
+import ModuleAIGrunderna     from '../modules/Naringsklivet/ModuleAIGrunderna';
+import ModuleCopilotWord     from '../modules/Naringsklivet/ModuleCopilotWord';
+import ExempelKurs           from '../modules/Naringsklivet/ExempelKurs';
+import ModuleDataskyddsombud from '../modules/Naringsklivet/ModuleDataskyddsombud';
+import ModuleDatalackor from '../modules/Naringsklivet/ModuleDatalackor';
+import ModuleTedAI           from '../modules/Naringsklivet/ModuleTedAI';
+import ModuleTedLedarskap     from '../modules/Naringsklivet/ModuleTedLedarskap';
+import ModuleTedProduktivitet from '../modules/Naringsklivet/ModuleTedProduktivitet';
+import ModuleJavaScript, { courseData as jsData } from '../modules/Naringsklivet/ModuleJavaScript';
+import ModuleGDPR, { courseData as gdprData } from '../modules/Naringsklivet/ModuleGDPR';
+import ModuleMejl, { courseData as mejlData } from '../modules/Naringsklivet/ModuleMejl';
+
+
+// ── Instruktör ────────────────────────────────────────────────────────────────
 const INSTRUCTOR = {
   name:  'Tomas Mauritzson',
   title: 'Kursledare, Näringsklivet',
@@ -32,7 +44,7 @@ export const categories = [
 // ── Kursdata ──────────────────────────────────────────────────────────────────
 export const modulesData = [
 
-  // ── 1 ────────────────────────────────────────────────────────────────────
+  // ── 1 — AI-grunderna ─────────────────────────────────────────────────────
   {
     id:       'ai-grunderna',
     slug:     'ai-grunderna',
@@ -42,7 +54,7 @@ export const modulesData = [
     short_description: 'Lär dig hur AI fungerar, välj rätt verktyg och skriv promptar som faktiskt ger resultat.',
     long_description:  'Komplett introduktion till AI för yrkesverksamma. Täcker LLM-grunder, FAKTAP-modellen, säker användning och de vanligaste användningsområdena på jobbet.',
     image_url:       'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1280&h=720',
-    previewVideoUrl: null,
+    previewVideoUrl: 'https://www.youtube.com/watch?v=scTCyh1hR0c',
     duration:     '2 timmar',
     lessons:      13,
     videoLessons: 0,
@@ -52,7 +64,7 @@ export const modulesData = [
     price:        1990,
     priceTeam:    'Volymrabatt från 5 licenser',
     isTrial:      true,
-    component:    ModuleAIGrunderna, // byt till import när ModuleAIGrunderna är på plats
+    component:    ModuleAIGrunderna,
     instructor:   INSTRUCTOR,
     learningPoints: [
       'Hur stora språkmodeller (LLM) fungerar',
@@ -79,9 +91,307 @@ export const modulesData = [
       'Alla som är nyfikna men inte vet var man börjar',
     ],
     testimonials: [],
+    faq: [
+      {
+        question: 'Behöver jag förkunskaper för att ta kursen?',
+        answer: 'Nej — kursen börjar från noll. Ingen teknisk bakgrund krävs. Vi förklarar allt från grunden på ett praktiskt och lättillgängligt sätt.',
+      },
+      {
+        question: 'Vilket AI-verktyg behöver jag?',
+        answer: 'Ingen prenumeration krävs för att följa kursen. Vi visar hur du kommer igång med gratisversioner av ChatGPT, Claude och Copilot.',
+      },
+      {
+        question: 'Hur lång tid tar kursen?',
+        answer: 'Ca 2 timmar totalt. Du kan göra den i din egen takt och återkomma till avsnitt när du vill — du har tillgång i 365 dagar.',
+      },
+      {
+        question: 'Får jag ett kursbevis?',
+        answer: 'Ja — du får ett kursbevis från Näringsklivet direkt efter att du klarat kunskapstestet.',
+      },
+      {
+        question: 'Kan vi köpa licenser till hela teamet?',
+        answer: 'Absolut. Vi erbjuder volymrabatt från 5 licenser. Kontakta oss så skräddarsyr vi ett erbjudande för er organisation.',
+      },
+    ],
   },
 
-  // ── 2 ────────────────────────────────────────────────────────────────────
+  {
+  id: 'professionellt-mejl', slug: 'professionellt-mejl',
+  type: 'self-paced', category: 'Kommunikation',
+  title: 'Skriva professionellt mejl',
+  subtitle: 'Mejl som faktiskt läses, förstås och leder till handling.',
+  duration: '25–30 min', price: 790,
+  image_url: 'https://images.unsplash.com/photo-1596526131083-e8c633964948?w=800&q=80',
+  component: ModuleMejl, rating: 5.0,
+  ...mejlData,
+},
+
+  {
+  id: 'gdpr-medarbetare', slug: 'gdpr-medarbetare',
+  type: 'self-paced', category: 'Informationssäkerhet',
+  title: 'GDPR för alla medarbetare',
+  subtitle: 'Förstå ditt ansvar och hantera personuppgifter rätt i vardagen.',
+  duration: '25–30 min', price: 990,
+  image_url: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80',
+  component: ModuleGDPR, rating: 5.0,
+  ...gdprData,
+},
+
+  {
+  id:          'javascript-nybörjare',
+  slug:        'javascript-nybörjare',
+  type:        'free',
+  category:    'Automation',
+  title:       'JavaScript för nybörjare',
+  subtitle:    'Ditt första steg mot webbutveckling — Moshs nybörjarkurs gratis på YouTube.',
+  duration:    'Ca 2 timmar',
+  price:       0,
+  previewVideoUrl: 'https://www.youtube.com/watch?v=W6NZfCO5SIk',
+  image_url:   'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&q=80',
+  component:   ModuleJavaScript,
+  rating:      5.0,
+  ...jsData,
+},
+
+  {
+  id: 'ted-ai', slug: 'ted-ai', type: 'free',
+  category: 'AI-grunderna',
+  title: 'TED Talks: AI & Framtiden',
+  subtitle: '4 klassiska TED Talks om AI, maskininlärning och teknologins påverkan på samhället.',
+  duration: 'Ca 60 min', price: 0,
+  image_url: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80',
+  component: ModuleTedAI,
+},
+{
+  id: 'ted-ledarskap', slug: 'ted-ledarskap', type: 'free',
+  category: 'Ledarskap',
+  title: 'TED Talks: Ledarskap & Kommunikation',
+  subtitle: 'Simon Sinek, Brené Brown, Amy Cuddy och Julian Treasure — fyra klassiker om ledarskap.',
+  duration: 'Ca 55 min', price: 0,
+  image_url: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80',
+  component: ModuleTedLedarskap,
+},
+{
+  id: 'ted-produktivitet', slug: 'ted-produktivitet', type: 'free',
+  category: 'Produktivitet',
+  title: 'TED Talks: Produktivitet & Fokus',
+  subtitle: 'Cal Newport, Dan Pink, Matt Cutts och Kelly McGonigal om motivation och välmående.',
+  duration: 'Ca 60 min', price: 0,
+  image_url: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&q=80',
+  component: ModuleTedProduktivitet,
+},
+
+  // naringsklivetData.ts
+{
+  id:       'datalackor',
+  slug:     'datalackor',
+  category: 'AI-GRUNDERNA',
+  type: 'free',
+  title:    '5 misstag som leder till dataläckor',
+  subtitle: 'Och hur ni stoppar dem — på 20 minuter',
+  short_description: 'Lär dig känna igen och stoppa de 5 vanligaste misstagen som orsakar dataläckor i organisationer.',
+  image_url: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1280&q=80',
+  previewVideoUrl: null,
+  duration: '20–30 min',
+  lessons: 7, quizzes: 6, price: 990,
+  component: ModuleDatalackor,
+  // ...
+},
+
+{
+  id: 'oneonone-copilot',
+  slug: 'oneonone-copilot',
+  type: 'live',
+  category: 'Microsoft 365',
+  title: 'One-on-One: Copilot i din vardag',
+  subtitle: 'Personlig träning i Microsoft 365 Copilot — på dina villkor',
+  location: 'Microsoft Teams',
+  maxParticipants: 1,
+  duration: '60 min',
+  price: 2490,
+  pdfUrl: '/pdfs/oneonone-copilot.pdf',
+  // ...
+},
+{
+  id: 'workshop-ai-teamet',
+  slug: 'workshop-ai-teamet',
+  type: 'live',
+  category: 'AI-grunderna',
+  title: 'Workshop: AI för hela teamet',
+  subtitle: 'Halvdagsworkshop för grupper om 5–15 personer',
+  location: 'På plats hos er',
+  maxParticipants: 15,
+  duration: '4 timmar',
+  price: 14900,
+  pdfUrl: '/pdfs/workshop-ai-teamet.pdf',
+  // ...
+},
+
+  // ── Exempelkurs ───────────────────────────────────────────────────────────
+  {
+    id:       'exempelkurs',
+    slug:     'exempelkurs',
+    category: 'PRODUKTIVITET',
+    title:    'Slide-mallbiblioteket',
+    subtitle: 'Internt referensmaterial för kursutveckling',
+    short_description: 'Genomgång av alla slide-mallar med live-exempel.',
+    long_description:  'Intern exempelkurs som demonstrerar SlideA–I från SlideTemplates.tsx.',
+    image_url:       '/images/co1.png',
+    previewVideoUrl: null,
+    duration:     '5 minuter',
+    lessons:      10,
+    videoLessons: 1,
+    quizzes:      1,
+    rating:       5.0,
+    students:     0,
+    price:        0,
+    priceTeam:    '',
+    isTrial:      true,
+    component:    ExempelKurs,
+    instructor:   INSTRUCTOR,
+    learningPoints: ['SlideA–I i praktiken'],
+    modules:      [],
+    forWho:       ['Kursutvecklare'],
+    testimonials: [],
+  },
+
+  // ── Dataskyddsombud ───────────────────────────────────────────────────────
+  {
+    id:       'dataskyddsombud',
+    slug:     'dataskyddsombud',
+    category: 'AI-GRUNDERNA',
+    title:    'Dataskyddsombud – programmet för dagen',
+    subtitle: 'En heldagsutbildning för dig som ska axla DSO-rollen',
+    short_description: 'Från GDPR-grunderna till AI och dataskydd, incidenthantering och internrevision.',
+    long_description:  'Komplett utbildning för blivande dataskyddsombud. Täcker roll och ansvar, dokumentation, biträdesavtal, internationella överföringar, informationssäkerhet, AI och GDPR, konsekvensbedömning, incidenthantering och internrevision.',
+    image_url:       '/images/co1.png',
+    previewVideoUrl: 'https://www.youtube.com/watch?v=scTCyh1hR0c',
+    duration:     '1 dag',
+    lessons:      14,
+    videoLessons: 0,
+    quizzes:      9,
+    rating:       5.0,
+    students:     0,
+    price:        4990,
+    priceTeam:    'Fast pris per organisation',
+    isTrial:      false,
+    component:    ModuleDataskyddsombud,
+    instructor:   INSTRUCTOR,
+    learningPoints: [
+      'Dataskyddsombudets roll, ansvar och befogenheter',
+      'Ansvarsskyldighet och de sju GDPR-principerna',
+      'Registerförteckning, dataskyddspolicy och DPIA',
+      'Biträdesavtal — vad de måste innehålla',
+      'Internationella överföringar och standardavtalsklausuler',
+      'AI-förordningen och GDPR i kombination',
+      'Incidenthantering och 72-timmarsregeln',
+      'Internrevision och rapportering till ledningen',
+    ],
+    modules: [
+      { title: 'Introduktion',             duration: '20 min', free: true  },
+      { title: 'Roll och ansvar',          duration: '30 min', free: false },
+      { title: 'Ansvarsskyldighet',        duration: '30 min', free: false },
+      { title: 'Dokumentation',            duration: '30 min', free: false },
+      { title: 'Biträdesavtal',            duration: '20 min', free: false },
+      { title: 'Internationellt',          duration: '30 min', free: false },
+      { title: 'Informationssäkerhet',     duration: '30 min', free: false },
+      { title: 'AI och dataskydd',         duration: '45 min', free: false },
+      { title: 'Konsekvensbedömning',      duration: '30 min', free: false },
+      { title: 'Incidenthantering',        duration: '30 min', free: false },
+      { title: 'Övervakning och revision', duration: '30 min', free: false },
+      { title: 'Sammanfattning',           duration: '15 min', free: false },
+    ],
+    forWho: [
+      'Blivande dataskyddsombud',
+      'Jurister och compliance-ansvariga',
+      'IT-chefer och säkerhetschefer',
+      'HR-ansvariga som hanterar personaldata',
+    ],
+    testimonials: [],
+    faq: [
+      {
+        question: 'Vad är GDPR?',
+        answer: 'GDPR (General Data Protection Regulation) är EU:s dataskyddsförordning som trädde i kraft 2018. Den reglerar hur personuppgifter om EU-medborgare får samlas in, lagras och användas.',
+      },
+      {
+        question: 'Vad är ett dataskyddsombud?',
+        answer: 'Ett dataskyddsombud (DSO) är en person som har i uppgift att säkerställa att en organisation följer dataskyddslagstiftningen. DSO fungerar som rådgivare, övervakare och kontaktpunkt mot tillsynsmyndigheten.',
+      },
+      {
+        question: 'Vem behöver ett dataskyddsombud?',
+        answer: 'Offentliga myndigheter och organ är alltid skyldiga att utse ett DSO. Privata organisationer som behandlar personuppgifter i stor skala eller hanterar känsliga personuppgifter systematiskt är också skyldiga att utse ett DSO.',
+      },
+      {
+        question: 'Kan dataskyddsombudet hållas personligt ansvarigt?',
+        answer: 'Nej — det juridiska ansvaret ligger på organisationen (personuppgiftsansvarig), inte på DSO. Ombudets roll är att vägleda och övervaka, inte att fatta beslut om personuppgiftsbehandlingen.',
+      },
+      {
+        question: 'Kan dataskyddsombudet vara extern?',
+        answer: 'Ja — rollen kan fyllas av en intern anställd eller en extern konsult. Det viktiga är att personen har tillräcklig expertkunskap och inte befinner sig i en intressekonflikt.',
+      },
+    ],
+  },
+
+  // ── Copilot i Word ────────────────────────────────────────────────────────
+  {
+    id:       'copilot-word',
+    slug:     'copilot-word',
+    category: 'PRODUKTIVITET',
+    title:    'Copilot i Word',
+    subtitle: 'Från tomt dokument till färdig text med AI-hjälp',
+    short_description: 'Lär dig sammanfatta, skriva nytt och redigera befintlig text i Word med Microsoft Copilot.',
+    long_description:  'Kortkurs för dig som använder Microsoft 365. Täcker alla sätt att använda Copilot i Word — från sammanfattning av långa dokument till att skriva om text med ny ton.',
+    image_url:       'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1280&h=720',
+    previewVideoUrl: 'https://www.youtube.com/watch?v=scTCyh1hR0c',
+    duration:     '10 minuter',
+    lessons:      1,
+    videoLessons: 1,
+    quizzes:      1,
+    rating:       5.0,
+    students:     0,
+    price:        490,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      true,
+    component:    ModuleCopilotWord,
+    instructor:   INSTRUCTOR,
+    learningPoints: [
+      'Var du hittar Copilot i Word',
+      'Sammanfatta långa dokument på sekunder',
+      'Skriva om text med annan ton eller stil',
+      'Skapa nytt innehåll från scratch',
+      'Granska och faktakontrollera AI-genererad text',
+    ],
+    modules: [
+      { title: '🎬 Video – Copilot i Word', duration: '7 min', free: true  },
+      { title: '🧠 Kunskapstest',           duration: '3 min', free: true  },
+    ],
+    forWho: [
+      'Alla som använder Microsoft 365',
+      'Kontorsarbetare som skriver mycket',
+      'Team som vill effektivisera dokumentarbetet',
+    ],
+    testimonials: [],
+    faq: [
+      {
+        question: 'Behöver jag en Copilot-licens?',
+        answer: 'Ja, Microsoft 365 Copilot är ett tillägg till din vanliga M365-licens. Kontakta din IT-avdelning eller administratör för att aktivera det.',
+      },
+      {
+        question: 'Fungerar kursen för Mac-användare?',
+        answer: 'Ja — Copilot i Word fungerar på både Mac och PC med en giltig Microsoft 365-licens och aktiv internetanslutning.',
+      },
+      {
+        question: 'Hur lång tid tar kursen?',
+        answer: 'Ca 10 minuter — en kort video följt av ett kunskapstest med 5 frågor.',
+      },
+      {
+        question: 'Kan jag lita på allt Copilot skriver?',
+        answer: 'Nej — se alltid AI-genererad text som ett första utkast. Granska fakta, justera språket och kontrollera att informationen stämmer innan du skickar vidare.',
+      },
+    ],
+  },
+
+  // ── 2 — Prompt Engineering ───────────────────────────────────────────────
   {
     id:       'prompt-engineering-pro',
     slug:     'prompt-engineering-pro',
@@ -111,12 +421,12 @@ export const modulesData = [
       'Bygg ett promptbibliotek för ditt team',
     ],
     modules: [
-      { title: 'Repetition – FAKTAP',      duration: '10 min', free: true  },
-      { title: 'Chain-of-Thought',         duration: '15 min', free: false },
-      { title: 'Few-shot-teknik',          duration: '15 min', free: false },
-      { title: 'Systemprompts',            duration: '20 min', free: false },
-      { title: 'Rollspel & simulering',    duration: '15 min', free: false },
-      { title: 'Promptbibliotek i team',   duration: '15 min', free: false },
+      { title: 'Repetition – FAKTAP',    duration: '10 min', free: true  },
+      { title: 'Chain-of-Thought',       duration: '15 min', free: false },
+      { title: 'Few-shot-teknik',        duration: '15 min', free: false },
+      { title: 'Systemprompts',          duration: '20 min', free: false },
+      { title: 'Rollspel & simulering',  duration: '15 min', free: false },
+      { title: 'Promptbibliotek i team', duration: '15 min', free: false },
     ],
     forWho: [
       'Befintliga AI-användare som vill bli riktigt bra',
@@ -125,7 +435,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 3 ────────────────────────────────────────────────────────────────────
+  // ── 3 — AI för chefer ────────────────────────────────────────────────────
   {
     id:       'ai-for-chefer',
     slug:     'ai-for-chefer',
@@ -136,17 +446,17 @@ export const modulesData = [
     long_description:  'Skräddarsydd för chefer och teamledare. Fokus på strategiska beslut, beslutsunderlag, 1:1-samtal, medarbetarfeedback och hur du bygger en AI-kultur i ditt team.',
     image_url:       'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '2 timmar',
-    lessons:        10,
-    videoLessons:   0,
-    quizzes:        2,
-    rating:         5.0,
-    students:       0,
-    price:          2490,
-    priceTeam:      'Fast pris per ledningsgrupp',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '2 timmar',
+    lessons:      10,
+    videoLessons: 0,
+    quizzes:      2,
+    rating:       5.0,
+    students:     0,
+    price:        2490,
+    priceTeam:    'Fast pris per ledningsgrupp',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'AI som bollplank i svåra beslut',
       'Snabba beslutsunderlag med AI',
@@ -169,7 +479,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 4 ────────────────────────────────────────────────────────────────────
+  // ── 4 — Kommunikation ────────────────────────────────────────────────────
   {
     id:       'ai-for-kommunikation',
     slug:     'ai-for-kommunikation',
@@ -180,17 +490,17 @@ export const modulesData = [
     long_description:  'Praktisk kurs i att använda AI för daglig kommunikation. Lär dig skriva, förbättra, korta ner och anpassa text för olika mottagare och kanaler.',
     image_url:       'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '1.5 timmar',
-    lessons:        7,
-    videoLessons:   0,
-    quizzes:        1,
-    rating:         4.8,
-    students:       0,
-    price:          1490,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '1.5 timmar',
+    lessons:      7,
+    videoLessons: 0,
+    quizzes:      1,
+    rating:       4.8,
+    students:     0,
+    price:        1490,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Skriv och svara på mejl på halva tiden',
       'Anpassa ton och stil för olika mottagare',
@@ -199,11 +509,11 @@ export const modulesData = [
       'Mallar och återanvändbara promptar',
     ],
     modules: [
-      { title: 'Mejl på 2 minuter',         duration: '15 min', free: true  },
-      { title: 'Ton och stil',              duration: '15 min', free: false },
-      { title: 'Sammanfatta trådar',        duration: '15 min', free: false },
-      { title: 'Intern kommunikation',      duration: '15 min', free: false },
-      { title: 'Mallar för teamet',         duration: '20 min', free: false },
+      { title: 'Mejl på 2 minuter',    duration: '15 min', free: true  },
+      { title: 'Ton och stil',         duration: '15 min', free: false },
+      { title: 'Sammanfatta trådar',   duration: '15 min', free: false },
+      { title: 'Intern kommunikation', duration: '15 min', free: false },
+      { title: 'Mallar för teamet',    duration: '20 min', free: false },
     ],
     forWho: [
       'Alla med mycket mejl och intern kommunikation',
@@ -212,7 +522,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 5 ────────────────────────────────────────────────────────────────────
+  // ── 5 — Marknadsföring ───────────────────────────────────────────────────
   {
     id:       'ai-for-marknadsforing',
     slug:     'ai-for-marknadsforing',
@@ -223,17 +533,17 @@ export const modulesData = [
     long_description:  'Från idéfas till publicering – kursen täcker hur du använder AI för att producera blogginlägg, sociala medier, annonstext, SEO-copy och nyhetsbrev i tio gånger snabbare takt.',
     image_url:       'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '2.5 timmar',
-    lessons:        11,
-    videoLessons:   0,
-    quizzes:        2,
-    rating:         4.9,
-    students:       0,
-    price:          1990,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '2.5 timmar',
+    lessons:      11,
+    videoLessons: 0,
+    quizzes:      2,
+    rating:       4.9,
+    students:     0,
+    price:        1990,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Content-strategi och idégenerering med AI',
       'LinkedIn, Instagram och Facebook-copy',
@@ -259,7 +569,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 6 ────────────────────────────────────────────────────────────────────
+  // ── 6 — Sälj ────────────────────────────────────────────────────────────
   {
     id:       'ai-for-salj',
     slug:     'ai-for-salj',
@@ -270,17 +580,17 @@ export const modulesData = [
     long_description:  'Praktisk säljkurs med AI. Täcker prospektering, LinkedIn-outreach, offertskrivning, mötesförberedelse, invändningshantering och uppföljning.',
     image_url:       'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '2 timmar',
-    lessons:        9,
-    videoLessons:   0,
-    quizzes:        2,
-    rating:         4.9,
-    students:       0,
-    price:          1990,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '2 timmar',
+    lessons:      9,
+    videoLessons: 0,
+    quizzes:      2,
+    rating:       4.9,
+    students:     0,
+    price:        1990,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Prospektering och ICP-analys med AI',
       'Personaliserade LinkedIn-meddelanden i skala',
@@ -290,12 +600,12 @@ export const modulesData = [
       'Uppföljningsmejl som konverterar',
     ],
     modules: [
-      { title: 'AI i säljprocessen',     duration: '15 min', free: true  },
-      { title: 'Prospektering',          duration: '20 min', free: false },
-      { title: 'Outreach och LinkedIn',  duration: '20 min', free: false },
-      { title: 'Offerter',               duration: '20 min', free: false },
-      { title: 'Mötesförberedelse',      duration: '20 min', free: false },
-      { title: 'Uppföljning',            duration: '15 min', free: false },
+      { title: 'AI i säljprocessen',    duration: '15 min', free: true  },
+      { title: 'Prospektering',         duration: '20 min', free: false },
+      { title: 'Outreach och LinkedIn', duration: '20 min', free: false },
+      { title: 'Offerter',              duration: '20 min', free: false },
+      { title: 'Mötesförberedelse',     duration: '20 min', free: false },
+      { title: 'Uppföljning',           duration: '15 min', free: false },
     ],
     forWho: [
       'Säljare och account managers',
@@ -305,7 +615,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 7 ────────────────────────────────────────────────────────────────────
+  // ── 7 — Excel & data ─────────────────────────────────────────────────────
   {
     id:       'ai-for-excel-data',
     slug:     'ai-for-excel-data',
@@ -316,17 +626,17 @@ export const modulesData = [
     long_description:  'Lär dig använda ChatGPT och Copilot för att analysera Excel-filer, skriva formler, skapa pivottabeller och producera automatiserade rapporter.',
     image_url:       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '2 timmar',
-    lessons:        9,
-    videoLessons:   0,
-    quizzes:        2,
-    rating:         4.8,
-    students:       0,
-    price:          1990,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '2 timmar',
+    lessons:      9,
+    videoLessons: 0,
+    quizzes:      2,
+    rating:       4.8,
+    students:     0,
+    price:        1990,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Ladda upp och analysera Excel-filer i ChatGPT',
       'Skriv komplexa formler med AI-hjälp',
@@ -335,12 +645,12 @@ export const modulesData = [
       'Hitta mönster och anomalier i data',
     ],
     modules: [
-      { title: 'AI och Excel – grunden',  duration: '15 min', free: true  },
-      { title: 'Formler med AI',          duration: '20 min', free: false },
-      { title: 'Dataanalys i praktiken',  duration: '25 min', free: false },
-      { title: 'Pivottabeller',           duration: '20 min', free: false },
+      { title: 'AI och Excel – grunden',   duration: '15 min', free: true  },
+      { title: 'Formler med AI',           duration: '20 min', free: false },
+      { title: 'Dataanalys i praktiken',   duration: '25 min', free: false },
+      { title: 'Pivottabeller',            duration: '20 min', free: false },
       { title: 'Automatiserade rapporter', duration: '20 min', free: false },
-      { title: 'Slutprov',               duration: '10 min', free: false },
+      { title: 'Slutprov',                 duration: '10 min', free: false },
     ],
     forWho: [
       'Ekonomer och controllers',
@@ -350,7 +660,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 8 ────────────────────────────────────────────────────────────────────
+  // ── 8 — HR ───────────────────────────────────────────────────────────────
   {
     id:       'ai-for-hr',
     slug:     'ai-for-hr',
@@ -361,17 +671,17 @@ export const modulesData = [
     long_description:  'Kursen täcker hur HR-team och chefer kan använda AI för platsannonser, intervjufrågor, onboarding-material, prestandautvärderingar och kompetensgapanalyser.',
     image_url:       'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '2 timmar',
-    lessons:        9,
-    videoLessons:   0,
-    quizzes:        1,
-    rating:         4.8,
-    students:       0,
-    price:          1990,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '2 timmar',
+    lessons:      9,
+    videoLessons: 0,
+    quizzes:      1,
+    rating:       4.8,
+    students:     0,
+    price:        1990,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Platsannonser som attraherar rätt kandidater',
       'Strukturerade intervjufrågor med AI',
@@ -395,28 +705,28 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 9 ────────────────────────────────────────────────────────────────────
+  // ── 9 — Projektledning ───────────────────────────────────────────────────
   {
     id:       'ai-for-projektledning',
     slug:     'ai-for-projektledning',
     category: 'PRODUKTIVITET',
     title:    'AI för projektledning',
     subtitle: 'Planera, följa upp och kommunicera projekt smartare',
-    short_description: 'Lär dig använda AI för projektplaner, riskanalyser, statusrapporter och mötesprotokolle.',
+    short_description: 'Lär dig använda AI för projektplaner, riskanalyser, statusrapporter och mötesprotokoll.',
     long_description:  'Praktisk kurs för projektledare som vill spara tid utan att tappa kontrollen. Täcker projektplaner, riskmatriser, statusrapporter, retrospektiv och stakeholder-kommunikation.',
     image_url:       'https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '2 timmar',
-    lessons:        9,
-    videoLessons:   0,
-    quizzes:        2,
-    rating:         4.9,
-    students:       0,
-    price:          1990,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '2 timmar',
+    lessons:      9,
+    videoLessons: 0,
+    quizzes:      2,
+    rating:       4.9,
+    students:     0,
+    price:        1990,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Projektplan och milstolpar på 15 minuter',
       'Riskmatris och konsekvensanalys',
@@ -426,12 +736,12 @@ export const modulesData = [
       'Retrospektiv och förbättringsanalys',
     ],
     modules: [
-      { title: 'AI i projektledarrollen',  duration: '15 min', free: true  },
-      { title: 'Projektplan med AI',       duration: '20 min', free: false },
-      { title: 'Riskanalys',               duration: '20 min', free: false },
-      { title: 'Statusrapporter',          duration: '20 min', free: false },
-      { title: 'Möten och protokoll',      duration: '20 min', free: false },
-      { title: 'Retrospektiv',             duration: '15 min', free: false },
+      { title: 'AI i projektledarrollen', duration: '15 min', free: true  },
+      { title: 'Projektplan med AI',      duration: '20 min', free: false },
+      { title: 'Riskanalys',              duration: '20 min', free: false },
+      { title: 'Statusrapporter',         duration: '20 min', free: false },
+      { title: 'Möten och protokoll',     duration: '20 min', free: false },
+      { title: 'Retrospektiv',            duration: '15 min', free: false },
     ],
     forWho: [
       'Projektledare och scrum masters',
@@ -441,7 +751,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 10 ───────────────────────────────────────────────────────────────────
+  // ── 10 — Automation ──────────────────────────────────────────────────────
   {
     id:       'ai-automation-vardagen',
     slug:     'ai-automation-vardagen',
@@ -452,17 +762,17 @@ export const modulesData = [
     long_description:  'Utan kod och utan teknisk bakgrund. Kursen täcker Zapier, Make och hur du kopplar ChatGPT till Gmail, Slack, Notion och Google Sheets för automatiska arbetsflöden.',
     image_url:       'https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '2.5 timmar',
-    lessons:        10,
-    videoLessons:   0,
-    quizzes:        1,
-    rating:         4.8,
-    students:       0,
-    price:          2490,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '2.5 timmar',
+    lessons:      10,
+    videoLessons: 0,
+    quizzes:      1,
+    rating:       4.8,
+    students:     0,
+    price:        2490,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Kartlägg dina repetitiva uppgifter',
       'Zapier och Make – gratis nivå räcker långt',
@@ -472,12 +782,12 @@ export const modulesData = [
       'Bygg ditt första automatiserade flöde',
     ],
     modules: [
-      { title: 'Vad kan automatiseras?',    duration: '15 min', free: true  },
-      { title: 'Zapier och Make',           duration: '25 min', free: false },
-      { title: 'AI + Gmail',                duration: '20 min', free: false },
-      { title: 'AI + Notion',               duration: '20 min', free: false },
-      { title: 'AI + Slack',                duration: '20 min', free: false },
-      { title: 'Bygg ditt flöde',           duration: '30 min', free: false },
+      { title: 'Vad kan automatiseras?', duration: '15 min', free: true  },
+      { title: 'Zapier och Make',        duration: '25 min', free: false },
+      { title: 'AI + Gmail',             duration: '20 min', free: false },
+      { title: 'AI + Notion',            duration: '20 min', free: false },
+      { title: 'AI + Slack',             duration: '20 min', free: false },
+      { title: 'Bygg ditt flöde',        duration: '30 min', free: false },
     ],
     forWho: [
       'Alla som gör samma saker om och om igen',
@@ -487,7 +797,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 11 ───────────────────────────────────────────────────────────────────
+  // ── 11 — Ekonomi ─────────────────────────────────────────────────────────
   {
     id:       'ai-for-ekonomi',
     slug:     'ai-for-ekonomi',
@@ -498,17 +808,17 @@ export const modulesData = [
     long_description:  'För ekonomer och controllers som vill arbeta snabbare och kommunicera insikter bättre. Täcker budgetbygge, avvikelserapportering, prognoser och presentationer för ledningen.',
     image_url:       'https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '2 timmar',
-    lessons:        8,
-    videoLessons:   0,
-    quizzes:        1,
-    rating:         4.7,
-    students:       0,
-    price:          1990,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '2 timmar',
+    lessons:      8,
+    videoLessons: 0,
+    quizzes:      1,
+    rating:       4.7,
+    students:     0,
+    price:        1990,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Budgetbygge med AI som assistent',
       'Avvikelserapportering på 10 minuter',
@@ -517,11 +827,11 @@ export const modulesData = [
       'Presentationsunderlag för ledningen',
     ],
     modules: [
-      { title: 'AI och ekonomirollen',     duration: '15 min', free: true  },
-      { title: 'Budgetarbete',             duration: '20 min', free: false },
-      { title: 'Avvikelserapportering',    duration: '20 min', free: false },
-      { title: 'Prognoser',                duration: '20 min', free: false },
-      { title: 'Kommunicera siffror',      duration: '20 min', free: false },
+      { title: 'AI och ekonomirollen',  duration: '15 min', free: true  },
+      { title: 'Budgetarbete',          duration: '20 min', free: false },
+      { title: 'Avvikelserapportering', duration: '20 min', free: false },
+      { title: 'Prognoser',             duration: '20 min', free: false },
+      { title: 'Kommunicera siffror',   duration: '20 min', free: false },
     ],
     forWho: [
       'Ekonomer och controllers',
@@ -531,7 +841,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 12 ───────────────────────────────────────────────────────────────────
+  // ── 12 — Kreativt skrivande ──────────────────────────────────────────────
   {
     id:       'ai-kreativt-skrivande',
     slug:     'ai-kreativt-skrivande',
@@ -542,17 +852,17 @@ export const modulesData = [
     long_description:  'Kursen handlar om att använda AI för att förstärka din kreativitet, inte ersätta den. Täcker storytelling, varumärkesberättelse, personliga essäer och presentationsnarrativ.',
     image_url:       'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '1.5 timmar',
-    lessons:        7,
-    videoLessons:   0,
-    quizzes:        1,
-    rating:         4.8,
-    students:       0,
-    price:          1490,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '1.5 timmar',
+    lessons:      7,
+    videoLessons: 0,
+    quizzes:      1,
+    rating:       4.8,
+    students:     0,
+    price:        1490,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'AI som kreativ sparringspartner',
       'Storytelling-struktur med AI-stöd',
@@ -561,11 +871,11 @@ export const modulesData = [
       'Presentationsnarrativ som engagerar',
     ],
     modules: [
-      { title: 'AI och kreativitet',        duration: '15 min', free: true  },
-      { title: 'Storytelling-grunden',      duration: '20 min', free: false },
-      { title: 'Din skrivröst',             duration: '20 min', free: false },
-      { title: 'Varumärkesberättelse',      duration: '20 min', free: false },
-      { title: 'Presentations-narrativ',    duration: '15 min', free: false },
+      { title: 'AI och kreativitet',     duration: '15 min', free: true  },
+      { title: 'Storytelling-grunden',   duration: '20 min', free: false },
+      { title: 'Din skrivröst',          duration: '20 min', free: false },
+      { title: 'Varumärkesberättelse',   duration: '20 min', free: false },
+      { title: 'Presentations-narrativ', duration: '15 min', free: false },
     ],
     forWho: [
       'Kommunikatörer och skribenter',
@@ -575,7 +885,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 13 ───────────────────────────────────────────────────────────────────
+  // ── 13 — Kundservice ─────────────────────────────────────────────────────
   {
     id:       'ai-for-kundservice',
     slug:     'ai-for-kundservice',
@@ -586,17 +896,17 @@ export const modulesData = [
     long_description:  'För kundservice-team som vill skala kvaliteten utan att skala personalstyrkan. Täcker svarsmallar, eskaleringsflöden, kundsentimentanalys och AI-assisterade svar.',
     image_url:       'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '1.5 timmar',
-    lessons:        7,
-    videoLessons:   0,
-    quizzes:        1,
-    rating:         4.7,
-    students:       0,
-    price:          1490,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '1.5 timmar',
+    lessons:      7,
+    videoLessons: 0,
+    quizzes:      1,
+    rating:       4.7,
+    students:     0,
+    price:        1490,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Bygg ett AI-drivet svarsmallsbibliotek',
       'Hantera svåra och arga kunder med AI-stöd',
@@ -605,11 +915,11 @@ export const modulesData = [
       'Mät och förbättra kundnöjdhet',
     ],
     modules: [
-      { title: 'AI i kundservice',          duration: '15 min', free: true  },
-      { title: 'Svarsmallar',               duration: '20 min', free: false },
-      { title: 'Svåra ärenden',             duration: '20 min', free: false },
-      { title: 'Sentimentanalys',           duration: '20 min', free: false },
-      { title: 'Mät kundnöjdhet',           duration: '15 min', free: false },
+      { title: 'AI i kundservice', duration: '15 min', free: true  },
+      { title: 'Svarsmallar',      duration: '20 min', free: false },
+      { title: 'Svåra ärenden',    duration: '20 min', free: false },
+      { title: 'Sentimentanalys',  duration: '20 min', free: false },
+      { title: 'Mät kundnöjdhet',  duration: '15 min', free: false },
     ],
     forWho: [
       'Kundservice-team och supportagenter',
@@ -619,7 +929,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 14 ───────────────────────────────────────────────────────────────────
+  // ── 14 — AI-säkerhet & GDPR ──────────────────────────────────────────────
   {
     id:       'ai-sakerhet-gdpr',
     slug:     'ai-sakerhet-gdpr',
@@ -630,17 +940,17 @@ export const modulesData = [
     long_description:  'För organisationer som vill använda AI på ett ansvarsfullt sätt. Täcker GDPR, EU AI Act, intern AI-policy, riskklassificering och hur du utbildar medarbetare i säker AI-användning.',
     image_url:       'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '2 timmar',
-    lessons:        8,
-    videoLessons:   0,
-    quizzes:        2,
-    rating:         5.0,
-    students:       0,
-    price:          1990,
-    priceTeam:      'Fast pris per organisation',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '2 timmar',
+    lessons:      8,
+    videoLessons: 0,
+    quizzes:      2,
+    rating:       5.0,
+    students:     0,
+    price:        1990,
+    priceTeam:    'Fast pris per organisation',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Vad GDPR innebär för AI-användning',
       'EU AI Act – vad gäller från 2025',
@@ -663,7 +973,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 15 ───────────────────────────────────────────────────────────────────
+  // ── 15 — Presentationer ──────────────────────────────────────────────────
   {
     id:       'ai-for-presentationer',
     slug:     'ai-for-presentationer',
@@ -674,17 +984,17 @@ export const modulesData = [
     long_description:  'Lär dig använda AI för att strukturera budskap, skriva manus, skapa talepunkter och ge instruktioner till verktyg som Gamma, Beautiful.ai och Copilot i PowerPoint.',
     image_url:       'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '1.5 timmar',
-    lessons:        7,
-    videoLessons:   0,
-    quizzes:        1,
-    rating:         4.8,
-    students:       0,
-    price:          1490,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '1.5 timmar',
+    lessons:      7,
+    videoLessons: 0,
+    quizzes:      1,
+    rating:       4.8,
+    students:     0,
+    price:        1490,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Strukturera ett starkt presentationsbudskap',
       'Manus och talepunkter med AI',
@@ -693,10 +1003,10 @@ export const modulesData = [
       'Visualiseringsidéer med AI-stöd',
     ],
     modules: [
-      { title: 'Presentation med AI',      duration: '10 min', free: true  },
-      { title: 'Struktur och budskap',     duration: '20 min', free: false },
-      { title: 'Manus och talepunkter',    duration: '20 min', free: false },
-      { title: 'Copilot i PowerPoint',     duration: '20 min', free: false },
+      { title: 'Presentation med AI',           duration: '10 min', free: true  },
+      { title: 'Struktur och budskap',          duration: '20 min', free: false },
+      { title: 'Manus och talepunkter',         duration: '20 min', free: false },
+      { title: 'Copilot i PowerPoint',          duration: '20 min', free: false },
       { title: 'Gamma och alternativa verktyg', duration: '20 min', free: false },
     ],
     forWho: [
@@ -707,7 +1017,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 16 ───────────────────────────────────────────────────────────────────
+  // ── 16 — Inköp ───────────────────────────────────────────────────────────
   {
     id:       'ai-for-inkoep',
     slug:     'ai-for-inkoep',
@@ -718,17 +1028,17 @@ export const modulesData = [
     long_description:  'Kursen täcker hur inköpare och upphandlare kan använda AI för att skriva kravspecifikationer, analysera anbud, granska kontrakt och förbereda förhandlingar.',
     image_url:       'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '2 timmar',
-    lessons:        8,
-    videoLessons:   0,
-    quizzes:        1,
-    rating:         4.7,
-    students:       0,
-    price:          1990,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '2 timmar',
+    lessons:      8,
+    videoLessons: 0,
+    quizzes:      1,
+    rating:       4.7,
+    students:     0,
+    price:        1990,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Kravspecifikationer på halva tiden',
       'Analysera och jämföra anbud med AI',
@@ -751,7 +1061,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 17 ───────────────────────────────────────────────────────────────────
+  // ── 17 — Research ────────────────────────────────────────────────────────
   {
     id:       'ai-research-omvarldsbevakning',
     slug:     'ai-research-omvarldsbevakning',
@@ -762,17 +1072,17 @@ export const modulesData = [
     long_description:  'Kursen täcker hur du bygger AI-drivna research-flöden, sammanfattar rapporter, bevakar konkurrenter och identifierar trender – utan att drunkna i information.',
     image_url:       'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '1.5 timmar',
-    lessons:        7,
-    videoLessons:   0,
-    quizzes:        1,
-    rating:         4.8,
-    students:       0,
-    price:          1490,
-    priceTeam:      'Volymrabatt från 5 licenser',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '1.5 timmar',
+    lessons:      7,
+    videoLessons: 0,
+    quizzes:      1,
+    rating:       4.8,
+    students:     0,
+    price:        1490,
+    priceTeam:    'Volymrabatt från 5 licenser',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Bygg ett AI-drivet research-flöde',
       'Sammanfatta långa rapporter och studier',
@@ -795,7 +1105,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  // ── 18 ───────────────────────────────────────────────────────────────────
+  // ── 18 — AI-strategi ─────────────────────────────────────────────────────
   {
     id:       'ai-strategi-organisation',
     slug:     'ai-strategi-organisation',
@@ -806,17 +1116,17 @@ export const modulesData = [
     long_description:  'Kursen ger ledningsgrupper och strategiansvariga verktygen för att kartlägga AI-möjligheter, prioritera use cases, hantera risker och bygga en intern AI-förmåga som håller över tid.',
     image_url:       'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1280&h=720',
     previewVideoUrl: null,
-    duration:       '3 timmar',
-    lessons:        12,
-    videoLessons:   0,
-    quizzes:        2,
-    rating:         5.0,
-    students:       0,
-    price:          4990,
-    priceTeam:      'Fast pris per ledningsgrupp – alla deltagare ingår',
-    isTrial:        false,
-    component:      null,
-    instructor:     INSTRUCTOR,
+    duration:     '3 timmar',
+    lessons:      12,
+    videoLessons: 0,
+    quizzes:      2,
+    rating:       5.0,
+    students:     0,
+    price:        4990,
+    priceTeam:    'Fast pris per ledningsgrupp – alla deltagare ingår',
+    isTrial:      false,
+    component:    null,
+    instructor:   INSTRUCTOR,
     learningPoints: [
       'Kartlägg AI-möjligheter i er organisation',
       'Prioriteringsramverk för AI use cases',
@@ -826,14 +1136,14 @@ export const modulesData = [
       'Mät ROI och värde av AI-initiativ',
     ],
     modules: [
-      { title: 'AI-landskap 2025',          duration: '20 min', free: true  },
-      { title: 'Kartlägg möjligheter',      duration: '25 min', free: false },
-      { title: 'Prioriteringsramverk',      duration: '25 min', free: false },
-      { title: 'Business case',             duration: '25 min', free: false },
-      { title: 'Förändringsledning',        duration: '25 min', free: false },
-      { title: 'Bygg intern förmåga',       duration: '25 min', free: false },
-      { title: 'Mät värde och ROI',         duration: '20 min', free: false },
-      { title: 'Slutprov',                  duration: '15 min', free: false },
+      { title: 'AI-landskap 2025',     duration: '20 min', free: true  },
+      { title: 'Kartlägg möjligheter', duration: '25 min', free: false },
+      { title: 'Prioriteringsramverk', duration: '25 min', free: false },
+      { title: 'Business case',        duration: '25 min', free: false },
+      { title: 'Förändringsledning',   duration: '25 min', free: false },
+      { title: 'Bygg intern förmåga',  duration: '25 min', free: false },
+      { title: 'Mät värde och ROI',    duration: '20 min', free: false },
+      { title: 'Slutprov',             duration: '15 min', free: false },
     ],
     forWho: [
       'VD:ar och ledningsgrupper',
@@ -844,7 +1154,7 @@ export const modulesData = [
   },
 ];
 
-// ── Hjälpfunktioner (samma API som modules2.jsx) ─────────────────────────────
+// ── Hjälpfunktioner ───────────────────────────────────────────────────────────
 export const getModuleBySlug = (slug: string) =>
   modulesData.find(m => m.slug === slug);
 

@@ -92,7 +92,7 @@ style={{ background: '#0f1623', borderBottom: '1px solid rgba(255,255,255,0.08)'
         className="transition-all duration-300 ease-in-out"
         style={{ marginLeft: 'var(--sidebar-width, 320px)' }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-2">
+        <div className="max-w-none mx-auto px-6 py-2">
           <div className="flex items-center justify-between gap-4">
 
          {/* Logo */}

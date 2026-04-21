@@ -27,3 +27,5 @@ dist-ssr
 .env
 .env.*
 !.env.example # Behåll denna om du vill ladda upp en mall utan nycklar
+
+public/video/

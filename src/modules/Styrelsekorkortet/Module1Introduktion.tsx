@@ -21,6 +21,8 @@ import SplitSlide, { StegLista, InfoRuta } from '../../components/CourseElements
 import AudioPlayer from '../../components/AudioPlayer';
 import InlineQuiz        from '../../components/CourseElements/InlineQuiz';
 import GdprQuizOverlay   from '../../components/CourseElements/GdprQuizOverlay';
+import IntressenterElevatorSection from '../../components/CourseElements/IntressenterElevatorSection';
+import ScenarioAndrahand from '../../components/CourseElements/ScenarioAndrahand';
 
 const O    = '#FF5421';
 const OD   = '#E04619';
@@ -858,7 +860,7 @@ const Module1Introduktion: React.FC = () => {
       id: 'intro', 
       title: 'Introduktion', 
       // 1. Detta visar spelaren i navigationsfältet längst ner:
-      audioSrc: '/audio/k3.mp3', 
+      audioSrc: '/audio/intro-brf-1.mp3', 
       // 2. Detta skickar in spelaren till själva slide-ytan (den stora vyn):
       component: (
         <IntroSlide 
@@ -867,6 +869,30 @@ const Module1Introduktion: React.FC = () => {
         />
       ) 
     },
+
+    { id: 'brf-struktur', title: 'Så fungerar BRF:en', component: <BrfFlödesdiagramSlide /> },
+
+    {
+  id: 'scenario-andrahand',
+  title: '📋 Scenario: Andrahandsuthyrning',
+  component: (
+    <ScenarioAndrahand
+      onComplete={handleComplete}
+      isDone={completedLessons.has('scenario-andrahand')}
+    />
+  ),
+},
+
+    {
+  id: 'intressenter',
+  title: 'Föreningens intressenter',
+  component: (
+    <IntressenterElevatorSection
+      isCompleted={completedLessons.has('intressenter')}
+      onComplete={() => handleComplete('intressenter')}
+    />
+  ),
+},
      {
     id: 'byggnad',
     title: 'Fastigheten',
@@ -878,7 +904,7 @@ const Module1Introduktion: React.FC = () => {
     ),
   },
     { id: 'rollerna',   title: 'Rollerna i styrelsen', component: <RollernaSlide /> },
-    { id: 'brf-struktur', title: 'Så fungerar BRF:en', component: <BrfFlödesdiagramSlide /> },
+    
     { id: 'ansvar',     title: 'Styrelsens ansvar',    component: <AnsvarSlide /> },
     { id: 'quiz-1',     title: '🧠 Kunskapstest 1',    component: <Quiz1Slide onComplete={handleComplete} isDone={completedLessons.has('quiz-1')} /> },
     { id: 'motet',      title: 'Styrelsemötet',        component: <MötetSlide /> },

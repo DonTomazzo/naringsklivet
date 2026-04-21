@@ -1,6 +1,6 @@
 // src/components/CourseElements/BrfFlödesdiagramSlide.jsx
 // Animerat flödesdiagram – Så fungerar bostadsrättsföreningen
-// Rubrik ovanför diagram (vänster), förklaring täcker hela höger, mobil accordion
+// Videobakgrund, mörkt tema, autoplay-sekvens med ljud
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,12 +9,23 @@ import { ChevronDown } from 'lucide-react';
 const O    = '#FF5421';
 const DARK = '#0f1623';
 
+// ── Autoplay-ordning ──────────────────────────────────────
+const AUTOPLAY_ORDER = [
+  'medlemmar',
+  'valberedning',
+  'stamma',
+  'revisor',
+  'styrelse',
+  'forvaltare',
+];
+
+// ── Huvud-noder ───────────────────────────────────────────
 const NODER = [
   {
     id: 'medlemmar',
     label: 'Medlemmar',
     icon: '👥',
-    beskrivning: 'Alla bostadsrättsägare är medlemmar och föreregergregregergergegergegergegegegegergergergergergergregergergreghgngngfngfnfnfgnfgngfngfngfnfngfngfngfnningens yttersta ägare. De utövar sin makt på föreningsstämman — en röst per lägenhet, oavsett storlek.',
+    beskrivning: 'Alla bostadsrättsägare är medlemmar och föreningens yttersta ägare. De utövar sin makt på föreningsstämman — en röst per lägenhet, oavsett storlek.',
     ansvar: ['Betalar årsavgift', 'Röstar på stämman', 'Följer stadgar och ordningsregler'],
     audioUrl: '/audio/medlemmarna.mp3',
   },
@@ -25,7 +36,7 @@ const NODER = [
     beskrivning: 'Föreningens högsta beslutande organ. Hålls minst en gång per år på våren. Här godkänns årsredovisning, väljs styrelse och revisorer och fattas viktiga beslut.',
     ansvar: ['Väljer styrelse och revisorer', 'Godkänner årsredovisning', 'Beslutar om avgifter och stadgar'],
     audioUrl: '/audio/foreningsstamman.mp3',
-    sido: { label: 'Valberedning', icon: '📋', text: 'Föreslår kandidater till styrelsen. Väljs av stämman och arbetar självständigt.' },
+    sidoId: 'valberedning',
   },
   {
     id: 'styrelse',
@@ -33,8 +44,8 @@ const NODER = [
     icon: '⚙️',
     beskrivning: 'Leder föreningens löpande arbete mellan stämmorna. Ansvarar juridiskt för fastigheten och ekonomin. Väljs av stämman för 1–2 år.',
     ansvar: ['Förvaltar fastighet och ekonomi', 'Fattar löpande beslut', 'Bär juridiskt ansvar'],
-    audioUrl: '/audio/styrelsen.mp3',
-    sido: { label: 'Revisor', icon: '🔍', text: 'Granskar styrelsens arbete och räkenskaper. Rapporterar till stämman — inte styrelsen.' },
+    audioUrl: '/audio/brf-styrelse.mp3',
+    sidoId: 'revisor',
   },
   {
     id: 'forvaltare',
@@ -42,62 +53,91 @@ const NODER = [
     icon: '🏢',
     beskrivning: 'Sköter den dagliga driften på styrelsens uppdrag — bokföring, felanmälningar och leverantörskontakter. Styrelsen kan aldrig delegera bort sitt juridiska ansvar.',
     ansvar: ['Ekonomisk och teknisk förvaltning', 'Hanterar felanmälningar', 'Leverantörskontakter'],
-    audioUrl: '/audio/k3.mp3',
+    audioUrl: '/audio/forvaltaren.mp3',
   },
 ];
 
-// ── Auto-play audio ───────────────────────────────────────
-function useAutoAudio(url) {
-  const ref = useRef(null);
-  useEffect(() => {
-    if (!url) return;
-    if (ref.current) { ref.current.pause(); ref.current.currentTime = 0; }
-    const audio = new Audio(url);
-    ref.current = audio;
-    audio.play().catch(() => {});
-    return () => { audio.pause(); audio.currentTime = 0; };
-  }, [url]);
-}
+// ── Sido-noder ────────────────────────────────────────────
+const SIDO_NODER = {
+  valberedning: {
+    id: 'valberedning',
+    label: 'Valberedning',
+    icon: '📋',
+    beskrivning: 'Valberedningen väljs av stämman och föreslår vilka som ska väljas in i styrelsen. De ska ha god kontakt med många medlemmar och veta vilka kompetenser som behövs. En välfungerande valberedning tänker på ålder, bakgrund och kön för en balanserad styrelse.',
+    ansvar: ['Föreslår kandidater till styrelsen', 'Arbetar självständigt från styrelsen', 'Tänker på mångfald och kompetens'],
+    audioUrl: '/audio/k3.mp3',
+  },
+  revisor: {
+    id: 'revisor',
+    label: 'Revisorn',
+    icon: '🔍',
+    beskrivning: 'Revisorn väljs av föreningsstämman — inte av styrelsen. Revisorn granskar att årsredovisningen ger en rättvisande bild av ekonomin och uttalar sig om styrelsens förvaltning. Det är viktigt att revisorn inte blir för involverad i styrelsearbetet.',
+    ansvar: ['Granskar årsredovisningen', 'Rapporterar till stämman — inte styrelsen', 'Oberoende granskare'],
+    audioUrl: '/audio/brf-revisor.mp3',
+  },
+};
 
-// ── Desktop nivå-diagram ──────────────────────────────────
-function OrgChart({ aktiv, setAktiv }) {
+const ALLA_NODER = [
+  ...NODER,
+  ...Object.values(SIDO_NODER),
+];
+
+// ── Desktop org-chart ─────────────────────────────────────
+function OrgChart({ aktiv, onKlick }) {
   return (
     <div className="w-full space-y-0">
       {NODER.map((nod, i) => {
-        const isAktiv = aktiv === nod.id;
+        const isAktiv   = aktiv === nod.id;
+        const sidoNod   = nod.sidoId ? SIDO_NODER[nod.sidoId] : null;
+        const sidoAktiv = sidoNod ? aktiv === sidoNod.id : false;
+
         return (
           <div key={nod.id}>
             <div className="relative flex items-center">
-              {/* Sido-badge */}
-              {nod.sido && (
-                <div
-                  className="absolute right-full mr-3 px-3 py-2 rounded-xl border text-xs font-bold whitespace-nowrap"
+
+              {/* Sido-nod — i sidofältet, klickbar */}
+              {sidoNod && (
+                <motion.button
+                  onClick={() => onKlick(sidoNod.id)}
+                  whileHover={{ scale: 1.06, x: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="absolute right-full mr-3 px-3 py-2 rounded-xl border text-xs font-bold whitespace-nowrap cursor-pointer"
                   style={{
-                    background: isAktiv ? `${O}18` : 'rgba(255,255,255,0.04)',
-                    borderColor: isAktiv ? `${O}50` : 'rgba(255,255,255,0.1)',
-                    color: isAktiv ? O : 'rgba(255,255,255,0.4)',
+                    background: sidoAktiv ? `${O}20` : 'rgba(255,255,255,0.06)',
+                    borderColor: sidoAktiv ? O : 'rgba(255,255,255,0.12)',
+                    color: sidoAktiv ? O : 'rgba(255,255,255,0.45)',
+                    boxShadow: sidoAktiv ? `0 0 16px ${O}30` : 'none',
+                    backdropFilter: 'blur(8px)',
                   }}
                 >
-                  <span className="mr-1">{nod.sido.icon}</span>
-                  {nod.sido.label}
+                  <span className="mr-1">{sidoNod.icon}</span>
+                  {sidoNod.label}
                   <div style={{
                     position: 'absolute', left: '100%', top: '50%',
                     width: 12, height: 1,
-                    background: isAktiv ? O : 'rgba(255,255,255,0.15)',
+                    background: sidoAktiv ? O : 'rgba(255,255,255,0.15)',
                   }} />
-                </div>
+                  {sidoAktiv && (
+                    <motion.div
+                      initial={{ scale: 0 }} animate={{ scale: 1 }}
+                      className="absolute -top-1 -right-1 w-2 h-2 rounded-full"
+                      style={{ background: O }}
+                    />
+                  )}
+                </motion.button>
               )}
 
               {/* Huvud-nod */}
               <motion.button
-                onClick={() => setAktiv(nod.id)}
+                onClick={() => onKlick(nod.id)}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
                 className="w-full py-4 px-5 rounded-2xl border-2 text-left transition-all"
                 style={{
-                  background: isAktiv ? `${O}18` : 'rgba(255,255,255,0.04)',
-                  borderColor: isAktiv ? O : 'rgba(255,255,255,0.1)',
+                  background: isAktiv ? `${O}20` : 'rgba(255,255,255,0.06)',
+                  borderColor: isAktiv ? O : 'rgba(255,255,255,0.12)',
                   boxShadow: isAktiv ? `0 0 28px ${O}30` : 'none',
+                  backdropFilter: 'blur(8px)',
                 }}
               >
                 <div className="flex items-center gap-3">
@@ -107,7 +147,7 @@ function OrgChart({ aktiv, setAktiv }) {
                       style={{ color: isAktiv ? O : 'rgba(255,255,255,0.85)', fontFamily: "'Nunito', sans-serif" }}>
                       {nod.label}
                     </p>
-                    <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                    <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
                       {nod.ansvar[0]}
                     </p>
                   </div>
@@ -126,7 +166,7 @@ function OrgChart({ aktiv, setAktiv }) {
                 <div className="flex flex-col items-center gap-0.5">
                   <motion.div animate={{ y: [0, 3, 0] }}
                     transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-                    style={{ color: 'rgba(255,255,255,0.18)', fontSize: 13, lineHeight: 1 }}>↓</motion.div>
+                    style={{ color: 'rgba(255,255,255,0.2)', fontSize: 13, lineHeight: 1 }}>↓</motion.div>
                   {nod.id === 'stamma' && (
                     <motion.div animate={{ y: [0, -3, 0] }}
                       transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
@@ -138,26 +178,26 @@ function OrgChart({ aktiv, setAktiv }) {
           </div>
         );
       })}
-      <p className="text-center text-xs mt-4" style={{ color: 'rgba(255,255,255,0.18)' }}>
-        Klicka på varje nivå för mer information
+      <p className="text-center text-xs mt-4" style={{ color: 'rgba(255,255,255,0.2)' }}>
+        Klicka på varje nivå — även revisor och valberedning
       </p>
     </div>
   );
 }
 
 // ── Mobil accordion ───────────────────────────────────────
-function MobilAccordion({ aktiv, setAktiv }) {
+function MobilAccordion({ aktiv, onKlick }) {
   return (
     <div className="space-y-2 px-4 pb-28">
-      {NODER.map((nod) => {
+      {ALLA_NODER.map((nod) => {
         const isAktiv = aktiv === nod.id;
         return (
           <div key={nod.id} className="rounded-2xl overflow-hidden border"
             style={{ borderColor: isAktiv ? O : 'rgba(255,255,255,0.1)' }}>
             <button
-              onClick={() => setAktiv(isAktiv ? null : nod.id)}
+              onClick={() => onKlick(isAktiv ? null : nod.id)}
               className="w-full flex items-center gap-3 px-4 py-3.5 text-left"
-              style={{ background: isAktiv ? `${O}15` : 'rgba(255,255,255,0.04)' }}
+              style={{ background: isAktiv ? `${O}18` : 'rgba(255,255,255,0.04)' }}
             >
               <span className="text-xl">{nod.icon}</span>
               <span className="flex-1 font-bold text-sm"
@@ -179,15 +219,6 @@ function MobilAccordion({ aktiv, setAktiv }) {
                 >
                   <div className="px-4 py-4 border-t" style={{ borderColor: `${O}25` }}>
                     <p className="text-sm text-white/70 leading-relaxed mb-3">{nod.beskrivning}</p>
-                    {nod.sido && (
-                      <div className="rounded-xl px-3 py-2 mb-3 border"
-                        style={{ background: `${O}10`, borderColor: `${O}25` }}>
-                        <p className="text-xs font-bold" style={{ color: O }}>
-                          {nod.sido.icon} {nod.sido.label}
-                        </p>
-                        <p className="text-xs text-white/50 mt-0.5">{nod.sido.text}</p>
-                      </div>
-                    )}
                     <div className="space-y-1.5">
                       {nod.ansvar.map((a, i) => (
                         <div key={i} className="flex items-start gap-2">
@@ -209,61 +240,97 @@ function MobilAccordion({ aktiv, setAktiv }) {
 
 // ── Huvud-komponent ───────────────────────────────────────
 export default function BrfFlödesdiagramSlide() {
-  const [aktiv, setAktiv] = useState('styrelse');
-  const aktivNod = NODER.find(n => n.id === aktiv);
+  const [aktiv, setAktiv] = useState('medlemmar');
+  const audioRef          = useRef(null);
+  const videoRef          = useRef(null);
 
-  useAutoAudio(aktivNod?.audioUrl);
+  const aktivNod = ALLA_NODER.find(n => n.id === aktiv);
+
+  // Video autoplay
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
+
+  // Ljud + autoplay nästa nod när klart
+  useEffect(() => {
+    if (!aktivNod?.audioUrl) return;
+
+    // Stoppa föregående
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.onended = null;
+      audioRef.current.currentTime = 0;
+    }
+
+    const audio = new Audio(aktivNod.audioUrl);
+    audioRef.current = audio;
+    audio.play().catch(() => {});
+
+    // När klart — gå till nästa i sekvensen
+    audio.onended = () => {
+      const idx    = AUTOPLAY_ORDER.indexOf(aktiv);
+      const nextId = AUTOPLAY_ORDER[idx + 1];
+      if (nextId) setAktiv(nextId);
+    };
+
+    return () => {
+      audio.pause();
+      audio.onended = null;
+    };
+  }, [aktiv]);
+
+  const handleKlick = (id) => {
+  if (!id) return;
+  setAktiv(id);
+  // Spela om videon från början vid varje klick
+  if (videoRef.current) {
+    videoRef.current.currentTime = 0;
+    videoRef.current.play().catch(() => {});
+  }
+};
 
   return (
-    <div className="h-full overflow-hidden" style={{ paddingTop: 'var(--header-height, 60px)' }}>
+    <div className="h-full overflow-hidden relative"
+      style={{ paddingTop: 'var(--header-height, 60px)' }}>
 
-      {/* ── DESKTOP ───────────────────────────────────── */}
-      <div className="hidden lg:grid grid-cols-2 h-full">
+      {/* Videobakgrund */}
+      <video
+        ref={videoRef}
+        src="/video/hus2.mp4"
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ zIndex: 0 }}
+        onEnded={e => e.target.pause()}
+      />
+      <div className="absolute inset-0" style={{ background: 'rgba(15,22,35,0.78)', zIndex: 1 }} />
 
-        {/* Vänster: rubrik + diagram */}
-        <div className="flex flex-col px-10 py-8 overflow-y-auto" style={{ background: DARK }}>
+      {/* ── DESKTOP ──────────────────────────────────────── */}
+      <div className="hidden lg:grid grid-cols-2 h-full relative" style={{ zIndex: 2 }}>
 
-          {/* Rubrik ovanför diagrammet */}
-          <div className="mb-6 flex-shrink-0 text-center">
-  <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>
+        {/* Vänster */}
+        <div className="flex flex-col px-10 py-2 overflow-y-auto">
+          <div className="mb-0 flex-shrink-0 text-center">
+            <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>
               Grunderna · BRF-struktur
             </p>
             <h2 className="text-3xl font-black leading-tight text-white"
               style={{ fontFamily: "'Nunito', sans-serif" }}>
-              Så fungerar{' '}
-              <span style={{ color: O }}>bostadsrättsföreningen</span>
+              Så fungerar <span style={{ color: O }}>bostadsrättsföreningen</span>
             </h2>
-            <p className="text-white/35 text-xs mt-2">
-              Klicka på varje nivå för att förstå rollen.
-            </p>
+            <p className="text-white/30 text-xs mt-2">Spelar automatiskt — klicka för att hoppa.</p>
           </div>
-
-          {/* Diagram */}
           <div className="flex-1 flex items-center justify-center">
             <div className="w-full max-w-lg">
-              <OrgChart aktiv={aktiv} setAktiv={setAktiv} />
+              <OrgChart aktiv={aktiv} onKlick={handleKlick} />
             </div>
           </div>
         </div>
 
-        {/* Höger: förklaring täcker hela ytan */}
-{/* 1. Här lade vi till 'relative' i className */}
-<div 
-  className="h-full overflow-y-auto flex flex-col justify-center px-10 lg:px-14 py-12 pb-28 relative"
-  style={{ background: '#FAFAF8' }}
->
-
-  {/* 2. HÄR klistrar du in bakgrundsbilden */}
-  <div 
-    className="absolute inset-0 z-0 pointer-events-none"
-    style={{ 
-      backgroundImage: 'url("https://images.unsplash.com/photo-1560514446-440a34b41a38?q=80&w=1000&auto=format&fit=crop")',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      filter: 'grayscale(100%) brightness(1.05) contrast(0.9)',
-      opacity: 0.15,
-    }}
-  />
+        {/* Höger */}
+        <div className="h-full overflow-y-auto flex flex-col justify-center px-10 lg:px-14 py-12 pb-28">
           <AnimatePresence mode="wait">
             {aktivNod && (
               <motion.div key={aktivNod.id}
@@ -272,10 +339,9 @@ export default function BrfFlödesdiagramSlide() {
                 exit={{ opacity: 0, x: -16 }}
                 transition={{ duration: 0.22 }}>
 
-                {/* Nod-header */}
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0"
-                    style={{ background: `${O}12`, border: `2px solid ${O}30` }}>
+                    style={{ background: `${O}18`, border: `2px solid ${O}35` }}>
                     {aktivNod.icon}
                   </div>
                   <h3 className="text-3xl font-black leading-tight"
@@ -284,24 +350,12 @@ export default function BrfFlödesdiagramSlide() {
                   </h3>
                 </div>
 
-                {/* Beskrivning */}
-                <p className="text-gray-600 text-base leading-relaxed mb-6">
+                <p className="text-white/75 text-base leading-relaxed mb-6">
                   {aktivNod.beskrivning}
                 </p>
 
-                {/* Sido-info */}
-                {aktivNod.sido && (
-                  <div className="rounded-2xl px-5 py-4 mb-6 border"
-                    style={{ background: `${O}07`, borderColor: `${O}20` }}>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-1.5" style={{ color: O }}>
-                      {aktivNod.sido.icon} {aktivNod.sido.label}
-                    </p>
-                    <p className="text-sm text-gray-500 leading-relaxed">{aktivNod.sido.text}</p>
-                  </div>
-                )}
-
-                {/* Ansvar */}
-                <div className="rounded-2xl p-5 border-l-4" style={{ borderColor: O, background: `${O}06` }}>
+                <div className="rounded-2xl p-5 border-l-4"
+                  style={{ borderColor: O, background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(8px)' }}>
                   <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: O }}>
                     Ansvar & roll
                   </p>
@@ -309,7 +363,7 @@ export default function BrfFlödesdiagramSlide() {
                     {aktivNod.ansvar.map((a, i) => (
                       <div key={i} className="flex items-start gap-3">
                         <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5" style={{ background: O }} />
-                        <p className="text-sm text-gray-700">{a}</p>
+                        <p className="text-sm text-white/70">{a}</p>
                       </div>
                     ))}
                   </div>
@@ -321,8 +375,8 @@ export default function BrfFlödesdiagramSlide() {
         </div>
       </div>
 
-      {/* ── MOBIL ─────────────────────────────────────── */}
-      <div className="lg:hidden h-full overflow-y-auto" style={{ background: DARK }}>
+      {/* ── MOBIL ──────────────────────────────────────── */}
+      <div className="lg:hidden h-full overflow-y-auto relative" style={{ zIndex: 2 }}>
         <div className="px-5 pt-6 pb-4">
           <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>
             Grunderna · BRF-struktur
@@ -331,9 +385,9 @@ export default function BrfFlödesdiagramSlide() {
             style={{ fontFamily: "'Nunito', sans-serif" }}>
             Så fungerar <span style={{ color: O }}>BRF:en</span>
           </h2>
-          <p className="text-white/40 text-xs mb-5">Tryck på varje nivå för att läsa mer</p>
+          <p className="text-white/35 text-xs mb-5">Tryck på varje nivå för att läsa mer</p>
         </div>
-        <MobilAccordion aktiv={aktiv} setAktiv={setAktiv} />
+        <MobilAccordion aktiv={aktiv} onKlick={handleKlick} />
       </div>
 
     </div>

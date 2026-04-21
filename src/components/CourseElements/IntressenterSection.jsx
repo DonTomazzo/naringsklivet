@@ -303,7 +303,7 @@ const IntressenterSection = ({ isCompleted, onComplete }) => {
 
   return (
     <section className="min-h-screen relative py-12"
-      style={{ background: 'linear-gradient(135deg, #0f1623 0%, #171f32 60%, #1a2540 100%)', paddingTop: 'calc(var(--header-height, 60px) + 2rem)' }}>
+      style={{ background: 'linear-gradient(135deg, #0f1623 0%, #171f32 60%, #1a2540 100%)', paddingTop: 'calc(var(--header-height, 60px) + 0.5rem)' }}>
 
       <div className="absolute inset-0 pointer-events-none"
         style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, rgba(255,84,33,0.04) 0%, transparent 50%)' }} />
@@ -327,7 +327,7 @@ const IntressenterSection = ({ isCompleted, onComplete }) => {
           transition={{ delay: 0.1 }}>
           <div className="relative rounded-2xl overflow-visible">
             <img
-  src="/images/planima_HeaderImage_House_png.webp"
+  src="/images/hus.png"
   alt="Flerfamiljshus med intressenter"
   className="w-full h-auto"
   style={{

@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 
 import CourseHeader      from '../../components/CourseElements/CourseHeader';
-import GlobalSidebar     from '../../components/GlobalSidebar';
+import SlideSidebar from '../../components/SlideSidebar';
 import FloatingFAQ       from '../../components/CourseElements/FloatingFAQ';
 import ModuleSlideLayout from '../../components/CourseElements/ModuleSlideLayout';
 import ModuleIntroSlide  from '../../components/CourseElements/ModuleIntroSlide';
@@ -1429,7 +1429,15 @@ const ModuleAIGrunderna: React.FC = () => {
           slideProgress={{ current: currentIndex, total: slides.length }}
         />
       </div>
-      <GlobalSidebar />
+     <SlideSidebar
+  slides={slides}
+  currentIndex={currentIndex}
+  completedLessons={completedLessons}
+  onNavigate={setCurrentIndex}
+  courseTitle="AI i arbetslivet – grundkursen"
+  userName={userData.name}
+  onDiplomaDownload={() => alert('Kursbevis laddas ner...')}
+/>
       <div
         className="flex-1 overflow-hidden"
         style={{ marginLeft: isDesktop ? 'var(--sidebar-width, 320px)' : '0px' }}
