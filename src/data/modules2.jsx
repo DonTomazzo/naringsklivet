@@ -1,18 +1,21 @@
 // src/data/modules2.jsx
 import Bostadsrattsforeningen from '../modules/Styrelsekorkortet/BRFModule.tsx';
-
 import Module1Introduktion from '../modules/Styrelsekorkortet/Module1Introduktion.tsx';
 import Module3Gdpr from '../modules/Styrelsekorkortet/Module3Gdpr.tsx';
 import ModuleDokumentation from '../modules/Styrelsekorkortet/ModuleDokumentation';
 import Module5AiBrf from '../modules/Styrelsekorkortet/Module5AiBrf.tsx';
 import ModuleHallbarhet from '../modules/Styrelsekorkortet/ModuleHallbarhet.tsx';
 import ModuleIntressenter from '../modules/Styrelsekorkortet/ModuleIntressenter.tsx';
-
 import Module4Diskriminering from '../modules/Styrelsekorkortet/Module4Diskriminering.tsx';
 import Module0Introduktion from '../modules/Styrelsekorkortet/Module0Introduktion.tsx';
 import Module2Arsredovisning from '../modules/Styrelsekorkortet/Module2Arsredovisning';
 import ModuleMotesledning, { courseData as motenData } from '../modules/Styrelsekorkortet/ModuleMotesledning';
-import ModuleFastigheten, { courseData as fastighetenData } from '../modules/Styrelsekorkortet/ModuleFastigheten';
+import FastighetenOversikt from '../pages/FastighetenOversikt';
+import ModuleFastighetenSakerhet, { courseData as fastighetenData } from '../modules/Styrelsekorkortet/ModuleFastighetenSakerhet';
+import ModuleFastighetenUnderhall from '../modules/Styrelsekorkortet/ModuleFastighetenUnderhall';
+import ModuleFastighetenEnergi from '../modules/Styrelsekorkortet/ModuleFastighetenEnergi';
+import ModuleFastighetenDrift from '../modules/Styrelsekorkortet/ModuleFastighetenDrift';
+
 
 // ── Delad instruktör ──────────────────────────────────────
 const INSTRUCTOR = {
@@ -462,6 +465,214 @@ export const modulesData = [
   },
 
   {
+    id: 'fastigheten',
+    slug: 'fastigheten',
+    title: 'Fastigheten — översikt',
+    subtitle: 'Välj ett av fyra kapitel: säkerhet, underhåll, energi eller drift.',
+    category: 'FASTIGHET',
+    type: 'bundle',
+    duration: '60–90 min totalt',
+    lessons: 25,
+    videoLessons: 0,
+    quizzes: 4,
+    rating: 5.0,
+    students: 0,
+    price: 1490,
+    priceTeam: 'Ingår i Styrelsekörkortet',
+    isTrial: false,
+    previewVideoUrl: null,
+    image_url: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1280',
+    component: FastighetenOversikt,
+    instructor: INSTRUCTOR,
+    ...fastighetenData,
+  },
+ 
+  {
+    id: 'fastigheten-sakerhet',
+    slug: 'fastigheten-sakerhet',
+    title: 'Fastigheten — Säkerhet',
+    subtitle: 'Brandskydd, hissar, radon och legionella — lagstadgade krav som skyddar dina boende.',
+    category: 'FASTIGHET',
+    type: 'bundle',
+    duration: '20–25 min',
+    lessons: 7,
+    videoLessons: 0,
+    quizzes: 1,
+    rating: 5.0,
+    students: 0,
+    price: 1490,
+    priceTeam: 'Ingår i Styrelsekörkortet',
+    isTrial: false,
+    previewVideoUrl: null,
+    image_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1280',
+    component: ModuleFastighetenSakerhet,
+    instructor: INSTRUCTOR,
+    learningPoints: [
+      'Vad SBA — systematiskt brandskyddsarbete — innebär i praktiken',
+      'Hur ofta hissar måste besiktigas och vad som händer vid brister',
+      'Gränsvärdet för radon och hur ni mäter rätt',
+      'Legionellarisk i varmvattensystem och hur ni förebygger det',
+    ],
+    modules: [
+      { title: 'Brandskydd & SBA',          duration: '5 min', free: true  },
+      { title: '📋 Scenario: Brandinspektion', duration: '4 min', free: true  },
+      { title: 'Hissar & taksäkerhet',       duration: '5 min', free: false },
+      { title: '📋 Scenario: Hissbesiktning', duration: '4 min', free: false },
+      { title: 'Radon & Legionella',         duration: '5 min', free: false },
+      { title: '📋 Scenario: Radonmätning',  duration: '4 min', free: false },
+      { title: '🧠 Quiz: Säkerhet',          duration: '5 min', free: false },
+    ],
+    forWho: [
+      'Styrelseledamöter med fastighetsansvar',
+      'Ordföranden som ansvarar för säkerheten',
+      'Alla ledamöter som vill förstå lagkraven',
+    ],
+    faq: [
+      { question: 'Hur ofta ska hissar besiktigas?', answer: 'Vart 2:e år av ackrediterat organ. Styrelsen ansvarar för att boka besiktning i tid.' },
+      { question: 'Vad är SBA?', answer: 'Systematiskt Brandskyddsarbete — ett kontinuerligt, dokumenterat arbete. Inte en engångshändelse.' },
+      { question: 'Vad är gränsvärdet för radon?', answer: '200 Bq/m³ enligt Folkhälsomyndigheten. Rekommenderas starkt att mäta — särskilt hus från 1945–1985.' },
+    ],
+    testimonials: [],
+  },
+ 
+  {
+    id: 'fastigheten-underhall',
+    slug: 'fastigheten-underhall',
+    title: 'Fastigheten — Underhåll & planering',
+    subtitle: 'OVK, egenkontroll och underhållsplanering — systemen som håller fastigheten i skick.',
+    category: 'FASTIGHET',
+    type: 'bundle',
+    duration: '20–25 min',
+    lessons: 6,
+    videoLessons: 0,
+    quizzes: 1,
+    rating: 5.0,
+    students: 0,
+    price: 1490,
+    priceTeam: 'Ingår i Styrelsekörkortet',
+    isTrial: false,
+    previewVideoUrl: null,
+    image_url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1280',
+    component: ModuleFastighetenUnderhall,
+    instructor: INSTRUCTOR,
+    learningPoints: [
+      'OVK — obligatorisk ventilationskontroll — intervaller och konsekvenser',
+      'Föreningens egenkontroll — vad ska kontrolleras och hur ofta',
+      'Vad som händer om ni missar en besiktning',
+      'Ansvarsgränsen mellan förening och bostadsrättsinnehavare',
+    ],
+    modules: [
+      { title: 'OVK — obligatorisk ventilationskontroll', duration: '5 min', free: true  },
+      { title: '📋 Scenario: OVK-besiktning',             duration: '4 min', free: true  },
+      { title: 'Egenkontroll',                            duration: '5 min', free: false },
+      { title: '📋 Scenario: Golvbrunn läcker',           duration: '4 min', free: false },
+      { title: '🧠 Quiz: Underhåll',                      duration: '5 min', free: false },
+    ],
+    forWho: [
+      'Styrelseledamöter med fastighetsansvar',
+      'Ordföranden som planerar underhåll',
+      'Alla som vill förstå föreningens underhållsskyldigheter',
+    ],
+    faq: [
+      { question: 'Hur ofta måste OVK göras?', answer: 'FT/FTX-ventilation: vart 3:e år. S-ventilation: vart 6:e år. Nybyggda hus: inom 2 år från inflyttning.' },
+      { question: 'Vad är egenkontroll?', answer: 'Föreningens eget system för att löpande kontrollera att fastigheten uppfyller krav. Ska dokumenteras.' },
+      { question: 'Vad händer om vi missar OVK?', answer: 'Kommunen kan förelägga föreningen och ta ut sanktionsavgift. Vid allvarliga brister kan fastigheten förbjudas att brukas.' },
+    ],
+    testimonials: [],
+  },
+ 
+  {
+    id: 'fastigheten-energi',
+    slug: 'fastigheten-energi',
+    title: 'Fastigheten — Energi & miljö',
+    subtitle: 'Energideklaration, solceller och laddstolpar — hållbarhet och lagkrav i praktiken.',
+    category: 'FASTIGHET',
+    type: 'bundle',
+    duration: '20–25 min',
+    lessons: 6,
+    videoLessons: 0,
+    quizzes: 1,
+    rating: 5.0,
+    students: 0,
+    price: 1490,
+    priceTeam: 'Ingår i Styrelsekörkortet',
+    isTrial: false,
+    previewVideoUrl: null,
+    image_url: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1280',
+    component: ModuleFastighetenEnergi,
+    instructor: INSTRUCTOR,
+    learningPoints: [
+      'Energideklarationens krav — obligatorisk vart 10:e år',
+      'Vad som gäller för solceller och bygglov',
+      'Bostadsrättsinnehavarens rätt att installera laddpunkt sedan 2022',
+      'Hur styrelsen tar beslut om solceller på rätt sätt',
+    ],
+    modules: [
+      { title: 'Energideklaration',              duration: '5 min', free: true  },
+      { title: 'Solceller & laddstolpar',         duration: '5 min', free: true  },
+      { title: '📋 Scenario: Solceller på taket', duration: '4 min', free: false },
+      { title: '📋 Scenario: Laddstolpe-ansökan', duration: '4 min', free: false },
+      { title: '🧠 Quiz: Energi & miljö',          duration: '5 min', free: false },
+    ],
+    forWho: [
+      'Styrelser som planerar energiinvesteringar',
+      'Ordföranden som hanterar laddstolpsansökningar',
+      'Alla som vill förstå energilagstiftningen',
+    ],
+    faq: [
+      { question: 'Måste vi ha en energideklaration?', answer: 'Ja — obligatorisk för flerbostadshus, uppdateras vart 10:e år. Ska finnas tillgänglig vid försäljning.' },
+      { question: 'Behövs bygglov för solceller?', answer: 'Vanligtvis inte om de följer takets form och inte sticker ut mer än 20 cm. Kontrollera med kommunen.' },
+      { question: 'Kan vi neka laddstolpsinstallation?', answer: 'Nej — sedan 2022 har boende lagstadgad rätt att installera laddpunkt. Styrelsen kan ange tekniska krav men inte neka utan sakliga skäl.' },
+    ],
+    testimonials: [],
+  },
+ 
+  {
+    id: 'fastigheten-drift',
+    slug: 'fastigheten-drift',
+    title: 'Fastigheten — Praktisk drift',
+    subtitle: 'Sopor, PCB, lekplatser och bygglov — vardagliga frågor med juridiska konsekvenser.',
+    category: 'FASTIGHET',
+    type: 'bundle',
+    duration: '20–25 min',
+    lessons: 6,
+    videoLessons: 0,
+    quizzes: 1,
+    rating: 5.0,
+    students: 0,
+    price: 1490,
+    priceTeam: 'Ingår i Styrelsekörkortet',
+    isTrial: false,
+    previewVideoUrl: null,
+    image_url: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1280',
+    component: ModuleFastighetenDrift,
+    instructor: INSTRUCTOR,
+    learningPoints: [
+      'PCB-inventering — vilka fastigheter berörs och vad krävs',
+      'Lekplatsbesiktning — föreningens produktansvar',
+      'När krävs bygglov och när inte',
+      'Sophantering och källsorteringskrav 2024–2027',
+    ],
+    modules: [
+      { title: 'Sophantering, snöröjning & PCB', duration: '6 min', free: true  },
+      { title: 'Bygglov & tekniska krav',          duration: '6 min', free: false },
+      { title: '📋 Scenario: Takpåbyggnad',        duration: '4 min', free: false },
+      { title: '🧠 Quiz: Praktisk drift',           duration: '5 min', free: false },
+    ],
+    forWho: [
+      'Styrelseledamöter med driftsansvar',
+      'Ordföranden som hanterar bygglovsärenden',
+      'Alla som vill förstå föreningens miljöansvar',
+    ],
+    faq: [
+      { question: 'Vad är PCB och är det ett problem?', answer: 'PCB är ett miljögift som förbjöds på 70-talet och kan finnas i fogmassor. Fastigheter byggda 1956–1973 kan behöva inventeras.' },
+      { question: 'När krävs bygglov?', answer: 'Vid fasadändring, tillbyggnad eller ändrad användning. Underhåll som inte ändrar utseendet kräver normalt inte lov.' },
+      { question: 'Vem ansvarar för lekplatsen?', answer: 'Föreningen ansvarar för alla lekplatser på föreningens mark. Besiktning minst en gång per år.' },
+    ],
+    testimonials: [],
+  },
+
+  {
   id: 'effektivare-moten',
   slug: 'effektivare-moten',
   title: 'Effektivare styrelsemöten',
@@ -618,19 +829,7 @@ export const modulesData = [
     ],
   },
 
-  {
-  id: 'fastigheten',
-  slug: 'fastigheten',
-  title: 'Fastigheten',
-  subtitle: 'Säkerhet, underhåll, energi och drift — allt styrelsen behöver veta om fastigheten.',
-  category: 'FASTIGHET',
-  type: 'bundle',
-  duration: '60–90 min',
-  price: 1490,
-  image_url: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1280',
-  component: ModuleFastigheten,
-  ...fastighetenData,
-},
+  
 
   {
   id:       'styrelsekorkortet-plats',
@@ -1118,47 +1317,7 @@ export const modulesData = [
     testimonials: [],
   },
 
-  {
-    id: 'fastigheten',
-    slug: 'fastigheten',
-    title: 'Fastigheten',
-    subtitle: 'Underhållsplanering, energieffektivisering och fastighetsskötsel',
-    category: 'FÖRVALTNING',
-    short_description: 'Lär dig om fastighetsförvaltning och underhåll av bostadsrättsföreningens fastighet.',
-    long_description: 'Allt om underhållsplanering, energieffektivisering, renovering och fastighetens skötsel.',
-    image_url: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1280&h=720',
-    duration: '3 timmar',
-    lessons: 11,
-    videoLessons: 3,
-    quizzes: 2,
-    rating: 4.8,
-    students: 370,
-    type: 'bundle', 
-    price: 1490,
-    priceTeam: 'Volymrabatt från 2 licenser',
-    previewVideoUrl: null,
-    component: null,
-    instructor: INSTRUCTOR,
-    learningPoints: [
-      'Underhållsplan och stambyten',
-      'Energieffektivisering',
-      'Fastighetsskötsel och drift',
-      'Större renoveringsprojekt',
-    ],
-    modules: [
-      { title: 'Underhållsplanering',      duration: '25 min', free: true  },
-      { title: 'Stambyten och renoveringar', duration: '30 min', free: false },
-      { title: 'Energieffektivisering',    duration: '25 min', free: false },
-      { title: 'Löpande drift',            duration: '25 min', free: false },
-      { title: 'Upphandling av entreprenörer', duration: '25 min', free: false },
-    ],
-    forWho: [
-      'Styrelseledamöter med fastighetsansvar',
-      'Ordföranden som planerar underhåll',
-    ],
-    testimonials: [],
-  },
-
+  
   {
   id: 'hallbarhet',
   slug: 'hallbarhet',

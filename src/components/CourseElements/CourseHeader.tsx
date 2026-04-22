@@ -96,18 +96,20 @@ style={{ background: '#0f1623', borderBottom: '1px solid rgba(255,255,255,0.08)'
           <div className="flex items-center justify-between gap-4">
 
          {/* Logo */}
-<Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity flex-shrink-0">
-  <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-1.5">
+<Link to="/" className="flex items-center gap-1.5 hover:opacity-80 transition-opacity flex-shrink-0">
+  <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-1">
     <img
       src="/logo.png"
       alt="Näringsklivet Logotyp"
-      /* Justerad från 16 till 18 - en bra gyllene medelväg */
-      width={18}
-      height={18}
+      /* Minskat från 18 till 14 eller 16 för en nättare känsla */
+      width={15} 
+      height={15}
       className="object-contain opacity-90"
     />
-    {/* text-base är ca 16px, vilket brukar kännas mest "rätt" på skärm */}
-    <div className="text-base sm:text-lg font-bold" style={{ color: '#FFFFFF' }}>
+    {/* Ändrat text-base (16px) till text-sm (14px) 
+      och sm:text-lg (18px) till sm:text-base (16px) 
+    */}
+    <div className="text-sm sm:text-base font-bold" style={{ color: '#FFFFFF' }}>
       <span className="text-[#FF5421]">Styrelse</span>körkortet®
     </div>
   </motion.div>

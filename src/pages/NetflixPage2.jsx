@@ -1,4 +1,3 @@
-// netflix2
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -92,7 +91,7 @@ const Nav = () => {
               onClick={() => navigate('/seminarier')}
               className="text-sm font-bold px-4 py-2 rounded-lg text-white"
               style={{ background: C.orange }}>
-              Boka möte
+              Boka kursen
             </motion.button>
             {/* Mobile burger */}
             <button className="md:hidden w-9 h-9 flex flex-col justify-center items-center gap-1.5"
@@ -150,7 +149,7 @@ const Hero = () => {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-8"
           style={{ background: C.orangeL, color: C.orange }}>
           <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: C.orange }} />
-          TRÄNINGSPROGRAM FÖR FÖRTROENDEVALDA I BOSTADSRÄTTSFÖRENINGAR
+          AI-utbildning för yrkesverksamma
         </motion.div>
 
         {/* Grid */}
@@ -161,13 +160,15 @@ const Hero = () => {
             transition={{ duration: 0.7, delay: 0.08 }}>
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight mb-8"
               style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>
-              Bli tryggare i<br />
-              <span style={{ color: C.orange }}>din</span><br />
-              styrelseroll.
+              Lär dig<br />
+              <span style={{ color: C.orange }}>använda AI</span><br />
+              på riktigt.
             </h1>
             <p className="text-lg sm:text-xl leading-relaxed mb-8 max-w-lg"
               style={{ color: C.mid }}>
-              Komplett utbildning i allt styrelsearbete kräver — juridik, ekonomi, protokoll och ansvar. På din tid, i din takt. Med diplom när du är klar."
+              Träningsprogram, workshops och föreläsningar som ger
+              konkreta resultat – inte buzzwords. För medarbetare,
+              chefer och egenföretagare som vill ligga steget före.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <motion.button whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}
@@ -185,14 +186,104 @@ const Hero = () => {
             </div>
           </motion.div>
 
-          {/* Höger – kalender */}
-          <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.65, delay: 0.25 }}>
-            <DatePicker />
-          </motion.div>
+          {/* Höger – Bild-modul som ersätter kalendern */}
+<motion.div 
+  initial={{ opacity: 0, x: 24 }} 
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.65, delay: 0.25 }}
+  className="relative"
+>
+  <div className="relative">
+    {/* Själva bilden */}
+    <div className="rounded-3xl overflow-hidden aspect-[4/5] bg-slate-200 shadow-2xl">
+      <img
+        src="/founder.png"
+        alt="Grundare Näringsklivet"
+        className="w-full h-full object-cover object-top"
+      />
+    </div>
+
+    {/* Floating badge (Nere till höger) */}
+    <div className="absolute -bottom-5 -right-5 bg-white rounded-2xl px-5 py-4 shadow-xl border border-slate-100">
+      <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: '#FF5421' }}>
+        Näringsklivet®
+      </p>
+      <p className="text-sm font-bold text-slate-800">Grundat 2024</p>
+    </div>
+
+    {/* Accent blob (Bakom bilden uppe till vänster) */}
+    <div 
+      className="absolute -top-6 -left-6 w-32 h-32 rounded-full opacity-10 -z-10"
+      style={{ background: '#FF5421' }} 
+    />
+  </div>
+</motion.div>
 
         </div>
 
+    <motion.div 
+  initial={{ opacity: 0, y: 20 }} 
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.65, delay: 0.2 }}
+  className="w-full"
+>
+  {/* Vi använder grid som blir 1 kolumn på mobil och 2 kolumner (75/25) på stora skärmar */}
+  <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 items-center">
+    
+    {/* Text-sektion (Tar upp 3 av 4 kolumner = 75%) */}
+    <div className="lg:col-span-3 text-center lg:text-left">
+      <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1.5
+                       rounded-full mb-6 text-white" style={{ background: '#FF5421' }}>
+        Vår story
+      </span>
+      
+      <h2 className="text-3xl sm:text-5xl font-bold mb-8 leading-tight"
+        style={{ color: '#0F172A', fontFamily: "'Nunito', sans-serif" }}>
+        Vi bygger broar mellan <span style={{ color: '#FF5421' }}>AI och verkligheten</span>
+      </h2>
+
+      <div className="max-w-3xl mx-auto lg:mx-0 space-y-6 text-lg text-slate-600 leading-relaxed">
+        <p>
+          Näringsklivet ® grundades ur en enkel insikt: det finns en enorm klyfta mellan
+          vad AI kan göra och vad de flesta faktiskt använder det till på jobbet.
+          Inte för att folk inte är intresserade – utan för att ingen har visat dem
+          hur det fungerar i deras faktiska arbetsdag.
+        </p>
+        <p>
+          Vi har 15+ års erfarenhet av försäljning, kundrelationer och projektledning.
+          Den erfarenheten kombinerar vi med djup AI-kunskap för att skapa utbildning
+          som är praktisk från första minuten – utan teknisk jargong.
+        </p>
+      </div>
+
+      <div className="mt-10">
+        <button
+          onClick={() => navigate('/purchase/naringsklivet-ai')}
+          className="inline-flex items-center gap-2 font-bold text-base px-8 py-4 rounded-xl text-white transition-transform hover:scale-105"
+          style={{ background: `linear-gradient(135deg, #FF5421, #E04619)` }}
+        >
+          Se träningsprogrammet <ArrowRight size={18} />
+        </button>
+      </div>
+    </div>
+
+    {/* Liten bild (Tar upp 1 av 4 kolumner = 25%) */}
+    <div className="lg:col-span-1 flex justify-center">
+      <div className="relative w-full max-w-[200px] lg:max-w-full">
+        <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white rotate-3 hover:rotate-0 transition-transform duration-300">
+          <img
+            src="/founder.png" 
+            alt="Mindre dekorationsbild"
+            className="w-full h-auto object-cover"
+          />
+        </div>
+        {/* Liten accent-cirkel bakom för att knyta ihop designen */}
+        <div className="absolute -z-10 -bottom-3 -left-3 w-12 h-12 rounded-full opacity-20" style={{ background: '#FF5421' }} />
+      </div>
+    </div>
+
+  </div>
+</motion.div>
         {/* Hero image */}
         <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.36 }}
@@ -238,7 +329,7 @@ const LogoBand = () => (
 const COURSES = [
   {
     tag: 'Träningsprogram',
-    title: 'AI för yrkesverksamma',
+    title: 'Styrelsekörkortet online',
     desc: '14 moduler. Från grunder till avancerad prompt-teknik, automation och verktygsval. I din egen takt.',
     price: 'Från 1 490 kr/person',
     img: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80',
@@ -247,7 +338,7 @@ const COURSES = [
   },
   {
     tag: 'Workshop',
-    title: 'Hands-on AI-dag',
+    title: 'Styrelsekörkortet + Teams',
     desc: 'Halvdag eller heldag. Deltagarna jobbar med sina egna uppgifter i realtid. Max 20 pers.',
     price: 'Offert på begäran',
     img: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80',

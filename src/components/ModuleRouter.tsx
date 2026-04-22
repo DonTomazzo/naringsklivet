@@ -24,6 +24,11 @@ import ModuleTedAI           from '../modules/Naringsklivet/ModuleTedAI';
 import ModuleTedLedarskap     from '../modules/Naringsklivet/ModuleTedLedarskap';
 import ModuleTedProduktivitet from '../modules/Naringsklivet/ModuleTedProduktivitet';
 import ModuleFastigheten from '../modules/Styrelsekorkortet/ModuleFastigheten';
+import FastighetenOversikt        from '../pages/FastighetenOversikt';
+import ModuleFastighetenSakerhet  from '../modules/Styrelsekorkortet/ModuleFastighetenSakerhet';
+import ModuleFastighetenUnderhall from '../modules/Styrelsekorkortet/ModuleFastighetenUnderhall';
+import ModuleFastighetenEnergi    from '../modules/Styrelsekorkortet/ModuleFastighetenEnergi';
+import ModuleFastighetenDrift     from '../modules/Styrelsekorkortet/ModuleFastighetenDrift';
 
 
 
@@ -67,6 +72,11 @@ const MODULE_MAP: Record<string, React.ComponentType> = {
 'gdpr-medarbetare': ModuleGDPR,
 'professionellt-mejl': ModuleMejl,
 'effektivare-moten': ModuleMotesledning,
+'fastigheten':            FastighetenOversikt,
+'fastigheten-sakerhet':   ModuleFastighetenSakerhet,
+'fastigheten-underhall':  ModuleFastighetenUnderhall,
+'fastigheten-energi':     ModuleFastighetenEnergi,
+'fastigheten-drift':      ModuleFastighetenDrift,
   
 
   // Kurser utan komponent ännu – lägg till när de byggs:
