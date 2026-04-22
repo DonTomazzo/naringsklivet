@@ -448,6 +448,7 @@ const ModuleFastighetenDrift: React.FC = () => {
   }, []);
 
   const handleComplete = (id: string) => setCompletedLessons(prev => new Set([...prev, id]));
+  const allDone = completedLessons.has('quiz-drift');
 
 
   const KapitelIntro = ({ emoji, rubrik, desc, bild, slideNr, total, nr }: {
