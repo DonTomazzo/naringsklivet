@@ -520,39 +520,91 @@ export default function QuizSalesPage() {
       </div>
 
       {/* ── DESKTOP layout ── */}
-      <div className="hidden lg:grid flex-1" style={{ gridTemplateColumns: '1fr 1fr', position: 'relative', zIndex: 10, overflow: 'hidden' }}>
+     {/* ── DESKTOP layout ── */}
+<div className="hidden lg:grid flex-1" style={{ 
+  gridTemplateColumns: '1fr 1fr', 
+  position: 'relative', 
+  zIndex: 10, 
+  overflow: 'hidden' 
+}}>
 
-        {/* VÄNSTER — persona centrerad vertikalt */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 48px', gap: 24 }}>
-          <AnimatePresence mode="wait">
-            <motion.div key={idx} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
-              style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-              {/* Persona */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                <img src={current.bild} alt={current.persona}
-                  style={{ width: 150, height: 150, borderRadius: '50%', objectFit: 'cover', border: `3px solid ${O}`, boxShadow: `0 0 32px ${O}50`, flexShrink: 0 }} />
-                <div>
-                  <p style={{ fontSize: 17, fontWeight: 800, color: '#fff' }}>{current.persona}</p>
-                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{current.roll}</p>
-                </div>
-              </div>
 
-              {/* Bubbla — hög kontrast */}
-              <div style={{
-                padding: '20px 24px',
-                borderRadius: '4px 20px 20px 20px',
-                background: 'rgba(255,255,255,0.14)',
-                border: '1px solid rgba(255,255,255,0.25)',
-                backdropFilter: 'blur(16px)',
-                maxWidth: 380,
-              }}>
-                <p style={{ fontSize: 16, color: '#ffffff', lineHeight: 1.7, fontWeight: 500 }}>
-                  "{current.bubbla}"
-                </p>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+{/* VÄNSTER — Fokus på Karin (Videon är i bakgrunden) */}
+<div style={{ 
+  display: 'flex', 
+  flexDirection: 'column', 
+  alignItems: 'center', 
+  justifyContent: 'center', 
+  padding: '60px',
+  height: '100%' 
+}}>
+  <AnimatePresence mode="wait">
+    <motion.div 
+      key={idx} 
+      initial={{ opacity: 0, y: 20 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      exit={{ opacity: 0, y: -20 }}
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32 }}
+    >
+      
+      {/* 1. PERSONEN OCH TITELN (Återställd) */}
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: 20, 
+        width: '100%', 
+        maxWidth: 580 // Samma som bubblan för att de ska linjera snyggt
+      }}>
+        <img 
+          src={current.bild} 
+          alt={current.persona}
+          style={{ 
+            width: 100, 
+            height: 100, 
+            borderRadius: '50%', 
+            objectFit: 'cover',
+            border: `4px solid ${O}`, 
+            boxShadow: `0 0 20px ${O}40`,
+            flexShrink: 0
+          }} 
+        />
+        <div style={{ textAlign: 'left' }}>
+          <p style={{ fontSize: 24, fontWeight: 800, color: '#fff', margin: 0 }}>
+            {current.persona}
+          </p>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginTop: 4, margin: 0 }}>
+            {current.roll}
+          </p>
         </div>
+      </div>
+
+      {/* 2. PRATBUBBLAN (Den stora storleken) */}
+      <div style={{
+        padding: '48px 56px',
+        borderRadius: '32px',
+        background: 'rgba(255,255,255,0.08)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        backdropFilter: 'blur(24px)',
+        maxWidth: 580,
+        width: '100%',
+        boxShadow: '0 30px 60px rgba(0,0,0,0.4)',
+      }}>
+        <p style={{ 
+          fontSize: 24, 
+          color: '#fff', 
+          lineHeight: 1.5, 
+          fontWeight: 600, 
+          textAlign: 'center',
+          margin: 0,
+          letterSpacing: '-0.01em'
+        }}>
+          "{current.bubbla}"
+        </p>
+      </div>
+
+    </motion.div>
+  </AnimatePresence>
+</div>
 
         {/* HÖGER — vit sida */}
         <div style={{ background: '#FAFAF8', overflowY: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '40px 48px' }}>

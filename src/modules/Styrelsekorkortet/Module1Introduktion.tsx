@@ -23,6 +23,7 @@ import InlineQuiz        from '../../components/CourseElements/InlineQuiz';
 import GdprQuizOverlay   from '../../components/CourseElements/GdprQuizOverlay';
 import IntressenterElevatorSection from '../../components/CourseElements/IntressenterElevatorSection';
 import ScenarioAndrahand from '../../components/CourseElements/ScenarioAndrahand';
+import BrfMissuppfattningsQuiz from '../../components/CourseElements/BrfMissuppfattningsQuiz';
 
 const O    = '#FF5421';
 const OD   = '#E04619';
@@ -871,6 +872,17 @@ const Module1Introduktion: React.FC = () => {
     },
 
     { id: 'brf-struktur', title: 'Så fungerar BRF:en', component: <BrfFlödesdiagramSlide /> },
+
+    {
+  id: 'brf-missuppfattningar',
+  title: '❓ Vanliga missuppfattningar',
+  component: (
+    <BrfMissuppfattningsQuiz
+      onComplete={handleComplete}
+      isDone={completedLessons.has('brf-missuppfattningar')}
+    />
+  ),
+},
 
     {
   id: 'scenario-andrahand',

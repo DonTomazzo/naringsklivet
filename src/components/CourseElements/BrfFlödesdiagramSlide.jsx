@@ -27,7 +27,7 @@ const NODER = [
     icon: '👥',
     beskrivning: 'Alla bostadsrättsägare är medlemmar och föreningens yttersta ägare. De utövar sin makt på föreningsstämman — en röst per lägenhet, oavsett storlek.',
     ansvar: ['Betalar årsavgift', 'Röstar på stämman', 'Följer stadgar och ordningsregler'],
-    audioUrl: '/audio/medlemmarna.mp3',
+    audioUrl: '/audio/medlemmarna-2.mp3',
   },
   {
     id: 'stamma',
@@ -35,7 +35,7 @@ const NODER = [
     icon: '🗳️',
     beskrivning: 'Föreningens högsta beslutande organ. Hålls minst en gång per år på våren. Här godkänns årsredovisning, väljs styrelse och revisorer och fattas viktiga beslut.',
     ansvar: ['Väljer styrelse och revisorer', 'Godkänner årsredovisning', 'Beslutar om avgifter och stadgar'],
-    audioUrl: '/audio/foreningsstamman.mp3',
+    audioUrl: '/audio/foreningsstamman-1.mp3',
     sidoId: 'valberedning',
   },
   {
@@ -44,7 +44,7 @@ const NODER = [
     icon: '⚙️',
     beskrivning: 'Leder föreningens löpande arbete mellan stämmorna. Ansvarar juridiskt för fastigheten och ekonomin. Väljs av stämman för 1–2 år.',
     ansvar: ['Förvaltar fastighet och ekonomi', 'Fattar löpande beslut', 'Bär juridiskt ansvar'],
-    audioUrl: '/audio/brf-styrelse.mp3',
+    audioUrl: '/audio/styrelsen-1.mp3',
     sidoId: 'revisor',
   },
   {
@@ -53,7 +53,7 @@ const NODER = [
     icon: '🏢',
     beskrivning: 'Sköter den dagliga driften på styrelsens uppdrag — bokföring, felanmälningar och leverantörskontakter. Styrelsen kan aldrig delegera bort sitt juridiska ansvar.',
     ansvar: ['Ekonomisk och teknisk förvaltning', 'Hanterar felanmälningar', 'Leverantörskontakter'],
-    audioUrl: '/audio/forvaltaren.mp3',
+    audioUrl: '/audio/forvaltaren-2.mp3',
   },
 ];
 
@@ -65,7 +65,7 @@ const SIDO_NODER = {
     icon: '📋',
     beskrivning: 'Valberedningen väljs av stämman och föreslår vilka som ska väljas in i styrelsen. De ska ha god kontakt med många medlemmar och veta vilka kompetenser som behövs. En välfungerande valberedning tänker på ålder, bakgrund och kön för en balanserad styrelse.',
     ansvar: ['Föreslår kandidater till styrelsen', 'Arbetar självständigt från styrelsen', 'Tänker på mångfald och kompetens'],
-    audioUrl: '/audio/k3.mp3',
+    audioUrl: '/audio/bostadsrattsforeningen.mp3',
   },
   revisor: {
     id: 'revisor',

@@ -353,7 +353,7 @@ export default function BrfFlödesdiagramSlide() {
       <video ref={videoRef} src="/video/hiss.mp4" muted playsInline
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
         onEnded={e => e.target.pause()} />
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(15,22,35,0.80)', zIndex: 1 }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(15,22,35,0.30)', zIndex: 1 }} />
 
       {/* Innehåll — centrerat */}
       <div style={{ position: 'relative', height: '100%', overflowY: 'auto', zIndex: 2,
