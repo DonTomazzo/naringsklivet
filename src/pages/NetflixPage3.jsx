@@ -1,22 +1,8 @@
-// src/pages/StyrelsekorkortetLanding.tsx
-// Landningssida för Styrelsekörkortet® — BRF-styrelseutbildning
-//
-// FIXAT:
-//  1. ModulesSection2 renderas nu faktiskt i sidan
-//  2. DatePicker-import borttagen
-//  3. Oanvända lucide-imports borttagna (CheckCircle, ChevronDown, Play, X)
-//  4. Dubbel grundarbild — andra bilden ersatt med workshop-bild
-//  5. "Vår story" utbruten ur Hero till egen komponent
-//  6. Brand-namn konsekvent: Styrelsekörkortet® överallt
-//  7. LogoBand → förtroendebyggande siffror istället
-//  8. Hero-bilden i botten har nu caption med BRF-koppling
-//  9. Testimonials omskrivna för BRF-kontext
-// 10. FAQ omskriven för BRF-specifika frågor
-
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, CheckCircle, ChevronDown, Play, X } from 'lucide-react';
+import  DatePicker  from "../components/DatePicker";
 import ModulesSection2 from '../components/landing/ModulesSection2';
 
 // ── Design tokens ─────────────────────────────────────────
@@ -47,9 +33,7 @@ const Reveal = ({ children, delay = 0, y = 24, className = '' }) => {
   );
 };
 
-// ══════════════════════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════════════════════
+// ── NAVIGATION ────────────────────────────────────────────
 const Nav = () => {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
@@ -72,19 +56,19 @@ const Nav = () => {
         }}
       >
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-          {/* Logo — konsekvent brand: Styrelsekörkortet® */}
+          {/* Logo */}
           <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate('/')}>
-            <img src="/logo.png" alt="Styrelsekörkortet" className="w-8 h-8 object-contain" />
-            <span className="font-bold text-base tracking-tight" style={{ color: C.dark }}>
-              <span style={{ color: C.orange }}>Styrelse</span>körkortet
-              <span style={{ color: C.orange }}>®</span>
-            </span>
-          </div>
+           <img src="/logo.png" alt="Näringsklivet" className="w-8 h-8 object-contain" />
+  <span className="font-bold text-base tracking-tight" style={{ color: C.dark }}>
+    <span style={{ color: C.orange }}>Styrelse</span>körkortet®
+    <span style={{ color: C.orange }}></span>
+  </span>
+</div>
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8">
             {[
-              ['Utbildningen', '/modules'],
+              ['Utbildningar', '/modules'],
               ['Seminarier',   '/seminarier'],
               ['Om oss',       '/om-oss'],
             ].map(([label, path]) => (
@@ -104,11 +88,12 @@ const Nav = () => {
             </button>
             <motion.button
               whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              onClick={() => navigate('/purchase/styrelsekorkortet-grund')}
+              onClick={() => navigate('/seminarier')}
               className="text-sm font-bold px-4 py-2 rounded-lg text-white"
               style={{ background: C.orange }}>
-              Kom igång
+              Boka kursen
             </motion.button>
+            {/* Mobile burger */}
             <button className="md:hidden w-9 h-9 flex flex-col justify-center items-center gap-1.5"
               onClick={() => setMobileOpen(p => !p)}>
               <span className="w-5 h-0.5 rounded-full transition-all" style={{ background: C.dark,
@@ -122,6 +107,7 @@ const Nav = () => {
         </div>
       </header>
 
+      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
@@ -129,16 +115,16 @@ const Nav = () => {
             className="fixed inset-0 z-40 pt-16 px-5 pb-8 flex flex-col"
             style={{ background: C.bg }}>
             <div className="flex flex-col gap-1 mt-8">
-              {[['Utbildningen','/modules'],['Seminarier','/seminarier'],['Om oss','/om-oss']].map(([l,p]) => (
+              {[['Utbildningar','/modules'],['Seminarier','/seminarier'],['Om oss','/om-oss']].map(([l,p]) => (
                 <button key={l} onClick={() => { navigate(p); setMobileOpen(false); }}
                   className="text-left text-2xl font-bold py-4 border-b"
                   style={{ color: C.dark, borderColor: C.border }}>{l}</button>
               ))}
             </div>
-            <motion.button whileTap={{ scale: 0.97 }} onClick={() => navigate('/purchase/styrelsekorkortet-grund')}
+            <motion.button whileTap={{ scale: 0.97 }} onClick={() => navigate('/seminarier')}
               className="mt-auto w-full py-4 rounded-2xl text-white font-bold text-lg"
               style={{ background: C.orange }}>
-              Kom igång
+              Boka ett möte
             </motion.button>
           </motion.div>
         )}
@@ -147,9 +133,6 @@ const Nav = () => {
   );
 };
 
-// ══════════════════════════════════════════════════════════
-// HERO — bara hero nu, "Vår story" utbrutet (fix #5)
-// ══════════════════════════════════════════════════════════
 const Hero = () => {
   const navigate = useNavigate();
 
@@ -166,9 +149,10 @@ const Hero = () => {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-8"
           style={{ background: C.orangeL, color: C.orange }}>
           <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: C.orange }} />
-          Certifieringsutbildning för förtroendevalda i bostadsrättsföreningar
+          AI-utbildning för yrkesverksamma
         </motion.div>
 
+        {/* Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 
           {/* Vänster – text */}
@@ -176,77 +160,144 @@ const Hero = () => {
             transition={{ duration: 0.7, delay: 0.08 }}>
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight mb-8"
               style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>
-              Bli tryggare<br />
-              <span style={{ color: C.orange }}>i din styrelseroll</span>
+              Lär dig<br />
+              <span style={{ color: C.orange }}>använda AI</span><br />
+              på riktigt.
             </h1>
             <p className="text-lg sm:text-xl leading-relaxed mb-8 max-w-lg"
               style={{ color: C.mid }}>
-              Praktisk utbildning för förtroendevalda i bostadsrättsföreningar.
-              Juridik, ekonomi och mötesteknik — presenterat på ett sätt som faktiskt
-              fastnar. I din egen takt, med certifikat.
+              Träningsprogram, workshops och föreläsningar som ger
+              konkreta resultat – inte buzzwords. För medarbetare,
+              chefer och egenföretagare som vill ligga steget före.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <motion.button whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}
                 onClick={() => navigate('/modules')}
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-base text-white"
                 style={{ background: C.orange, boxShadow: `0 8px 32px ${C.orange}40` }}>
-                Se utbildningen <ArrowRight size={18} />
+                Se alla utbildningar <ArrowRight size={18} />
               </motion.button>
               <motion.button whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}
                 onClick={() => navigate('/seminarier')}
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-base"
                 style={{ color: C.dark, border: `2px solid ${C.border}`, background: C.white }}>
-                Boka seminarium
+                Boka föreläsning
               </motion.button>
             </div>
           </motion.div>
 
-          {/* Höger – grundarbild */}
-          <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.65, delay: 0.25 }}
-            className="relative"
-          >
-            <div className="relative">
-              <div className="rounded-3xl overflow-hidden aspect-[4/5] bg-slate-200 shadow-2xl">
-                <img
-                  src="/founder.png"
-                  alt="Grundare Styrelsekörkortet"
-                  className="w-full h-full object-cover object-top"
-                />
-              </div>
+          {/* Höger – Bild-modul som ersätter kalendern */}
+<motion.div 
+  initial={{ opacity: 0, x: 24 }} 
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.65, delay: 0.25 }}
+  className="relative"
+>
+  <div className="relative">
+    {/* Själva bilden */}
+    <div className="rounded-3xl overflow-hidden aspect-[4/5] bg-slate-200 shadow-2xl">
+      <img
+        src="/founder.png"
+        alt="Grundare Näringsklivet"
+        className="w-full h-full object-cover object-top"
+      />
+    </div>
 
-              <div className="absolute -bottom-5 -right-5 bg-white rounded-2xl px-5 py-4 shadow-xl border border-slate-100">
-                <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: C.orange }}>
-                  Styrelsekörkortet®
-                </p>
-                <p className="text-sm font-bold text-slate-800">Grundat 2024</p>
-              </div>
+    {/* Floating badge (Nere till höger) */}
+    <div className="absolute -bottom-5 -right-5 bg-white rounded-2xl px-5 py-4 shadow-xl border border-slate-100">
+      <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: '#FF5421' }}>
+        Näringsklivet®
+      </p>
+      <p className="text-sm font-bold text-slate-800">Grundat 2024</p>
+    </div>
 
-              <div
-                className="absolute -top-6 -left-6 w-32 h-32 rounded-full opacity-10 -z-10"
-                style={{ background: C.orange }}
-              />
-            </div>
-          </motion.div>
+    {/* Accent blob (Bakom bilden uppe till vänster) */}
+    <div 
+      className="absolute -top-6 -left-6 w-32 h-32 rounded-full opacity-10 -z-10"
+      style={{ background: '#FF5421' }} 
+    />
+  </div>
+</motion.div>
 
         </div>
 
-        {/* Hero-bild med BRF-relevant caption (fix #8) */}
+    <motion.div 
+  initial={{ opacity: 0, y: 20 }} 
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.65, delay: 0.2 }}
+  className="w-full"
+>
+  {/* Vi använder grid som blir 1 kolumn på mobil och 2 kolumner (75/25) på stora skärmar */}
+  <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 items-center">
+    
+    {/* Text-sektion (Tar upp 3 av 4 kolumner = 75%) */}
+    <div className="lg:col-span-3 text-center lg:text-left">
+      <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1.5
+                       rounded-full mb-6 text-white" style={{ background: '#FF5421' }}>
+        Vår story
+      </span>
+      
+      <h2 className="text-3xl sm:text-5xl font-bold mb-8 leading-tight"
+        style={{ color: '#0F172A', fontFamily: "'Nunito', sans-serif" }}>
+        Vi bygger broar mellan <span style={{ color: '#FF5421' }}>AI och verkligheten</span>
+      </h2>
+
+      <div className="max-w-3xl mx-auto lg:mx-0 space-y-6 text-lg text-slate-600 leading-relaxed">
+        <p>
+          Näringsklivet ® grundades ur en enkel insikt: det finns en enorm klyfta mellan
+          vad AI kan göra och vad de flesta faktiskt använder det till på jobbet.
+          Inte för att folk inte är intresserade – utan för att ingen har visat dem
+          hur det fungerar i deras faktiska arbetsdag.
+        </p>
+        <p>
+          Vi har 15+ års erfarenhet av försäljning, kundrelationer och projektledning.
+          Den erfarenheten kombinerar vi med djup AI-kunskap för att skapa utbildning
+          som är praktisk från första minuten – utan teknisk jargong.
+        </p>
+      </div>
+
+      <div className="mt-10">
+        <button
+          onClick={() => navigate('/purchase/naringsklivet-ai')}
+          className="inline-flex items-center gap-2 font-bold text-base px-8 py-4 rounded-xl text-white transition-transform hover:scale-105"
+          style={{ background: `linear-gradient(135deg, #FF5421, #E04619)` }}
+        >
+          Se träningsprogrammet <ArrowRight size={18} />
+        </button>
+      </div>
+    </div>
+
+    {/* Liten bild (Tar upp 1 av 4 kolumner = 25%) */}
+    <div className="lg:col-span-1 flex justify-center">
+      <div className="relative w-full max-w-[200px] lg:max-w-full">
+        <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white rotate-3 hover:rotate-0 transition-transform duration-300">
+          <img
+            src="/founder.png" 
+            alt="Mindre dekorationsbild"
+            className="w-full h-auto object-cover"
+          />
+        </div>
+        {/* Liten accent-cirkel bakom för att knyta ihop designen */}
+        <div className="absolute -z-10 -bottom-3 -left-3 w-12 h-12 rounded-full opacity-20" style={{ background: '#FF5421' }} />
+      </div>
+    </div>
+
+  </div>
+</motion.div>
+        {/* Hero image */}
         <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.36 }}
-          className="mt-20 rounded-t-3xl overflow-hidden relative"
+          className="mt-12 rounded-t-3xl overflow-hidden relative"
           style={{ height: '420px', marginLeft: '-1.25rem', marginRight: '-1.25rem' }}>
-          <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1600&q=85"
-            alt="Bostadsrättsförening" className="w-full h-full object-cover object-center" />
+          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1600&q=85"
+            alt="Workshop" className="w-full h-full object-cover object-center" />
           <div className="absolute inset-0"
             style={{ background: `linear-gradient(to right, ${C.dark}55 0%, transparent 50%, ${C.orange}22 100%)` }} />
           <div className="absolute bottom-6 left-6 sm:left-10 flex items-center gap-3 px-5 py-3.5 rounded-2xl"
             style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)' }}>
             <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: C.orange }} />
             <span className="text-sm font-bold" style={{ color: C.dark }}>
-              Nästa styrelseseminarium: <span style={{ color: C.orange }}>22 april 2026</span>
+              Nästa seminarium: <span style={{ color: C.orange }}>22 april 2026</span>
             </span>
           </div>
         </motion.div>
@@ -256,141 +307,57 @@ const Hero = () => {
   );
 };
 
-// ══════════════════════════════════════════════════════════
-// FÖRTROENDEBYGGANDE SIFFROR — ersätter platsarhållarlogos (fix #7)
-// ══════════════════════════════════════════════════════════
-const FortroendeBand = () => (
-  <section className="py-12 border-y" style={{ background: C.bgAlt, borderColor: C.border }}>
+// ── LOGO BAND ─────────────────────────────────────────────
+const LogoBand = () => (
+  <section className="py-10 border-y" style={{ background: C.bgAlt, borderColor: C.border }}>
     <div className="max-w-7xl mx-auto px-5 sm:px-8">
-      <p className="text-xs font-bold uppercase tracking-widest text-center mb-8" style={{ color: C.muted }}>
-        Utvecklat för Sveriges bostadsrättsföreningar
+      <p className="text-xs font-bold uppercase tracking-widest text-center mb-6" style={{ color: C.muted }}>
+        Utbildar medarbetare på
       </p>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {[
-          { val: '14',       label: 'Moduler' },
-          { val: '500+',     label: 'Utbildade styrelser' },
-          { val: '8 000+',   label: 'Genomförda kurser' },
-          { val: '4,8 / 5',  label: 'Genomsnittligt omdöme' },
-        ].map((stat, i) => (
-          <div key={i} className="text-center">
-            <p className="text-3xl sm:text-4xl font-black mb-1" style={{ color: C.orange }}>
-              {stat.val}
-            </p>
-            <p className="text-xs sm:text-sm font-semibold" style={{ color: C.mid }}>
-              {stat.label}
-            </p>
-          </div>
+      <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
+        {['Företag A', 'Konsult AB', 'Byrå & Co', 'Venture AB', 'Studio XYZ'].map((name, i) => (
+          <span key={i} className="text-base font-black tracking-tight opacity-30" style={{ color: C.dark }}>
+            {name}
+          </span>
         ))}
       </div>
     </div>
   </section>
 );
 
-// ══════════════════════════════════════════════════════════
-// VÅR STORY — utbruten egen sektion (fix #5), ny bild (fix #4)
-// ══════════════════════════════════════════════════════════
-const VarStory = () => {
-  const navigate = useNavigate();
-
-  return (
-    <section className="py-20 sm:py-28" style={{ background: C.bg }}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8">
-        <Reveal>
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 items-center">
-
-            {/* Text-sektion */}
-            <div className="lg:col-span-3 text-center lg:text-left">
-              <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1.5
-                              rounded-full mb-6 text-white" style={{ background: C.orange }}>
-                Vår story
-              </span>
-
-              <h2 className="text-3xl sm:text-5xl font-bold mb-8 leading-tight"
-                style={{ color: '#0F172A', fontFamily: "'Nunito', sans-serif" }}>
-                Styrelsearbete ska inte vara <span style={{ color: C.orange }}>skrämmande</span>
-              </h2>
-
-              <div className="max-w-3xl mx-auto lg:mx-0 space-y-6 text-lg leading-relaxed" style={{ color: C.mid }}>
-                <p>
-                  Styrelsekörkortet® grundades ur en återkommande frustration: nyvalda
-                  ledamöter kastas in i styrelsearbete med juridiskt ansvar — ofta utan någon
-                  förberedelse alls. Resultatet är osäkerhet, felaktiga beslut och i värsta fall
-                  personligt skadestånd.
-                </p>
-                <p>
-                  Vi har 15+ års erfarenhet av projektledning, ekonomi och BRF-förvaltning.
-                  Den erfarenheten har vi förpackat i en praktisk utbildning som ger er
-                  styrelse tryggheten att fatta rätt beslut — från dag ett.
-                </p>
-              </div>
-
-              <div className="mt-10">
-                <button
-                  onClick={() => navigate('/purchase/styrelsekorkortet-grund')}
-                  className="inline-flex items-center gap-2 font-bold text-base px-8 py-4 rounded-xl text-white transition-transform hover:scale-105"
-                  style={{ background: `linear-gradient(135deg, ${C.orange}, ${C.orangeD})` }}
-                >
-                  Se utbildningen <ArrowRight size={18} />
-                </button>
-              </div>
-            </div>
-
-            {/* Liten bild — annan bild än hero (fix #4) */}
-            <div className="lg:col-span-1 flex justify-center">
-              <div className="relative w-full max-w-[200px] lg:max-w-full">
-                <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white rotate-3 hover:rotate-0 transition-transform duration-300">
-                  <img
-                    src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&q=85"
-                    alt="Styrelsemöte"
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
-                <div className="absolute -z-10 -bottom-3 -left-3 w-12 h-12 rounded-full opacity-20" style={{ background: C.orange }} />
-              </div>
-            </div>
-
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-};
-
-// ══════════════════════════════════════════════════════════
-// UTBILDNINGAR
-// ══════════════════════════════════════════════════════════
+// ── UTBILDNINGAR ──────────────────────────────────────────
 const COURSES = [
   {
     tag: 'Träningsprogram',
     title: 'Styrelsekörkortet online',
-    desc: '14 moduler om juridik, ekonomi, mötesteknik och styrelseansvar. Ni går i er egen takt och får certifikat.',
-    price: 'Från 1 490 kr/styrelse',
-    img: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80',
+    desc: '14 moduler. Från grunder till avancerad prompt-teknik, automation och verktygsval. I din egen takt.',
+    price: 'Från 1 490 kr/person',
+    img: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80',
     path: '/modules',
     featured: true,
   },
   {
     tag: 'Workshop',
-    title: 'Styrelsekörkortet + Coach',
-    desc: 'Halvdag eller heldag. Vi går igenom er specifika situation och svarar på era frågor. På plats eller digitalt.',
+    title: 'Styrelsekörkortet + Teams',
+    desc: 'Halvdag eller heldag. Deltagarna jobbar med sina egna uppgifter i realtid. Max 20 pers.',
     price: 'Offert på begäran',
     img: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80',
     path: '/seminarier',
     featured: false,
   },
   {
-    tag: 'Seminarium',
-    title: 'BRF-styrelsens ansvar',
-    desc: '90 min — intensivseminarium om juridiskt ansvar, vanliga fallgropar och praktiska verktyg. Online eller på plats.',
+    tag: 'Föreläsning',
+    title: 'AI i arbetslivet',
+    desc: '45 min – halvdag. Engagerande keynote anpassad efter er bransch. Online eller på plats.',
     price: 'Offert på begäran',
-    img: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80',
+    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
     path: '/seminarier',
     featured: false,
   },
   {
-    tag: 'Rådgivning',
+    tag: 'One on One',
     title: 'Personlig genomgång',
-    desc: '60 min djupdykning i er styrelses specifika frågor. Ni lämnar med konkreta checklistor och mallar.',
+    desc: '90 min djupdykning i just dina arbetsuppgifter. Du lämnar med konkreta verktyg och promptmallar.',
     price: 'Från 2 500 kr',
     img: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80',
     path: '/seminarier',
@@ -411,6 +378,7 @@ const CourseCard = ({ course, index }) => {
         style={{ borderColor: C.border, background: C.white }}
         onClick={() => navigate(course.path)}
       >
+        {/* Image */}
         <div className={`relative overflow-hidden ${course.featured ? 'h-72 sm:h-80' : 'h-52'}`}>
           <img src={course.img} alt={course.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -418,6 +386,7 @@ const CourseCard = ({ course, index }) => {
             style={{ background: course.featured
               ? `linear-gradient(to top, ${C.dark}cc 0%, transparent 60%)`
               : `linear-gradient(to top, ${C.dark}88 0%, transparent 60%)` }} />
+          {/* Tag */}
           <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-bold text-white"
             style={{ background: C.orange }}>
             {course.tag}
@@ -429,6 +398,7 @@ const CourseCard = ({ course, index }) => {
             </div>
           )}
         </div>
+        {/* Body */}
         <div className="p-5 sm:p-6 flex items-start justify-between gap-4">
           <div>
             {!course.featured && (
@@ -463,7 +433,7 @@ const Utbildningar = () => {
               </p>
               <h2 className="text-4xl sm:text-5xl font-black leading-tight tracking-tight"
                 style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>
-                Välj ert format.
+                Välj ditt format.
               </h2>
             </div>
           </Reveal>
@@ -484,9 +454,9 @@ const Utbildningar = () => {
   );
 };
 
-// ══════════════════════════════════════════════════════════
-// METODIK
-// ══════════════════════════════════════════════════════════
+<ModulesSection2 />   
+
+// ── METODIK ───────────────────────────────────────────────
 const Metodik = () => (
   <section className="py-20 sm:py-28 border-y" style={{ background: C.bgAlt, borderColor: C.border }}>
     <div className="max-w-7xl mx-auto px-5 sm:px-8">
@@ -496,19 +466,19 @@ const Metodik = () => (
           <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: C.orange }}>Vår metodik</p>
           <h2 className="text-4xl sm:text-5xl font-black leading-tight tracking-tight mb-6"
             style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>
-            Från osäker till<br />trygg ledamot — på<br />
-            <span style={{ color: C.orange }}>några veckor.</span>
+            Från nollpunkt<br />till AI-van – på<br />
+            <span style={{ color: C.orange }}>riktigt.</span>
           </h2>
           <p className="text-lg leading-relaxed mb-10" style={{ color: C.mid }}>
-            Vi bygger utbildning som utgår från er faktiska situation. Inga onödiga
-            juridiska floskler — bara det ni behöver för att fatta rätt beslut.
+            Vi bygger inte kurs för kursens skull. Varje övning är kopplad till
+            din faktiska arbetsdag. Inga buzzwords, ingen onödig teori.
           </p>
           <div className="space-y-3">
             {[
-              'Förstå — vad er styrelses faktiska ansvar innebär',
-              'Lär — moduler om juridik, ekonomi och mötesteknik',
-              'Tillämpa — ni testar direkt på era egna beslut',
-              'Förankra — delas i styrelsen för gemensam grund',
+              'Kartlägg – vi börjar med vad du faktiskt gör',
+              'Lär – korta moduler med direkt koppling till jobbet',
+              'Testa – du applicerar direkt, mäter tid du sparar',
+              'Skala – bygg rutin, dela med kollegor',
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-4 py-4 border-b"
                 style={{ borderColor: C.border }}>
@@ -523,16 +493,18 @@ const Metodik = () => (
 
         <Reveal delay={0.12}>
           <div className="relative">
+            {/* Big orange square */}
             <div className="absolute -top-6 -right-6 w-48 h-48 rounded-3xl -z-10"
               style={{ background: C.orangeL }} />
             <div className="rounded-3xl overflow-hidden aspect-square shadow-2xl">
               <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=85"
                 alt="Metodik" className="w-full h-full object-cover" />
             </div>
+            {/* Floating stat */}
             <div className="absolute -bottom-5 -left-5 rounded-2xl px-6 py-4 shadow-xl"
               style={{ background: C.white, border: `1px solid ${C.border}` }}>
-              <p className="text-3xl font-black" style={{ color: C.orange }}>Från dag ett</p>
-              <p className="text-xs font-bold mt-0.5" style={{ color: C.muted }}>Konkreta verktyg direkt</p>
+              <p className="text-3xl font-black" style={{ color: C.orange }}>Dag ett</p>
+              <p className="text-xs font-bold mt-0.5" style={{ color: C.muted }}>Konkreta resultat direkt</p>
             </div>
           </div>
         </Reveal>
@@ -541,24 +513,22 @@ const Metodik = () => (
   </section>
 );
 
-// ══════════════════════════════════════════════════════════
-// TESTIMONIALS — BRF-anpassade (fix #9)
-// ══════════════════════════════════════════════════════════
+// ── TESTIMONIALS ──────────────────────────────────────────
 const TESTIMONIALS = [
   {
-    name: 'Maja Lindström', role: 'Ordförande, BRF Lönnen',
-    text: 'Äntligen en utbildning som faktiskt förklarar vad vi ansvarar för — utan att göra oss livrädda. Hela styrelsen har gått den.',
-    result: 'Hela styrelsen utbildad',
+    name: 'Maja Lindström', role: 'Marknadschef, Konsult AB',
+    text: 'Jag sparar minst 2 timmar om dagen. Det är inte en överdrift – det är faktiska mätningar från veckan efter kursen.',
+    result: '2h/dag sparad tid',
   },
   {
-    name: 'Erik Johansson', role: 'Kassör, BRF Ekbacken',
-    text: 'Vi undvek en stor ekonomisk miss på vårt första årsbokslut efter kursen. Den betalade sig själv direkt.',
-    result: 'Rätt på första bokslutet',
+    name: 'Erik Johansson', role: 'VD, Byrå & Co',
+    text: 'Bästa utbildningsinvesteringen vi gjort. Hela teamet jobbar annorlunda nu. AI har blivit en del av vår process.',
+    result: '40% snabbare offertarbete',
   },
   {
-    name: 'Sara Nilsson', role: 'Sekreterare, BRF Kastanjen',
-    text: 'Jag var nervös över att bli invald utan erfarenhet. Efter Styrelsekörkortet vet jag vad som förväntas av mig — och vad som inte gör det.',
-    result: 'Trygg i rollen från dag ett',
+    name: 'Sara Nilsson', role: 'Projektledare, Studio XYZ',
+    text: 'Äntligen en kurs som inte bara pratar om ChatGPT utan faktiskt visar hur man integrerar det i sitt arbetsflöde.',
+    result: 'Halverat projektdokumentationen',
   },
 ];
 
@@ -583,8 +553,9 @@ const Testimonials = () => {
             </p>
             <h2 className="text-4xl sm:text-5xl font-black leading-tight tracking-tight mb-10"
               style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>
-              Röster från<br />styrelserummet.
+              De som gjort<br />det – berättar.
             </h2>
+            {/* Dots */}
             <div className="flex gap-2">
               {TESTIMONIALS.map((_, i) => (
                 <button key={i} onClick={() => setActive(i)}
@@ -602,6 +573,7 @@ const Testimonials = () => {
                 exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.35 }}
                 className="rounded-3xl p-8 sm:p-10"
                 style={{ background: C.bgAlt, border: `1px solid ${C.border}` }}>
+                {/* Result chip */}
                 <div className="inline-block px-4 py-2 rounded-full text-sm font-bold mb-6"
                   style={{ background: C.orangeL, color: C.orange }}>
                   ✓ {t.result}
@@ -629,34 +601,12 @@ const Testimonials = () => {
   );
 };
 
-// ══════════════════════════════════════════════════════════
-// FAQ — BRF-specifika frågor (fix #10)
-// ══════════════════════════════════════════════════════════
+// ── FAQ ───────────────────────────────────────────────────
 const FAQS = [
-  {
-    q: 'Passar utbildningen även små föreningar?',
-    a: 'Absolut. Kursen är lika relevant för en styrelse i en liten förening med 10 lägenheter som för en stor med 200. Ansvaret och ramverket är detsamma — bara skalan skiljer.',
-  },
-  {
-    q: 'Behöver hela styrelsen gå kursen?',
-    a: 'Vi rekommenderar att minst ordförande och kassör går den, men hela styrelsen får mest värde. Ni får en gemensam grund att stå på och undviker missförstånd om roller och ansvar.',
-  },
-  {
-    q: 'Kan fakturan skickas till föreningen?',
-    a: 'Ja. Vi fakturerar direkt till bostadsrättsföreningen med 30 dagars netto. Ni kan betala med organisationsnummer utan kreditkort.',
-  },
-  {
-    q: 'Hur länge har vi tillgång till materialet?',
-    a: 'Ni har tillgång i 24 månader från köpdatum. Det innebär att nya ledamöter som väljs in under mandatperioden också kan gå kursen utan extra kostnad.',
-  },
-  {
-    q: 'Är kursen uppdaterad med senaste lagändringarna?',
-    a: 'Ja. Vi uppdaterar innehållet löpande när bostadsrättslagen eller andra relevanta lagar ändras. Ni får alltid senaste versionen.',
-  },
-  {
-    q: 'Vad gäller om vi inte är nöjda?',
-    a: '30 dagars pengarna tillbaka-garanti. Är ni inte nöjda returnerar vi hela beloppet utan frågor.',
-  },
+  { q: 'Passar utbildningen även icke-tekniska personer?', a: 'Absolut. Vi utgår alltid från din faktiska arbetsdag och behöver du inte förstå hur AI fungerar tekniskt – bara hur du använder det.' },
+  { q: 'Hur lång tid tar träningsprogrammet?', a: 'De flesta genomför det på 3–6 veckor i sin egen takt. Varje modul är 20–40 minuter.' },
+  { q: 'Kan vi boka för hela avdelningen?', a: 'Ja. Vi erbjuder volymrabatt och kan skräddarsy innehållet för er organisations specifika behov.' },
+  { q: 'Hur fungerar betalning?', a: 'Vi fakturerar mot 30 dagars netto. Inga kreditkort krävs.' },
 ];
 
 const FAQ = () => {
@@ -705,9 +655,7 @@ const FAQ = () => {
   );
 };
 
-// ══════════════════════════════════════════════════════════
-// CTA BANNER
-// ══════════════════════════════════════════════════════════
+// ── CTA BANNER ────────────────────────────────────────────
 const CTABanner = () => {
   const navigate = useNavigate();
   return (
@@ -716,30 +664,31 @@ const CTABanner = () => {
         <Reveal>
           <div className="rounded-3xl px-8 sm:px-14 py-14 sm:py-20 relative overflow-hidden"
             style={{ background: C.orange }}>
+            {/* Texture */}
             <div className="absolute inset-0 pointer-events-none opacity-10"
               style={{ backgroundImage: 'radial-gradient(circle at 80% 50%, white 0%, transparent 60%)' }} />
             <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
               <div>
                 <p className="text-white/70 text-sm font-bold uppercase tracking-widest mb-3">
-                  Redo att ta kliv?
+                  Redo att börja?
                 </p>
                 <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight"
                   style={{ fontFamily: "'Nunito', sans-serif" }}>
-                  Trygga styrelsens<br />arbete idag.
+                  Framtidssäkra din<br />organisation idag.
                 </h2>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
                 <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-                  onClick={() => navigate('/purchase/styrelsekorkortet-grund')}
+                  onClick={() => navigate('/seminarier')}
                   className="px-8 py-4 rounded-2xl font-bold text-base"
                   style={{ background: C.white, color: C.orange }}>
-                  Kom igång →
+                  Boka möte →
                 </motion.button>
                 <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-                  onClick={() => navigate('/seminarier')}
+                  onClick={() => navigate('/modules')}
                   className="px-8 py-4 rounded-2xl font-bold text-base text-white"
                   style={{ background: 'rgba(255,255,255,0.18)', border: '2px solid rgba(255,255,255,0.3)' }}>
-                  Boka seminarium
+                  Se kurserna
                 </motion.button>
               </div>
             </div>
@@ -750,33 +699,33 @@ const CTABanner = () => {
   );
 };
 
-// ══════════════════════════════════════════════════════════
-// FOOTER — konsekvent brand (fix #6)
-// ══════════════════════════════════════════════════════════
+// ── FOOTER ────────────────────────────────────────────────
 const Footer = () => {
   const navigate = useNavigate();
   return (
     <footer className="py-12 mt-4 border-t" style={{ background: C.bgAlt, borderColor: C.border }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 mb-10">
+          {/* Brand */}
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <img src="/logo.png" alt="Styrelsekörkortet" className="w-8 h-8 object-contain" />
-              <span className="font-bold" style={{ color: C.dark }}>
-                <span style={{ color: C.orange }}>Styrelse</span>körkortet
-                <span style={{ color: C.orange }}>®</span>
-              </span>
-            </div>
+              <img src="/logo.png" alt="Näringsklivet" className="w-8 h-8 object-contain" />
+    <span className="font-bold" style={{ color: C.dark }}>
+      Närings<span style={{ color: C.orange }}>klivet</span>
+      <span style={{ color: C.orange }}>®</span>
+    </span>
+  </div>
             <p className="text-sm leading-relaxed" style={{ color: C.muted }}>
-              Praktisk styrelseutbildning för BRF.<br />Malmö / Lund – online & på plats.
+              AI-utbildning som faktiskt gör skillnad.<br />Malmö / Lund – online & på plats.
             </p>
           </div>
+          {/* Links */}
           <div>
             <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: C.muted }}>
               Utbildningar
             </p>
             <div className="space-y-2">
-              {['Träningsprogram','Workshop','Seminarium','Rådgivning'].map(l => (
+              {['Träningsprogram','Workshop','Föreläsning','One on One'].map(l => (
                 <button key={l} onClick={() => navigate('/modules')}
                   className="block text-sm font-medium hover:opacity-80 transition-opacity"
                   style={{ color: C.dark }}>{l}</button>
@@ -798,7 +747,7 @@ const Footer = () => {
         </div>
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t"
           style={{ borderColor: C.border }}>
-          <p className="text-xs" style={{ color: C.muted }}>© 2026 Styrelsekörkortet®. Alla rättigheter förbehållna.</p>
+          <p className="text-xs" style={{ color: C.muted }}>© 2026 Näringsklivet. Alla rättigheter förbehållna.</p>
           <div className="flex gap-5">
             {['Integritetspolicy','Villkor'].map(l => (
               <button key={l} className="text-xs hover:opacity-80 transition-opacity"
@@ -811,18 +760,14 @@ const Footer = () => {
   );
 };
 
-// ══════════════════════════════════════════════════════════
-// MAIN PAGE — ModulesSection2 renderas nu (fix #1)
-// ══════════════════════════════════════════════════════════
-export default function StyrelsekorkortetLanding() {
+// ── MAIN PAGE ─────────────────────────────────────────────
+export default function NaringsklivetLanding() {
   return (
     <div style={{ fontFamily: "'Nunito', sans-serif", background: C.bg }}>
       <Nav />
       <Hero />
-      <FortroendeBand />
-      <VarStory />
+      <LogoBand />
       <Utbildningar />
-      <ModulesSection2 />
       <Metodik />
       <Testimonials />
       <FAQ />

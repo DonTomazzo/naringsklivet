@@ -35,7 +35,7 @@ const LoginPage = () => {
     if (error) {
       // Supabase returnerar inte explicit "user not found" av säkerhetsskäl
       // men vi visar ett generiskt felmeddelande
-      setError('Något gick fel. Kontrollera att du använder rätt e-postadress.');
+      setError('Något gick fel eller så har du inte köpt kursen. Kontrollera att du använder rätt e-postadress eller gå till kursköp.');
       setState('error');
     } else {
       setState('sent');

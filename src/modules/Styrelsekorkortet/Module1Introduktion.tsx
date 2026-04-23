@@ -880,6 +880,7 @@ const Module1Introduktion: React.FC = () => {
     <BrfMissuppfattningsQuiz
       onComplete={handleComplete}
       isDone={completedLessons.has('brf-missuppfattningar')}
+      onNext={() => setCurrentIndex(i => i + 1)}
     />
   ),
 },
