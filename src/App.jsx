@@ -65,14 +65,14 @@ import FloatingCta from './components/landing/FloatingCta';
 import { TeamProvider, useTeam } from './contexts/MockTeamContext';
 import TeamCodeRegister from './components/auth/TeamCodeRegister';
 
-import TeamMemberDashboard from './components/auth/TeamMemberDashboard';
-import TeamLeaderDashboard from './components/auth/TeamLeaderDashboard';
 import MinaSidor from './pages/MinaSidor';
+import TeamLeaderDashboard from './pages/TeamLeaderDashboard';
 
 // Magic link 
 
 import LoginPage from './pages/LoginPage';
 import AuthCallback from './pages/AuthCallback';
+
 
 import {
   CheckCircle, Star, Users, Clock, Award, ChevronDown,
@@ -321,57 +321,95 @@ const PremiumCoursePage = () => {
 const AppRoutes = () => {
   return (
     <Routes>
- 
-      {/* ── PUBLIKA ─────────────────────────────────────── */}
-      <Route path="/old"                       element={<PremiumCoursePage />} />
-      <Route path="/"                       element={<NetflixPage2 />} />
-       <Route path="/netflix"                       element={<NetflixPage />} />
-      <Route path="/styrelsekörkortet"      element={<StyrelsekorkortetLanding />} />
-      <Route path="/seminarier"             element={<SeminarierPage />} />
-      <Route path="/om-oss"                 element={<OmOssPage />} />
-      <Route path="/villkor"                element={<VillkorPage />} />
-      <Route path="/integritetspolicy"      element={<IntegritetspolicyPage />} />
-      <Route path="/purchase/:courseId"     element={<PurchasePage />} />
-      <Route path="/kurs/:slug"             element={<CoursePage />} />
-      <Route path="/modules"                element={<ModulesPage />} />
-      <Route path="/modules/:slug"          element={<ModuleRouter />} />
-      <Route path="/styrelsesupport"        element={<StyrelsesupportPage />} />
-      <Route path="/testa-dig"              element={<QuizSalesPage />} />
-      <Route path="/survey/:slug"           element={<PublicSurvey />} />
- 
-      {/* ── AUTH ────────────────────────────────────────── */}
-      <Route path="/login"                  element={<LoginPage />} />
-      <Route path="/auth/callback"          element={<AuthCallback />} />
- 
-      {/* ── SKYDDADE — rollstyrda ────────────────────────── */}
-      {/* TeamMember: bara kursåtkomst */}
-      <Route path="/mina-sidor" element={
-        <ProtectedRoute><MinaSidor /></ProtectedRoute>
+      {/* Publika routes */}
+      <Route path="/" element={<PremiumCoursePage />} />
+      <Route path="/anmalan" element={<LandingPage />} />
+      <Route path="/course-form" element={<CourseFormPage />} />
+      <Route path="/survey/:slug" element={<PublicSurvey />} />
+      <Route path="/purchase/:courseId" element={<PurchasePage />} />
+      <Route path="/testa-dig" element={<QuizSalesPage />} />
+      <Route path="/mina-sidor" element={<MinaSidor />} />
+      <Route path="/slutprov" element={<FinalQuiz />} />
+      <Route path="/villkor" element={<VillkorPage />} />
+      <Route path="/integritetspolicy" element={<IntegritetspolicyPage />} />
+      <Route path="/om-oss" element={<OmOssPage />} />
+      <Route path="/seminarier" element={<SeminarierPage />} />
+      <Route path="/kurs/:slug" element={<CoursePage />} />
+      <Route path="/styrelsesupport" element={<StyrelsesupportPage />} />
+      <Route path="/styrelsekörkortet" element={<StyrelsekorkortetLanding />} />
+      <Route path="/module/:slug" element={<ModuleRouter />} />
+
+      {/* Auth routes */}
+      <Route path="/register" element={<TeamCodeRegister />} />
+      
+
+     <Route path="/mina-sidor" element={
+  <ProtectedRoute><MinaSidor /></ProtectedRoute>
+} />
+
+      {/* Protected – Team Leader Dashboard */}
+      <Route path="/team-leader-dashboard" element={
+        <ProtectedRoute requireTeamLeader={true}><TeamLeaderDashboard /></ProtectedRoute>
       } />
- 
-      {/* TeamLeader: bjud in team, se resultat, faktura */}
-      <Route path="/team" element={
-        <ProtectedRoute requireRole="teamleader"><TeamLeaderDashboard /></ProtectedRoute>
+
+      {/* Protected – Team View */}
+      <Route path="/teams/:teamSlug" element={
+        <ProtectedRoute><TeamView /></ProtectedRoute>
       } />
- 
-      {/* Admin: jag — CRUD användare, beställningar, magic links */}
+
+      {/* Protected – Admin */}
       <Route path="/admin" element={
-        <ProtectedRoute requireRole="admin"><AdminDashboard /></ProtectedRoute>
+        <ProtectedRoute requireAdmin={true}><AdminDashboard /></ProtectedRoute>
       } />
- 
-      {/* ── 404 ─────────────────────────────────────────── */}
+
+      {/* Protected – Documents */}
+      <Route path="/documents" element={
+        <ProtectedRoute><DocumentLibrary /></ProtectedRoute>
+      } />
+
+      {/* Quiz routes */}
+      <Route path="/quizzes" element={<QuizzesPage />} />
+      <Route path="/quizzes/:slug" element={<DynamicQuizPage />} />
+      <Route path="/quizzes/:slug/leaderboard" element={<QuizLeaderboardPage />} />
+
+      {/* Events */}
+      <Route path="/events" element={<Events />} />
+      <Route path="/events/:slug" element={<EventDetail />} />
+
+      {/* Modules */}
+      <Route path="/modules" element={<ModulesPage />} />
+      <Route path="/module/:slug" element={<ModulePage />} />
+
+      {/* Blog */}
+      <Route path="/blog" element={<BlogPage />} />
+      <Route path="/blog/:slug" element={<BlogPostPage />} />
+
+      {/* Ovriga sidor */}
+      <Route path="/netflix" element={<NetflixPage />} />
+      <Route path="/netflix2" element={<NetflixPage2 />} />
+      <Route path="/demo4" element={<DemoPage4 />} />
+      <Route path="/styrelsekorkortet" element={<Styrelsekorkortet />} />
+      <Route path="/aktiekorkortet" element={<Aktiekorkortet />} />
+      <Route path="/adaptive-homework" element={<AdaptiveHomeworkApp />} />
+
+ {/* Magic Link authes */}
+
+ <Route path="/login" element={<LoginPage />} />
+<Route path="/auth/callback" element={<AuthCallback />} />
+
+      {/* 404 */}
       <Route path="*" element={
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
           <div className="text-center">
             <h1 className="text-6xl font-bold text-gray-900 mb-4">404</h1>
             <p className="text-xl text-gray-600 mb-8">Sidan hittades inte</p>
-            <a href="/" className="bg-[#FF5421] text-white px-6 py-3 rounded-lg hover:bg-[#E04A1D] transition-colors inline-block">
+            <a href="/"
+              className="bg-[#FF5421] text-white px-6 py-3 rounded-lg hover:bg-[#E04A1D] transition-colors inline-block">
               Tillbaka till startsidan
             </a>
           </div>
         </div>
       } />
- 
     </Routes>
   );
 };
