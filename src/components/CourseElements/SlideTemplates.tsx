@@ -29,6 +29,13 @@ import { CheckCircle } from 'lucide-react';
 const O  = '#FF5421';
 const OD = '#E04619';
 
+// Re-export av SlideJ som ligger i egen fil
+export { SlideJ } from './SlideJ';
+export type { SlideJFraga, SlideJAlternativ, SlideJProps } from './SlideJ';
+
+export { SlideK } from './SlideK';
+export type { SlideKFraga, SlideKAlternativ, SlideKFeedback, SlideKFeedbackSektion, SlideKProps } from './SlideK';
+
 // ══════════════════════════════════════════════════════════
 // HJÄLPKOMPONENTER
 // ══════════════════════════════════════════════════════════

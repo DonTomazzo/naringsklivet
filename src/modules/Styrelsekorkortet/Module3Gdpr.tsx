@@ -1,454 +1,456 @@
 // src/modules/Styrelsekorkortet/Module3Gdpr.tsx
-// Uppgraderad med ModuleIntroSlide, SplitSlide och InlineQuiz per block
+// Förenklad GDPR-modul — bygger på samma designspråk som
+// Module4Diskriminering (SplitSlide, interaktiva kort, SlideK-quiz).
+//
+// STRUKTUR:
+//  1. Intro (ModuleIntroSlide)
+//  2. Vad är GDPR? — SplitSlide med de sex principerna
+//  3. Medlemmarnas rättigheter — interaktiva kort
+//  4. Rättsliga grunder & kamera — SplitSlide
+//  5. Quiz 1 (SlideK, 12 frågor) — Grunderna
+//  6. Säkerhet, gallring & incidenter — SplitSlide
+//  7. Quiz 2 (SlideK, 12 frågor) — Praktiska situationer
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle, Award, Shield, Database,
-         Users, Scale, Camera, Lock,
-         FileText, Target, Zap, AlertTriangle, HelpCircle } from 'lucide-react';
+import { Shield, Users, Database, Lock, X, CheckCircle } from 'lucide-react';
 
-import CourseHeader      from '../../components/CourseElements/CourseHeader';
-import GlobalSidebar     from '../../components/GlobalSidebar';
-import FloatingFAQ       from '../../components/CourseElements/FloatingFAQ';
-import AudioPlayer       from '../../components/AudioPlayer';
-import ModuleSlideLayout from '../../components/CourseElements/ModuleSlideLayout';
-import ModuleIntroSlide  from '../../components/CourseElements/ModuleIntroSlide';
-import SplitSlide, { StegLista, CheckLista, InfoRuta } from '../../components/CourseElements/SplitSlide';
-import InlineQuiz        from '../../components/CourseElements/InlineQuiz';
-import GdprPrinciplesSection from '../../components/CourseElements/GdprPrinciplesSection';
-import GdprMjukIntroSlide    from '../../components/CourseElements/GdprMjukIntroSlide';
-import Slide5Personuppgifter from '../../components/CourseElements/Slide5Personuppgifter';
-import GdprRolesSection      from '../../components/CourseElements/GdprRolesSection';
-import AudioCTA              from '../../components/CourseElements/AudioCTA';
-import { gdprQuiz }          from '../../data/quizzes/gdpr-quiz';
-import GdprQuizOverlay       from '../../components/CourseElements/GdprQuizOverlay';
+import CourseHeader         from '../../components/CourseElements/CourseHeader';
+import GlobalSidebar        from '../../components/GlobalSidebar';
+import FloatingFAQ          from '../../components/CourseElements/FloatingFAQ';
+import ModuleSlideLayout    from '../../components/CourseElements/ModuleSlideLayout';
+import ModuleIntroSlide     from '../../components/CourseElements/ModuleIntroSlide';
+import SplitSlide, { StegLista, InfoRuta } from '../../components/CourseElements/SplitSlide';
+import { SlideK }           from '../../components/CourseElements/SlideTemplates';
 
-const O  = '#FF5421';
-const OD = '#E04619';
+import { gdprFragorBlock1 } from '../../data/gdprFragorBlock1';
+import { gdprFragorBlock2 } from '../../data/gdprFragorBlock2';
 
-// ─── FAQ ─────────────────────────────────────────────────
+const O    = '#FF5421';
+const OD   = '#E04619';
+const OL   = '#FFF0EB';
+const DARK = '#0f1623';
+
+const IMGS = {
+  juridik:    'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1920&q=80',
+  data:       'https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=1920&q=80',
+  kontor:     'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80',
+  hemsida:    'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1920&q=80',
+  sakerhet:   'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80',
+  medlemmar:  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&q=80',
+};
+
+// ─────────────────────────────────────────────────────────
+// FAQ
+// ─────────────────────────────────────────────────────────
 const MODULE_FAQ = [
-  { question: 'Måste vår BRF ha ett dataskyddsombud?', answer: 'Nej, de flesta BRF:er är för små för att vara skyldiga att utse ett dataskyddsombud. Men ni måste ändå följa GDPR.' },
-  { question: 'Hur länge får vi spara protokoll?', answer: 'Styrelseprotokoll bör sparas i minst 10 år. Personuppgifter i protokollet ska minimeras – skriv inte mer om enskilda personer än nödvändigt.' },
-  { question: 'Vad händer om vi bryter mot GDPR?', answer: 'IMY kan utfärda anmärkningar, förelägganden och sanktionsavgifter. För BRF:er rör det sig oftast om lägre belopp, men det kan bli kostsamt.' },
-  { question: 'Behöver vi samtycke för kontaktuppgifter?', answer: 'Nej – kontaktuppgifter för löpande förvaltning av medlemskapet behandlas med stöd av avtal eller rättslig förpliktelse.' },
-  { question: 'Vad är ett biträdesavtal?', answer: 'Ett skriftligt avtal med externa leverantörer som behandlar personuppgifter på er uppdrag. Kravet finns i GDPR artikel 28.' },
+  {
+    question: 'Behöver vår BRF ett dataskyddsombud?',
+    answer:
+      'Nej, de flesta BRF:er är för små för att vara skyldiga att utse ett formellt dataskyddsombud. Men någon i styrelsen bör ha huvudansvar för GDPR-arbetet.',
+  },
+  {
+    question: 'Hur länge får vi spara protokoll?',
+    answer:
+      'Stämmoprotokoll bevaras permanent. Styrelseprotokoll ofta 10+ år. Minimera personuppgifter i protokollen — skriv fakta, inte värderingar.',
+  },
+  {
+    question: 'Vad händer om vi bryter mot GDPR?',
+    answer:
+      'IMY kan utfärda anmärkningar, förelägganden och sanktionsavgifter. För BRF:er ofta lägre belopp, men förtroendeskadan och skadeståndskrav från drabbade medlemmar kan bli större problem än böterna.',
+  },
+  {
+    question: 'Behöver vi samtycke för kontaktuppgifter?',
+    answer:
+      'Nej — kontaktuppgifter för löpande förvaltning av medlemskapet behandlas med stöd av avtal eller rättslig förpliktelse. Samtycke används främst för frivilliga ändamål som nyhetsbrev.',
+  },
+  {
+    question: 'Vad är ett personuppgiftsbiträdesavtal?',
+    answer:
+      'Ett skriftligt avtal (PUB-avtal) med externa leverantörer som hanterar era personuppgifter — förvaltare, IT-leverantörer, revisorer. Kravet finns i GDPR artikel 28.',
+  },
 ];
 
-// ─── Delade stilkomponenter ───────────────────────────────
-const SlideShell = ({ children, dark = false }: { children: React.ReactNode; dark?: boolean }) => (
-  <div className={`h-full w-full overflow-y-auto ${dark ? 'bg-[#0f1623]' : 'bg-[#F8F7F4]'}`}
-    style={{ paddingTop: 'var(--header-height, 60px)' }}>
-    <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8 pb-28">{children}</div>
-  </div>
-);
-
-const Badge = ({ text, dark = false }: { text: string; dark?: boolean }) => (
-  <div className={`inline-block px-3 py-1.5 rounded-full text-xs font-bold mb-4 tracking-wide uppercase ${
-    dark ? 'bg-[#FF5421]/20 text-[#FF5421] border border-[#FF5421]/30' : 'bg-[#FF5421]/10 text-[#FF5421]'
-  }`}>{text}</div>
-);
-
-const H = ({ icon: Icon, title, dark = false }: { icon: React.ElementType; title: string; dark?: boolean }) => (
-  <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 flex items-center gap-3 leading-tight ${dark ? 'text-white' : 'text-slate-800'}`}
-    style={{ fontFamily: "'Nunito', sans-serif" }}>
-    <Icon className="w-8 h-8 text-[#FF5421] flex-shrink-0" />{title}
-  </h2>
-);
-
 // ═══════════════════════════════════════════════════════════
-// SLIDE 1 – INTRO
+// SLIDE 1 — INTRO
 // ═══════════════════════════════════════════════════════════
-const IntroSlide = ({ onStart, onQuizOpen }: { onStart: () => void; onQuizOpen: () => void }) => (
+const IntroSlide = ({ onStart }: { onStart: () => void }) => (
   <ModuleIntroSlide
     kategori="JURIDIK"
     titel="GDPR för <span style='color:#FF5421'>BRF-styrelsen</span>"
-    ingress="Som styrelseledamot hanterar du personuppgifter varje dag – medlemsregister, fakturor, protokoll, kamerainspelningar. Lär dig vad GDPR kräver och hur ni skyddar medlemmarnas integritet."
-    bild="https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=1200&q=80"
-    längd="3 timmar"
-    avsnitt={13}
+    ingress="Ni hanterar personuppgifter varje dag — medlemsregister, fakturor, protokoll, kameror. Lär dig vad lagen kräver och hur ni skyddar medlemmarnas integritet utan att krångla till vardagen."
+    bild={IMGS.data}
+    längd="45 min"
+    avsnitt={7}
     onStart={onStart}
+    videoUrl="/video/intro-gdpr.mp4"
+    videoTitel="Introduktion till GDPR i BRF"
     vadLärDuDig={[
-      'GDPR:s sju grundprinciper och vad de innebär i praktiken',
-      'Vilka personuppgifter er BRF hanterar och var de finns',
-      'De fyra rättsliga grunderna – och vilken som gäller när',
+      'De sex grundprinciperna i GDPR',
+      'Skillnaden mellan personuppgiftsansvarig och biträde',
+      'Fyra rättsliga grunder — och vilken som gäller när',
       'Regler för kameraövervakning i BRF',
-      'Privacy by Design och dataskydd som standard',
-      'Vad som händer om ni bryter mot GDPR',
+      'Medlemmarnas sex rättigheter',
+      'Så hanterar ni incidenter inom 72 timmar',
     ]}
   />
 );
 
 // ═══════════════════════════════════════════════════════════
-// SLIDE 2 – VAD ÄR GDPR? (befintlig komponent)
+// SLIDE 2 — VAD ÄR GDPR?
 // ═══════════════════════════════════════════════════════════
 const VadArGdprSlide = () => (
-  <div className="h-full relative overflow-hidden" style={{ paddingTop: 'var(--header-height, 60px)' }}>
-    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1920&q=80"
-      alt="" className="absolute inset-0 w-full h-full object-cover" />
-    <div className="absolute inset-0 bg-black/55" />
-    <div className="relative z-10 h-full overflow-y-auto">
-      <div className="max-w-4xl mx-auto px-4 sm:px-8 py-8 pb-28">
-        <Badge text="Block 1 · Grunderna" dark />
-        <p className="font-bold text-white text-xl sm:text-2xl mb-2">GDPR:s sju principer</p>
-        <p className="text-white/60 text-sm mb-6">Klicka på varje cirkel för att läsa mer</p>
-        <p className="text-white/80 text-base leading-relaxed mb-8 max-w-2xl">
-          GDPR – <em>General Data Protection Regulation</em> – är EU:s dataskyddsförordning
-          sedan 25 maj 2018. Den vilar på sju grundprinciper.
-        </p>
-        <GdprPrinciplesSection />
-        <div className="mt-8 p-4 rounded-xl border-l-4 border-orange-400 bg-black/40 backdrop-blur-sm max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-widest mb-1 text-orange-400">IMY – Integritetsskyddsmyndigheten</p>
-          <p className="text-sm text-white/80 leading-relaxed">
-            IMY är den svenska tillsynsmyndigheten. De kan utfärda böter på upp till 20 miljoner euro eller 4% av omsättningen.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-// ═══════════════════════════════════════════════════════════
-// SLIDE 3 – VILKA UPPGIFTER (SplitSlide)
-// ═══════════════════════════════════════════════════════════
-const VilkaUppgifterSlide = () => (
   <SplitSlide
-    badge="Block 1 · Personuppgifter"
-    title="Vad är en <span style='color:#FF5421'>personuppgift?</span>"
-    ingress="All information som direkt eller indirekt kan kopplas till en levande fysisk person. Ni hanterar troligtvis fler uppgifter än ni tror."
-    bild="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200&q=80"
+    badge="Avsnitt 01 · Grunderna"
+    title="GDPR — sex <span style='color:#FF5421'>grundprinciper</span>"
+    ingress="GDPR trädde i kraft 25 maj 2018 och gäller alla som hanterar personuppgifter om personer i EU — inklusive bostadsrättsföreningar. All behandling måste följa sex grundprinciper."
+    bild={IMGS.juridik}
     bildPosition="right"
-    badge2="Tumregel"
-    badge2Sub="Kartlägg en gång per år"
+    badge2="Dataskyddsförordningen"
+    badge2Sub="Gäller alla BRF:er oavsett storlek"
   >
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-      <div className="rounded-2xl p-4 border-2 border-gray-200 bg-white">
-        <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: O }}>Vanliga uppgifter</p>
-        <CheckLista punkter={[
-          'Namn, adress, e-post, telefon',
-          'Lägenhetsnummer',
-          'Bankkontonummer',
-          'Köpeavtal och överlåtelsehandlingar',
-          'Protokoll där namn förekommer',
-        ]} />
-      </div>
-      <div className="rounded-2xl p-4 border-2 border-red-200 bg-red-50">
-        <p className="text-xs font-bold uppercase tracking-widest mb-3 text-red-600">Känsliga uppgifter</p>
-        <CheckLista punkter={[
-          'Hälsoinformation',
-          'Etniskt ursprung',
-          'Religiös övertygelse',
-          'Politisk åsikt',
-          'Biometriska uppgifter',
-        ]} />
-        <p className="text-xs text-red-600 mt-3 font-medium">⚠️ Kräver explicit samtycke</p>
-      </div>
-    </div>
+    <StegLista steg={[
+      {
+        nr: '01',
+        titel: 'Laglighet & öppenhet',
+        desc: 'Uppgifter får bara behandlas om det finns en laglig grund. Behandlingen ska vara korrekt och transparent mot de registrerade.',
+      },
+      {
+        nr: '02',
+        titel: 'Ändamålsbegränsning',
+        desc: 'Uppgifter får bara samlas in för specifika, uttryckliga och legitima ändamål. Får inte användas till något annat senare.',
+      },
+      {
+        nr: '03',
+        titel: 'Uppgiftsminimering',
+        desc: 'Bara de uppgifter som faktiskt behövs för ändamålet får samlas in. Inte "för säkerhets skull".',
+      },
+      {
+        nr: '04',
+        titel: 'Riktighet',
+        desc: 'Personuppgifter ska vara korrekta och hållas aktuella. Felaktiga uppgifter ska rättas utan dröjsmål.',
+      },
+      {
+        nr: '05',
+        titel: 'Lagringsminimering',
+        desc: 'Uppgifter får inte sparas längre än nödvändigt. Ha rutiner för när och hur gallring sker.',
+      },
+      {
+        nr: '06',
+        titel: 'Integritet & konfidentialitet',
+        desc: 'Skydda uppgifterna mot obehörig åtkomst, förlust eller förstöring. Tekniska och organisatoriska åtgärder krävs.',
+      },
+    ]} />
     <InfoRuta>
-      Gör en enkel kartläggning en gång per år — lista var ni lagrar personuppgifter, varför, hur länge och vem som har åtkomst.
+      IMY (Integritetsskyddsmyndigheten) utövar tillsyn i Sverige. De kan utfärda sanktionsavgifter — men förtroendeskadan efter en incident blir ofta större än bötesbeloppet.
     </InfoRuta>
   </SplitSlide>
 );
 
 // ═══════════════════════════════════════════════════════════
-// SLIDE 4 – QUIZ 1
+// SLIDE 3 — MEDLEMMARNAS RÄTTIGHETER (interaktiv)
 // ═══════════════════════════════════════════════════════════
-const Quiz1Slide = ({ onComplete, isDone }: { onComplete: (id: string) => void; isDone: boolean }) => (
-  <SlideShell dark>
-    <Badge text="Kunskapstest · Block 1" dark />
-    <H icon={HelpCircle} title="GDPR:s grunder" dark />
-    <p className="text-white/60 text-sm mb-6">Tre frågor om GDPR:s principer och personuppgifter.</p>
-    <InlineQuiz dark onComplete={() => onComplete('quiz-1')} questions={[
-      {
-        id: 'q1', question_text: 'Sedan vilket år gäller GDPR?',
-        question_type: 'single_choice', question_order: 1,
-        options: { choices: ['2015', '2016', '2018', '2020'] },
-        correct_answer: '2018',
-        explanation: 'GDPR trädde i kraft den 25 maj 2018 i hela EU.',
-        points: 100,
-      },
-      {
-        id: 'q2', question_text: 'Vilken myndighet är tillsynsmyndighet för GDPR i Sverige?',
-        question_type: 'single_choice', question_order: 2,
-        options: { choices: ['Datainspektionen', 'IMY – Integritetsskyddsmyndigheten', 'Bolagsverket', 'Konsumentverket'] },
-        correct_answer: 'IMY – Integritetsskyddsmyndigheten',
-        explanation: 'IMY (Integritetsskyddsmyndigheten) är den svenska tillsynsmyndigheten för GDPR.',
-        points: 100,
-      },
-      {
-        id: 'q3', question_text: 'Vilken typ av personuppgift kräver i princip alltid explicit samtycke?',
-        question_type: 'single_choice', question_order: 3,
-        options: { choices: ['Namn och adress', 'Lägenhetsnummer', 'Hälsoinformation och biometriska uppgifter', 'E-postadress'] },
-        correct_answer: 'Hälsoinformation och biometriska uppgifter',
-        explanation: 'Känsliga personuppgifter som hälsoinformation och biometriska uppgifter kräver extra skydd och i princip alltid explicit samtycke.',
-        points: 100,
-      },
-    ]} />
-  </SlideShell>
-);
 
-// ═══════════════════════════════════════════════════════════
-// SLIDE 5 – RÄTTSLIGA GRUNDER (SplitSlide)
-// ═══════════════════════════════════════════════════════════
-const RattsligaGrunderSlide = () => (
-  <SplitSlide
-    badge="Block 2 · Rättsliga grunder"
-    title="Fyra grunder att <span style='color:#FF5421'>känna till</span>"
-    ingress="Varje gång ni behandlar en personuppgift måste det finnas en laglig grund. Här är de fyra som är mest relevanta för en BRF."
-    bild="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1200&q=80"
-    bildPosition="left"
-    badge2="Viktigast"
-    badge2Sub="Rättslig förpliktelse"
-  >
-    <StegLista steg={[
-      {
-        nr: '⚖️',
-        titel: 'Rättslig förpliktelse',
-        desc: 'Ni är skyldiga att behandla uppgifterna enligt lag — bokföring, lägenhetsregister, årsredovisning. Inget samtycke behövs.',
-      },
-      {
-        nr: '📄',
-        titel: 'Avtal',
-        desc: 'Behandlingen behövs för att uppfylla ett avtal — nyttjanderättsavtal med hyresgäst, överlåtelseavtal vid köp.',
-      },
-      {
-        nr: '✋',
-        titel: 'Samtycke',
-        desc: 'Frivilligt och informerat samtycke. Kan återkallas när som helst. Använd bara när ingen annan grund passar.',
-      },
-      {
-        nr: '🎯',
-        titel: 'Berättigat intresse',
-        desc: 'Legitimt intresse som väger tyngre än skyddsintresset. Kräver dokumenterad intresseavvägning.',
-      },
-    ]} />
-    <InfoRuta>
-      Dokumentera alltid vilken rättslig grund ni använder för varje typ av behandling — ni kan behöva visa det för IMY.
-    </InfoRuta>
-  </SplitSlide>
-);
+interface Rättighet {
+  id: string;
+  label: string;
+  kort: string;
+  full: string;
+  rutin: string;
+}
 
-// ═══════════════════════════════════════════════════════════
-// SLIDE 6 – KAMERAÖVERVAKNING (SplitSlide)
-// ═══════════════════════════════════════════════════════════
-const KameraovervakningSlide = () => (
-  <SplitSlide
-    badge="Block 2 · Kameraövervakning"
-    title="Kamera i <span style='color:#FF5421'>BRF:en</span>"
-    ingress="Regleras av kamerabevakningslagen (2018:1200) och GDPR. Balansen mellan säkerhet och integritet."
-    bild="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80"
-    bildPosition="right"
-    badge2="Skyltning"
-    badge2Sub="Obligatorisk — alltid"
-  >
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-      <div className="rounded-2xl p-4 border-2 border-green-200 bg-green-50">
-        <p className="text-xs font-bold uppercase tracking-widest mb-3 text-green-700">✅ Tillåtet</p>
-        <CheckLista punkter={[
-          'Entré och parkering',
-          'Tvättstuga och förråd',
-          'Cykelrum och soprum',
-        ]} />
-      </div>
-      <div className="rounded-2xl p-4 border-2 border-amber-200 bg-amber-50">
-        <p className="text-xs font-bold uppercase tracking-widest mb-3 text-amber-700">⚠️ Kräver övervägning</p>
-        <CheckLista punkter={[
-          'Kamera mot grannens tomt',
-          'Inomhus i korridorer',
-          'Ansiktsigenkänning',
-        ]} />
-      </div>
-    </div>
-    <StegLista steg={[
-      { nr: '01', titel: 'Dokumentera syftet', desc: 'Varför sätter ni upp kameran? Spara dokumentationen.' },
-      { nr: '02', titel: 'Sätt upp skylt', desc: 'Obligatoriskt. Ska visa vem som ansvarar och kontaktuppgifter.' },
-      { nr: '03', titel: 'Bestäm lagringstid', desc: '72 timmar rekommenderas — max 30 dagar.' },
-      { nr: '04', titel: 'Biträdesavtal', desc: 'Med leverantören av kamerasystemet.' },
-    ]} />
-  </SplitSlide>
-);
+const RÄTTIGHETER: Rättighet[] = [
+  {
+    id: 'information',
+    label: 'Rätt till information',
+    kort: 'Veta att och varför ni behandlar uppgifter.',
+    full: 'Den registrerade har rätt att veta att ni behandlar deras uppgifter, varför, hur länge och vem som är ansvarig. Informationen ska ges i samband med inträde i föreningen.',
+    rutin: 'Skicka en kort integritetspolicy till nya medlemmar. Publicera den på hemsidan. En sida räcker.',
+  },
+  {
+    id: 'tillgang',
+    label: 'Rätt till tillgång',
+    kort: 'Registerutdrag på begäran.',
+    full: 'Varje person har rätt att begära ett registerutdrag — en kopia på alla uppgifter ni har om dem. Gratis och inom en månad.',
+    rutin: 'Ha en rutin för vem som hanterar begäran och var uppgifterna finns. Mall för utdraget. Då blir varje begäran bara en rutinärende.',
+  },
+  {
+    id: 'rattelse',
+    label: 'Rätt till rättelse',
+    kort: 'Felaktiga uppgifter ska rättas.',
+    full: 'Om uppgifter är felaktiga — fel adress, gammalt telefonnummer, felstavat namn — ska de rättas utan dröjsmål. Även inaktuell information räknas som felaktig.',
+    rutin: 'Uppdatera omedelbart vid anmälan. Bekräfta skriftligt att ändringen gjorts. Ge gärna medlemmar tillgång att uppdatera själva.',
+  },
+  {
+    id: 'radering',
+    label: 'Rätt till radering',
+    kort: 'Rätten att bli glömd.',
+    full: 'Den registrerade kan begära att uppgifter raderas. Men rätten är inte absolut — bokföringslagen kräver att ekonomiska handlingar sparas i 7 år. Stämmoprotokoll bevaras permanent.',
+    rutin: 'Bedöm vad som kan raderas omedelbart (kontaktuppgifter, fritextkommentarer) och vad som måste sparas enligt lag. Dokumentera bedömningen och informera medlemmen.',
+  },
+  {
+    id: 'begransning',
+    label: 'Rätt till begränsning',
+    kort: 'Stopp för behandling vid tvist.',
+    full: 'Medan en tvist om riktigheten eller lagligheten pågår kan behandlingen begränsas. Ni får lagra uppgifterna men inte behandla dem aktivt.',
+    rutin: 'Märk uppgifterna som "begränsade" i systemet. Behandla dem inte förrän tvisten är löst. Dokumentera begränsningen.',
+  },
+  {
+    id: 'invanda',
+    label: 'Rätt att invända',
+    kort: 'Invändning mot berättigat intresse.',
+    full: 'Om behandlingen grundas på "berättigat intresse" kan den registrerade invända. Ni måste då göra en ny avvägning mellan föreningens intresse och individens.',
+    rutin: 'Ta invändningen på allvar. Gör ny intresseavvägning. Dokumentera avvägningen. Om föreningens intresse inte är starkare — avsluta behandlingen.',
+  },
+];
 
-// ═══════════════════════════════════════════════════════════
-// SLIDE 7 – QUIZ 2
-// ═══════════════════════════════════════════════════════════
-const Quiz2Slide = ({ onComplete, isDone }: { onComplete: (id: string) => void; isDone: boolean }) => (
-  <SlideShell>
-    <Badge text="Kunskapstest · Block 2" />
-    <H icon={HelpCircle} title="Rättsliga grunder och kamera" />
-    <p className="text-slate-500 text-sm mb-6">Tre frågor om rättsliga grunder och kameraövervakning.</p>
-    <InlineQuiz onComplete={() => onComplete('quiz-2')} questions={[
-      {
-        id: 'q1', question_text: 'Vilken rättslig grund gäller för bokföring och lägenhetsregister?',
-        question_type: 'single_choice', question_order: 1,
-        options: { choices: ['Samtycke', 'Avtal', 'Rättslig förpliktelse', 'Berättigat intresse'] },
-        correct_answer: 'Rättslig förpliktelse',
-        explanation: 'Bokföring och lägenhetsregister är lagkrav — de behandlas med stöd av rättslig förpliktelse utan att samtycke behövs.',
-        points: 100,
-      },
-      {
-        id: 'q2', question_text: 'Vad är obligatoriskt vid kameraövervakning?',
-        question_type: 'single_choice', question_order: 2,
-        options: { choices: ['Tillstånd från IMY', 'Synlig skyltning', 'Godkännande från alla boende', 'Inspelning i minst 30 dagar'] },
-        correct_answer: 'Synlig skyltning',
-        explanation: 'Skyltning är obligatoriskt vid all kameraövervakning. Utan skylt är bevakningen otillåten oavsett syfte.',
-        points: 100,
-      },
-      {
-        id: 'q3', question_text: 'Hur länge rekommenderas att kamerainspelningar sparas?',
-        question_type: 'single_choice', question_order: 3,
-        options: { choices: ['24 timmar', '72 timmar', '7 dagar', '30 dagar'] },
-        correct_answer: '72 timmar',
-        explanation: '72 timmar är rekommendationen. Maxgränsen är 30 dagar och kräver starka skäl.',
-        points: 100,
-      },
-    ]} />
-  </SlideShell>
-);
-
-// ═══════════════════════════════════════════════════════════
-// SLIDE 8 – PRIVACY BY DESIGN (SplitSlide)
-// ═══════════════════════════════════════════════════════════
-const PrivacyByDesignSlide = () => (
-  <SplitSlide
-    badge="Block 3 · Privacy by Design"
-    title="Bygg in <span style='color:#FF5421'>skyddet</span> från start"
-    ingress="GDPR kräver att ni bygger in integritetsskydd från start — inte lägger till det i efterhand."
-    bild="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&q=80"
-    bildPosition="left"
-    badge2="Grundregeln"
-    badge2Sub="Minsta möjliga data"
-  >
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-      <div className="rounded-2xl p-4 border-2 overflow-hidden" style={{ borderColor: `${O}30`, background: '#FFF0EB' }}>
-        <div className="flex items-center gap-2 mb-3">
-          <Zap size={16} style={{ color: O }} />
-          <p className="font-bold text-sm" style={{ color: O }}>Privacy by Design</p>
-        </div>
-        <p className="text-xs text-gray-600 mb-3">Tänk på dataskydd INNAN ni startar ett projekt.</p>
-        <CheckLista punkter={[
-          'Krypterar data som standard',
-          'Minimera åtkomst',
-          'Automatisk radering',
-          'Konsekvensbedömning (DPIA)',
-        ]} />
-      </div>
-      <div className="rounded-2xl p-4 border-2 border-blue-200 bg-blue-50">
-        <div className="flex items-center gap-2 mb-3">
-          <Shield size={16} className="text-blue-600" />
-          <p className="font-bold text-sm text-blue-700">Privacy by Default</p>
-        </div>
-        <p className="text-xs text-gray-600 mb-3">Standardinställning = minst integritetskränkande.</p>
-        <CheckLista punkter={[
-          'Bara nödvändiga uppgifter',
-          'Dela inte utan skäl',
-          'Begränsa lagringstiden',
-          'Need-to-know-åtkomst',
-        ]} />
-      </div>
-    </div>
-    <StegLista steg={[
-      { nr: '01', titel: 'Behövs personuppgifter?', desc: 'Fråga innan ni startar ett nytt system eller projekt.' },
-      { nr: '02', titel: 'EU-datalagring', desc: 'Välj leverantör med tydligt biträdesavtal och europeisk lagring.' },
-      { nr: '03', titel: 'Automatisk radering', desc: 'Konfigurera borttagning av data efter fastställd tid.' },
-      { nr: '04', titel: 'Begränsad åtkomst', desc: 'Ge bara ordförande och sekreterare admin-åtkomst.' },
-    ]} />
-  </SplitSlide>
-);
-
-// ═══════════════════════════════════════════════════════════
-// SLIDE 9 – QUIZ 3
-// ═══════════════════════════════════════════════════════════
-const Quiz3Slide = ({ onComplete, isDone }: { onComplete: (id: string) => void; isDone: boolean }) => (
-  <SlideShell dark>
-    <Badge text="Kunskapstest · Block 3" dark />
-    <H icon={HelpCircle} title="Privacy by Design" dark />
-    <p className="text-white/60 text-sm mb-6">Tre frågor om inbyggt dataskydd.</p>
-    <InlineQuiz dark onComplete={() => onComplete('quiz-3')} questions={[
-      {
-        id: 'q1', question_text: 'Vad innebär Privacy by Design?',
-        question_type: 'single_choice', question_order: 1,
-        options: { choices: [
-          'Att designa hemsidan med GDPR-ikoner',
-          'Att bygga in dataskydd från start i system och processer',
-          'Att anlita en designer för dataskyddspolicyn',
-          'Att använda krypterade e-postmeddelanden',
-        ]},
-        correct_answer: 'Att bygga in dataskydd från start i system och processer',
-        explanation: 'Privacy by Design innebär att tänka på dataskydd INNAN ni startar ett projekt — inte lägga till det i efterhand.',
-        points: 100,
-      },
-      {
-        id: 'q2', question_text: 'Vad ska standardinställningen alltid vara enligt Privacy by Default?',
-        question_type: 'single_choice', question_order: 2,
-        options: { choices: [
-          'Det mest funktionsrika alternativet',
-          'Det minst integritetskränkande alternativet',
-          'Det billigaste alternativet',
-          'Det alternativ som ger mest data',
-        ]},
-        correct_answer: 'Det minst integritetskränkande alternativet',
-        explanation: 'Privacy by Default innebär att standardinställningen alltid ska vara det minst integritetskränkande alternativet.',
-        points: 100,
-      },
-      {
-        id: 'q3', question_text: 'Vad är en DPIA?',
-        question_type: 'single_choice', question_order: 3,
-        options: { choices: [
-          'En typ av biträdesavtal',
-          'En konsekvensbedömning för dataskydd vid hög risk',
-          'En EU-certifiering för dataskydd',
-          'En rapport till IMY',
-        ]},
-        correct_answer: 'En konsekvensbedömning för dataskydd vid hög risk',
-        explanation: 'DPIA (Data Protection Impact Assessment) är en konsekvensbedömning som görs när behandlingen innebär hög risk för de registrerades rättigheter.',
-        points: 100,
-      },
-    ]} />
-  </SlideShell>
-);
-
-// ═══════════════════════════════════════════════════════════
-// SLIDE 10 – SLUTPROV
-// ═══════════════════════════════════════════════════════════
-const SlutprovSlide = ({ isDone, onComplete }: { isDone: boolean; onComplete: (id: string) => void }) => {
-  const [quizOpen, setQuizOpen] = useState(false);
-  return (
-    <div className="h-full flex items-center relative overflow-hidden"
-      style={{ paddingTop: 'var(--header-height, 60px)' }}>
-      <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1920&q=80"
-        alt="" className="absolute inset-0 w-full h-full object-cover" />
-      <div className="absolute inset-0 bg-[#0f1623]/92" />
-      <div className="max-w-xl mx-auto px-4 sm:px-6 w-full relative z-10 py-8">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="text-center mb-8">
-            <div className="inline-block bg-[#FF5421] text-white px-4 py-2 rounded-full text-sm font-semibold mb-3">SLUTPROV</div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Testa dina GDPR-kunskaper</h2>
-            <p className="text-white/50 text-sm">50 frågor · 80% rätt krävs för godkänt</p>
+const RättighetModal = ({ rätt, onClose }: { rätt: Rättighet | null; onClose: () => void }) => (
+  <AnimatePresence>
+    {rätt && (
+      <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" onClick={onClose} />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 24 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.96, y: 24 }}
+          transition={{ duration: 0.28, ease: [0.32, 0.72, 0, 1] }}
+          className="fixed z-50"
+          style={{ top: 'var(--header-height, 60px)', left: 0, right: 0, bottom: 0 }}>
+          <div className="h-full flex items-center justify-center p-0 md:p-6">
+            <div className="bg-white w-full h-full md:h-auto md:max-w-xl md:rounded-3xl md:max-h-[85vh] shadow-2xl overflow-hidden flex flex-col">
+              <div className="px-6 sm:px-8 pt-7 pb-4 border-b" style={{ borderColor: '#f0ede8' }}>
+                <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>
+                  Medlemsrättighet
+                </p>
+                <h3 className="text-3xl font-black text-gray-900 leading-tight" style={{ fontFamily: "'Nunito', sans-serif" }}>
+                  {rätt.label}
+                </h3>
+                <button onClick={onClose}
+                  className="absolute top-5 right-5 w-9 h-9 rounded-full flex items-center justify-center transition-colors"
+                  style={{ background: '#f0ede8' }}>
+                  <X size={16} style={{ color: '#1a1a1a' }} />
+                </button>
+              </div>
+              <div className="px-6 sm:px-8 py-6 overflow-y-auto space-y-5 flex-1">
+                <p className="text-base text-gray-700 leading-relaxed">{rätt.full}</p>
+                <div className="rounded-2xl p-5 border-l-4" style={{ borderColor: O, background: OL }}>
+                  <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>
+                    Så gör ni
+                  </p>
+                  <p className="text-sm text-gray-700 leading-relaxed">{rätt.rutin}</p>
+                </div>
+                <div className="h-4 md:hidden" />
+              </div>
+            </div>
           </div>
-          <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-            onClick={() => setQuizOpen(true)}
-            className="w-full py-5 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-3 shadow-xl mb-4"
-            style={{ background: `linear-gradient(135deg, ${O}, ${OD})` }}>
-            <HelpCircle className="w-6 h-6" /> Starta provet
-          </motion.button>
-          <AnimatePresence>
-            {isDone && (
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                className="bg-white/10 border-2 border-green-400 rounded-xl p-6 text-center">
-                <Award className="w-12 h-12 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-xl font-bold text-white mb-1">Grattis!</h3>
-                <p className="text-white/60 text-sm">Du har klarat GDPR-modulen. Ditt diplom finns i <strong className="text-white">Mina sidor</strong>.</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </motion.div>
+      </>
+    )}
+  </AnimatePresence>
+);
+
+const RättigheterSlide = () => {
+  const [active, setActive] = useState<Rättighet | null>(null);
+  const [viewed, setViewed] = useState<Set<string>>(new Set());
+
+  const handleClick = (r: Rättighet) => {
+    setActive(r);
+    setViewed(prev => new Set([...prev, r.id]));
+  };
+
+  return (
+    <div className="h-full relative overflow-hidden">
+      <img src={IMGS.medlemmar} alt="" className="absolute inset-0 w-full h-full object-cover" />
+      <div className="absolute inset-0" style={{ background: 'rgba(15,22,35,0.88)' }} />
+
+      <div className="relative z-10 h-full overflow-y-auto">
+        <div className="max-w-4xl mx-auto px-5 sm:px-8 py-10 pb-28">
+
+          <div className="inline-block px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4"
+            style={{ background: `${O}22`, color: O, border: `1px solid ${O}40` }}>
+            Avsnitt 02 · Medlemmarnas rättigheter
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight mb-4 flex items-center gap-3"
+            style={{ fontFamily: "'Nunito', sans-serif" }}>
+            <Users className="w-9 h-9 flex-shrink-0" style={{ color: O }} />
+            Sex rättigheter
+          </h2>
+
+          <p className="text-white/70 text-base leading-relaxed mb-8 max-w-2xl">
+            GDPR ger medlemmarna sex specifika rättigheter gentemot er. Klicka på varje rättighet för att se
+            vad den innebär och hur ni hanterar den praktiskt.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8">
+            {RÄTTIGHETER.map((r, i) => {
+              const isViewed = viewed.has(r.id);
+              return (
+                <motion.button key={r.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => handleClick(r)}
+                  className="text-left rounded-2xl p-4 transition-all border-2"
+                  style={{
+                    background: isViewed ? `${O}18` : 'rgba(255,255,255,0.06)',
+                    borderColor: isViewed ? O : 'rgba(255,255,255,0.12)',
+                    backdropFilter: 'blur(8px)',
+                  }}>
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <p className="font-black text-base text-white" style={{ fontFamily: "'Nunito', sans-serif" }}>
+                      {r.label}
+                    </p>
+                    {isViewed && <CheckCircle size={16} style={{ color: O, flexShrink: 0, marginTop: 2 }} />}
+                  </div>
+                  <p className="text-white/55 text-xs leading-relaxed">{r.kort}</p>
+                </motion.button>
+              );
+            })}
+          </div>
+
+          {viewed.size > 0 && viewed.size < RÄTTIGHETER.length && (
+            <p className="text-center text-xs text-white/40">
+              {viewed.size}/{RÄTTIGHETER.length} utforskade
+            </p>
+          )}
+          {viewed.size === RÄTTIGHETER.length && (
+            <p className="text-center text-xs font-semibold" style={{ color: OL }}>
+              ✓ Du har utforskat alla sex rättigheter!
+            </p>
+          )}
+        </div>
       </div>
-      <GdprQuizOverlay isOpen={quizOpen} onClose={() => setQuizOpen(false)}
-        questions={gdprQuiz.questions}
-        onComplete={(passed) => { if (passed) onComplete('slutprov'); }} />
+
+      <RättighetModal rätt={active} onClose={() => setActive(null)} />
     </div>
   );
 };
+
+// ═══════════════════════════════════════════════════════════
+// SLIDE 4 — RÄTTSLIGA GRUNDER & KAMERA
+// ═══════════════════════════════════════════════════════════
+const RattsligaGrunderSlide = () => (
+  <SplitSlide
+    badge="Avsnitt 03 · Rättslig grund"
+    title="Fyra <span style='color:#FF5421'>rättsliga grunder</span>"
+    ingress="All behandling av personuppgifter kräver en laglig grund. Här är de fyra som är mest relevanta för en BRF — välj den starkaste som passar syftet."
+    bild={IMGS.kontor}
+    bildPosition="left"
+    badge2="Starkast först"
+    badge2Sub="Undvik samtycke när möjligt"
+  >
+    <StegLista steg={[
+      {
+        nr: '01',
+        titel: 'Rättslig förpliktelse',
+        desc: 'Lagen kräver behandlingen. Bokföringslagen (7-årsregeln), bostadsrättslagen (medlemsförteckning), skattelagstiftning. Inget samtycke behövs.',
+      },
+      {
+        nr: '02',
+        titel: 'Avtal',
+        desc: 'Behandlingen behövs för att uppfylla ett avtal med personen. Medlemskap, hyresavtal, överlåtelseavtal, styrelsearvode.',
+      },
+      {
+        nr: '03',
+        titel: 'Berättigat intresse',
+        desc: 'Föreningens legitima intresse väger tyngre än integriteten. Kräver dokumenterad intresseavvägning. Exempel: kameraövervakning, störningshantering.',
+      },
+      {
+        nr: '04',
+        titel: 'Samtycke',
+        desc: 'Frivilligt och informerat. Kan återkallas när som helst — därför svagast. Används för frivilliga ändamål som nyhetsbrev och fotografering.',
+      },
+    ]} />
+    <InfoRuta>
+      Kameraövervakning kräver proportionalitetsbedömning (dokumenterad), synlig skyltning och kort lagringstid (ofta 72 timmar, max 30 dagar). Biträdesavtal med kamerasystemsleverantören.
+    </InfoRuta>
+  </SplitSlide>
+);
+
+// ═══════════════════════════════════════════════════════════
+// SLIDE 5 — QUIZ BLOCK 1
+// ═══════════════════════════════════════════════════════════
+const QuizBlock1Slide = ({
+  onComplete, onNext, isDone,
+}: {
+  onComplete: (id: string) => void;
+  onNext: () => void;
+  isDone: boolean;
+}) => (
+  <SlideK
+    fragor={gdprFragorBlock1}
+    completionId="gdpr-quiz-1"
+    onComplete={onComplete}
+    onNext={onNext}
+    isDone={isDone}
+    bakgrundsbild={IMGS.data}
+  />
+);
+
+// ═══════════════════════════════════════════════════════════
+// SLIDE 6 — SÄKERHET, GALLRING & INCIDENTER
+// ═══════════════════════════════════════════════════════════
+const SakerhetSlide = () => (
+  <SplitSlide
+    badge="Avsnitt 04 · Praktiken"
+    title="Säkerhet, <span style='color:#FF5421'>gallring</span> och incidenter"
+    ingress="GDPR handlar inte bara om regler — det handlar om vardagsrutiner. Tre områden där ni som styrelse faktiskt måste agera löpande."
+    bild={IMGS.sakerhet}
+    bildPosition="right"
+    badge2="Incident?"
+    badge2Sub="72 timmar till IMY"
+  >
+    <StegLista steg={[
+      {
+        nr: '01',
+        titel: 'Begränsa åtkomsten',
+        desc: 'Bara de som behöver uppgifterna för sitt uppdrag ska ha tillgång. Unika inloggningar per ledamot. Återkalla åtkomst direkt vid avgång.',
+      },
+      {
+        nr: '02',
+        titel: 'Kryptera känslig data',
+        desc: 'Heldiskkryptering på mobila enheter (BitLocker/FileVault). Aldrig personnummer eller ekonomiska uppgifter i okrypterad e-post.',
+      },
+      {
+        nr: '03',
+        titel: 'Årsrutin för gallring',
+        desc: 'Boka in en timme varje januari — gå igenom register, radera uppgifter som passerat sin gallringstid, dokumentera vad som gjorts.',
+      },
+      {
+        nr: '04',
+        titel: 'Incidentplan redo',
+        desc: 'Bestäm i förväg: vem anmäler vid incident, var dokumenteras, hur informeras drabbade. Mall färdig INNAN något händer. 72 timmar till IMY gäller vid risk.',
+      },
+    ]} />
+    <InfoRuta>
+      PUB-avtal (personuppgiftsbiträdesavtal) krävs med alla som hanterar era personuppgifter: förvaltare, IT-leverantörer, bokningssystem, revisorer. Kontrollera era leverantörer.
+    </InfoRuta>
+  </SplitSlide>
+);
+
+// ═══════════════════════════════════════════════════════════
+// SLIDE 7 — QUIZ BLOCK 2
+// ═══════════════════════════════════════════════════════════
+const QuizBlock2Slide = ({
+  onComplete, onNext, isDone,
+}: {
+  onComplete: (id: string) => void;
+  onNext: () => void;
+  isDone: boolean;
+}) => (
+  <SlideK
+    fragor={gdprFragorBlock2}
+    completionId="gdpr-quiz-2"
+    onComplete={onComplete}
+    onNext={onNext}
+    isDone={isDone}
+    bakgrundsbild={IMGS.sakerhet}
+  />
+);
 
 // ═══════════════════════════════════════════════════════════
 // HUVUD-KOMPONENT
@@ -458,7 +460,6 @@ const Module3Gdpr: React.FC = () => {
   const [completedLessons, setCompletedLessons] = useState(new Set<string>(['intro']));
   const [isDesktop, setIsDesktop]               = useState(false);
   const [userData]                              = useState({ name: 'Anna Svensson', avatar: '' });
-  const [quizOpen, setQuizOpen]                 = useState(false);
 
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 1024);
@@ -471,31 +472,63 @@ const Module3Gdpr: React.FC = () => {
     setCompletedLessons(prev => new Set([...prev, id]));
 
   const slides = [
-    // ── Block 1: Grunderna ─────────────────────────────
-    { id: 'intro',           title: 'Introduktion',         component: <IntroSlide onStart={() => setCurrentIndex(1)} onQuizOpen={() => setQuizOpen(true)} /> },
-    { id: 'mjuk-intro',      title: 'GDPR & förtroende',    component: <GdprMjukIntroSlide /> },
-    { id: 'vad-ar-gdpr',     title: 'Sju principer',        component: <VadArGdprSlide /> },
-    { id: 'personuppgifter', title: 'Personuppgifter',      component: <Slide5Personuppgifter /> },
-    { id: 'vilka-uppgifter', title: 'Vad är en personuppgift?', component: <VilkaUppgifterSlide /> },
-    { id: 'quiz-1',          title: '🧠 Kunskapstest 1',    component: <Quiz1Slide onComplete={handleComplete} isDone={completedLessons.has('quiz-1')} /> },
-
-    // ── Block 2: Rättsliga grunder & kamera ───────────
-    { id: 'gdpr-i-foreningen', title: 'GDPR i föreningen',  component: <GdprRolesSection /> },
-    { id: 'rattsliga-grunder', title: 'Rättsliga grunder',  component: <RattsligaGrunderSlide /> },
-    { id: 'kameraovervakning', title: 'Kameraövervakning',  component: <KameraovervakningSlide /> },
-    { id: 'quiz-2',            title: '🧠 Kunskapstest 2',  component: <Quiz2Slide onComplete={handleComplete} isDone={completedLessons.has('quiz-2')} /> },
-
-    // ── Block 3: Privacy by Design ────────────────────
-    { id: 'privacy-by-design', title: 'Privacy by Design',  component: <PrivacyByDesignSlide /> },
-    { id: 'quiz-3',            title: '🧠 Kunskapstest 3',  component: <Quiz3Slide onComplete={handleComplete} isDone={completedLessons.has('quiz-3')} /> },
-
-    // ── Slutprov ──────────────────────────────────────
-    { id: 'slutprov', title: '🎯 Slutprov', component: <SlutprovSlide isDone={completedLessons.has('slutprov')} onComplete={handleComplete} /> },
+    {
+      id: 'intro',
+      title: 'Introduktion',
+      audioSrc: '/audio/gdpr-intro.mp3',
+      component: <IntroSlide onStart={() => setCurrentIndex(1)} />,
+    },
+    {
+      id: 'vad-ar-gdpr',
+      title: 'Vad är GDPR?',
+      audioSrc: '/audio/gdpr-vad-ar.mp3',
+      component: <VadArGdprSlide />,
+    },
+    {
+      id: 'rattigheter',
+      title: 'Medlemmarnas rättigheter',
+      audioSrc: '/audio/gdpr-rattigheter.mp3',
+      component: <RättigheterSlide />,
+    },
+    {
+      id: 'rattsliga-grunder',
+      title: 'Rättsliga grunder',
+      audioSrc: '/audio/gdpr-rattsliga-grunder.mp3',
+      component: <RattsligaGrunderSlide />,
+    },
+    {
+      id: 'quiz-block-1',
+      title: '🧠 Quiz · Grunderna',
+      component: (
+        <QuizBlock1Slide
+          onComplete={handleComplete}
+          onNext={() => setCurrentIndex(i => i + 1)}
+          isDone={completedLessons.has('gdpr-quiz-1')}
+        />
+      ),
+    },
+    {
+      id: 'sakerhet',
+      title: 'Säkerhet & gallring',
+      audioSrc: '/audio/gdpr-sakerhet.mp3',
+      component: <SakerhetSlide />,
+    },
+    {
+      id: 'quiz-block-2',
+      title: '🧠 Quiz · Praktiska situationer',
+      component: (
+        <QuizBlock2Slide
+          onComplete={handleComplete}
+          onNext={() => setCurrentIndex(i => i + 1)}
+          isDone={completedLessons.has('gdpr-quiz-2')}
+        />
+      ),
+    },
   ];
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden" style={{ background: '#0f1623' }}>
-      <div className="flex-shrink-0">
+    <div className="h-screen flex flex-col overflow-hidden" style={{ background: DARK }}>
+      <div className="flex-shrink-0" data-course-header>
         <CourseHeader
           isSidebarMinimized={false}
           isDesktop={isDesktop}
@@ -521,17 +554,6 @@ const Module3Gdpr: React.FC = () => {
         subtitle="Svar på de vanligaste frågorna om GDPR i BRF"
         buttonColor={O}
         kursämne="GDPR och dataskydd för bostadsrättsföreningar"
-        snabbfragor={[
-          'Behöver vi samtycke för att spara kontaktuppgifter?',
-          'Hur länge får vi spara protokoll?',
-          'Vad är skillnaden på personuppgiftsansvarig och biträde?',
-          'Måste vi anmäla dataintrång till IMY?',
-        ]}
-      />
-      <GdprQuizOverlay
-        isOpen={quizOpen}
-        onClose={() => setQuizOpen(false)}
-        questions={gdprQuiz.questions}
       />
     </div>
   );

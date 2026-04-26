@@ -1,6 +1,11 @@
 // src/components/CourseElements/BrfFlödesdiagramSlide.jsx
 // Animerat flödesdiagram – Så fungerar bostadsrättsföreningen
 // Videobakgrund, mörkt tema, autoplay-sekvens med ljud
+//
+// ÄNDRAT:
+// - "valberedning" sido-nod borttagen
+// - Ny topp-nod "bostadsrättsföreningen" som visuellt omsluter övriga noder som ett hus
+// - BRF-noden spelas först i autoplay-sekvensen
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,16 +15,27 @@ const O    = '#FF5421';
 const DARK = '#0f1623';
 
 // ── Autoplay-ordning ──────────────────────────────────────
+// BRF-noden spelas först, sedan övriga
 const AUTOPLAY_ORDER = [
+  'brf',
   'medlemmar',
-  'valberedning',
   'stamma',
   'revisor',
   'styrelse',
   'forvaltare',
 ];
 
-// ── Huvud-noder ───────────────────────────────────────────
+// ── Topp-nod: bostadsrättsföreningen (husets yttre skal) ──
+const BRF_NOD = {
+  id: 'brf',
+  label: 'Bostadsrättsföreningen',
+  icon: '🏠',
+  beskrivning: 'Bostadsrättsföreningen är den juridiska person som äger fastigheten. Den består av alla sina delar — medlemmarna, stämman, styrelsen, revisorn och förvaltaren — som tillsammans utgör en fungerande helhet.',
+  ansvar: ['Äger fastigheten', 'Ekonomisk förening', 'Styrs demokratiskt av medlemmarna'],
+  audioUrl: '/audio/bostadsrattsforeningen.mp3',
+};
+
+// ── Huvud-noder (inuti huset) ─────────────────────────────
 const NODER = [
   {
     id: 'medlemmar',
@@ -36,7 +52,6 @@ const NODER = [
     beskrivning: 'Föreningens högsta beslutande organ. Hålls minst en gång per år på våren. Här godkänns årsredovisning, väljs styrelse och revisorer och fattas viktiga beslut.',
     ansvar: ['Väljer styrelse och revisorer', 'Godkänner årsredovisning', 'Beslutar om avgifter och stadgar'],
     audioUrl: '/audio/foreningsstamman-1.mp3',
-    sidoId: 'valberedning',
   },
   {
     id: 'styrelse',
@@ -59,14 +74,6 @@ const NODER = [
 
 // ── Sido-noder ────────────────────────────────────────────
 const SIDO_NODER = {
-  valberedning: {
-    id: 'valberedning',
-    label: 'Valberedning',
-    icon: '📋',
-    beskrivning: 'Valberedningen väljs av stämman och föreslår vilka som ska väljas in i styrelsen. De ska ha god kontakt med många medlemmar och veta vilka kompetenser som behövs. En välfungerande valberedning tänker på ålder, bakgrund och kön för en balanserad styrelse.',
-    ansvar: ['Föreslår kandidater till styrelsen', 'Arbetar självständigt från styrelsen', 'Tänker på mångfald och kompetens'],
-    audioUrl: '/audio/bostadsrattsforeningen.mp3',
-  },
   revisor: {
     id: 'revisor',
     label: 'Revisorn',
@@ -78,108 +85,180 @@ const SIDO_NODER = {
 };
 
 const ALLA_NODER = [
+  BRF_NOD,
   ...NODER,
   ...Object.values(SIDO_NODER),
 ];
 
 // ── Desktop org-chart ─────────────────────────────────────
 function OrgChart({ aktiv, onKlick }) {
+  const husAktiv = aktiv === 'brf';
+
   return (
-    <div className="w-full space-y-0">
-      {NODER.map((nod, i) => {
-        const isAktiv   = aktiv === nod.id;
-        const sidoNod   = nod.sidoId ? SIDO_NODER[nod.sidoId] : null;
-        const sidoAktiv = sidoNod ? aktiv === sidoNod.id : false;
+    <div className="w-full">
+      {/* Hus-wrapper med klickbar grundnod längst ner */}
+      <motion.div
+        className="relative rounded-3xl border-2 p-5 pb-4"
+        animate={{
+          borderColor: husAktiv ? O : 'rgba(255,255,255,0.18)',
+          boxShadow: husAktiv ? `0 0 40px ${O}35` : `0 0 24px rgba(0,0,0,0.3)`,
+        }}
+        transition={{ duration: 0.3 }}
+        style={{
+          background: 'rgba(255,255,255,0.04)',
+          backdropFilter: 'blur(12px)',
+        }}
+      >
+        {/* Taklinje — visualiserar att det är ett hus */}
+        <div
+          className="absolute left-1/2 -translate-x-1/2"
+          style={{
+            top: -14,
+            width: 0,
+            height: 0,
+            borderLeft: '120px solid transparent',
+            borderRight: '120px solid transparent',
+            borderBottom: `14px solid ${husAktiv ? O : 'rgba(255,255,255,0.18)'}`,
+            transition: 'all 0.3s',
+          }}
+        />
 
-        return (
-          <div key={nod.id}>
-            <div className="relative flex items-center">
+        {/* Noderna inuti huset */}
+        <div className="space-y-0 mb-4">
+          {NODER.map((nod, i) => {
+            const isAktiv   = aktiv === nod.id;
+            const sidoNod   = nod.sidoId ? SIDO_NODER[nod.sidoId] : null;
+            const sidoAktiv = sidoNod ? aktiv === sidoNod.id : false;
 
-              {/* Sido-nod — i sidofältet, klickbar */}
-              {sidoNod && (
-                <motion.button
-                  onClick={() => onKlick(sidoNod.id)}
-                  whileHover={{ scale: 1.06, x: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="absolute right-full mr-3 px-3 py-2 rounded-xl border text-xs font-bold whitespace-nowrap cursor-pointer"
-                  style={{
-                    background: sidoAktiv ? `${O}20` : 'rgba(255,255,255,0.06)',
-                    borderColor: sidoAktiv ? O : 'rgba(255,255,255,0.12)',
-                    color: sidoAktiv ? O : 'rgba(255,255,255,0.45)',
-                    boxShadow: sidoAktiv ? `0 0 16px ${O}30` : 'none',
-                    backdropFilter: 'blur(8px)',
-                  }}
-                >
-                  <span className="mr-1">{sidoNod.icon}</span>
-                  {sidoNod.label}
-                  <div style={{
-                    position: 'absolute', left: '100%', top: '50%',
-                    width: 12, height: 1,
-                    background: sidoAktiv ? O : 'rgba(255,255,255,0.15)',
-                  }} />
-                  {sidoAktiv && (
-                    <motion.div
-                      initial={{ scale: 0 }} animate={{ scale: 1 }}
-                      className="absolute -top-1 -right-1 w-2 h-2 rounded-full"
-                      style={{ background: O }}
-                    />
+            return (
+              <div key={nod.id}>
+                <div className="relative flex items-center">
+
+                  {/* Sido-nod */}
+                  {sidoNod && (
+                    <motion.button
+                      onClick={() => onKlick(sidoNod.id)}
+                      whileHover={{ scale: 1.06, x: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="absolute right-full mr-3 px-3 py-2 rounded-xl border text-xs font-bold whitespace-nowrap cursor-pointer"
+                      style={{
+                        background: sidoAktiv ? `${O}20` : 'rgba(255,255,255,0.06)',
+                        borderColor: sidoAktiv ? O : 'rgba(255,255,255,0.12)',
+                        color: sidoAktiv ? O : 'rgba(255,255,255,0.45)',
+                        boxShadow: sidoAktiv ? `0 0 16px ${O}30` : 'none',
+                        backdropFilter: 'blur(8px)',
+                      }}
+                    >
+                      <span className="mr-1">{sidoNod.icon}</span>
+                      {sidoNod.label}
+                      <div style={{
+                        position: 'absolute', left: '100%', top: '50%',
+                        width: 12, height: 1,
+                        background: sidoAktiv ? O : 'rgba(255,255,255,0.15)',
+                      }} />
+                      {sidoAktiv && (
+                        <motion.div
+                          initial={{ scale: 0 }} animate={{ scale: 1 }}
+                          className="absolute -top-1 -right-1 w-2 h-2 rounded-full"
+                          style={{ background: O }}
+                        />
+                      )}
+                    </motion.button>
                   )}
-                </motion.button>
-              )}
 
-              {/* Huvud-nod */}
-              <motion.button
-                onClick={() => onKlick(nod.id)}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-                className="w-full py-4 px-5 rounded-2xl border-2 text-left transition-all"
-                style={{
-                  background: isAktiv ? `${O}20` : 'rgba(255,255,255,0.06)',
-                  borderColor: isAktiv ? O : 'rgba(255,255,255,0.12)',
-                  boxShadow: isAktiv ? `0 0 28px ${O}30` : 'none',
-                  backdropFilter: 'blur(8px)',
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{nod.icon}</span>
-                  <div className="flex-1">
-                    <p className="font-black text-base"
-                      style={{ color: isAktiv ? O : 'rgba(255,255,255,0.85)', fontFamily: "'Nunito', sans-serif" }}>
-                      {nod.label}
-                    </p>
-                    <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                      {nod.ansvar[0]}
-                    </p>
+                  {/* Huvud-nod */}
+                  <motion.button
+                    onClick={() => onKlick(nod.id)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-full py-3.5 px-5 rounded-2xl border-2 text-left transition-all"
+                    style={{
+                      background: isAktiv ? `${O}20` : 'rgba(255,255,255,0.06)',
+                      borderColor: isAktiv ? O : 'rgba(255,255,255,0.12)',
+                      boxShadow: isAktiv ? `0 0 28px ${O}30` : 'none',
+                      backdropFilter: 'blur(8px)',
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{nod.icon}</span>
+                      <div className="flex-1">
+                        <p className="font-black text-base"
+                          style={{ color: isAktiv ? O : 'rgba(255,255,255,0.85)', fontFamily: "'Nunito', sans-serif" }}>
+                          {nod.label}
+                        </p>
+                        <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                          {nod.ansvar[0]}
+                        </p>
+                      </div>
+                      {isAktiv && (
+                        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}
+                          className="w-2 h-2 rounded-full flex-shrink-0"
+                          style={{ background: O }} />
+                      )}
+                    </div>
+                  </motion.button>
+                </div>
+
+                {/* Pil */}
+                {i < NODER.length - 1 && (
+                  <div className="flex justify-center py-1.5">
+                    <div className="flex flex-col items-center gap-0.5">
+                      <motion.div animate={{ y: [0, 3, 0] }}
+                        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                        style={{ color: 'rgba(255,255,255,0.2)', fontSize: 13, lineHeight: 1 }}>↓</motion.div>
+                      {nod.id === 'stamma' && (
+                        <motion.div animate={{ y: [0, -3, 0] }}
+                          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+                          style={{ color: 'rgba(255,255,255,0.12)', fontSize: 11, lineHeight: 1 }}>↑</motion.div>
+                      )}
+                    </div>
                   </div>
-                  {isAktiv && (
-                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}
-                      className="w-2 h-2 rounded-full flex-shrink-0"
-                      style={{ background: O }} />
-                  )}
-                </div>
-              </motion.button>
-            </div>
-
-            {/* Pil */}
-            {i < NODER.length - 1 && (
-              <div className="flex justify-center py-1.5">
-                <div className="flex flex-col items-center gap-0.5">
-                  <motion.div animate={{ y: [0, 3, 0] }}
-                    transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-                    style={{ color: 'rgba(255,255,255,0.2)', fontSize: 13, lineHeight: 1 }}>↓</motion.div>
-                  {nod.id === 'stamma' && (
-                    <motion.div animate={{ y: [0, -3, 0] }}
-                      transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-                      style={{ color: 'rgba(255,255,255,0.12)', fontSize: 11, lineHeight: 1 }}>↑</motion.div>
-                  )}
-                </div>
+                )}
               </div>
-            )}
+            );
+          })}
+        </div>
+
+        {/* Grund — BRF-noden längst ner i huset */}
+        <motion.button
+          onClick={() => onKlick('brf')}
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all border-t-2"
+          style={{
+            background: husAktiv ? `${O}22` : 'rgba(255,255,255,0.05)',
+            borderColor: husAktiv ? O : 'rgba(255,255,255,0.1)',
+            borderRadius: '0 0 16px 16px',
+            marginLeft: -12,
+            marginRight: -12,
+            marginBottom: -12,
+            paddingLeft: 24,
+            paddingRight: 24,
+            paddingBottom: 18,
+            paddingTop: 14,
+          }}
+        >
+          <span className="text-2xl">{BRF_NOD.icon}</span>
+          <div className="flex-1">
+            <p className="text-[10px] font-bold uppercase tracking-widest"
+              style={{ color: husAktiv ? O : 'rgba(255,255,255,0.35)' }}>
+              Grunden · Helheten
+            </p>
+            <p className="font-black text-base"
+              style={{ color: husAktiv ? O : 'rgba(255,255,255,0.85)', fontFamily: "'Nunito', sans-serif" }}>
+              {BRF_NOD.label}
+            </p>
           </div>
-        );
-      })}
+          {husAktiv && (
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}
+              className="w-2 h-2 rounded-full flex-shrink-0"
+              style={{ background: O }} />
+          )}
+        </motion.button>
+      </motion.div>
+
       <p className="text-center text-xs mt-4" style={{ color: 'rgba(255,255,255,0.2)' }}>
-        Klicka på varje nivå — även revisor och valberedning
+        Klicka på grunden eller någon av nivåerna
       </p>
     </div>
   );
@@ -191,19 +270,32 @@ function MobilAccordion({ aktiv, onKlick }) {
     <div className="space-y-2 px-4 pb-28">
       {ALLA_NODER.map((nod) => {
         const isAktiv = aktiv === nod.id;
+        const isBrf   = nod.id === 'brf';
         return (
           <div key={nod.id} className="rounded-2xl overflow-hidden border"
-            style={{ borderColor: isAktiv ? O : 'rgba(255,255,255,0.1)' }}>
+            style={{
+              borderColor: isAktiv ? O : 'rgba(255,255,255,0.1)',
+              // Markera BRF-noden tydligare som "omslaget"
+              borderWidth: isBrf ? 2 : 1,
+            }}>
             <button
               onClick={() => onKlick(isAktiv ? null : nod.id)}
               className="w-full flex items-center gap-3 px-4 py-3.5 text-left"
               style={{ background: isAktiv ? `${O}18` : 'rgba(255,255,255,0.04)' }}
             >
               <span className="text-xl">{nod.icon}</span>
-              <span className="flex-1 font-bold text-sm"
-                style={{ color: isAktiv ? O : 'rgba(255,255,255,0.8)', fontFamily: "'Nunito', sans-serif" }}>
-                {nod.label}
-              </span>
+              <div className="flex-1">
+                {isBrf && (
+                  <p className="text-[9px] font-bold uppercase tracking-widest mb-0.5"
+                    style={{ color: isAktiv ? O : 'rgba(255,255,255,0.35)' }}>
+                    Helheten
+                  </p>
+                )}
+                <span className="font-bold text-sm"
+                  style={{ color: isAktiv ? O : 'rgba(255,255,255,0.8)', fontFamily: "'Nunito', sans-serif" }}>
+                  {nod.label}
+                </span>
+              </div>
               <motion.div animate={{ rotate: isAktiv ? 180 : 0 }} transition={{ duration: 0.2 }}>
                 <ChevronDown size={16} style={{ color: isAktiv ? O : 'rgba(255,255,255,0.3)' }} />
               </motion.div>
@@ -240,7 +332,8 @@ function MobilAccordion({ aktiv, onKlick }) {
 
 // ── Huvud-komponent ───────────────────────────────────────
 export default function BrfFlödesdiagramSlide() {
-  const [aktiv, setAktiv] = useState('medlemmar');
+  // Startar på brf-noden så dess ljud spelas först
+  const [aktiv, setAktiv] = useState('brf');
   const audioRef          = useRef(null);
   const videoRef          = useRef(null);
 
@@ -257,7 +350,6 @@ export default function BrfFlödesdiagramSlide() {
   useEffect(() => {
     if (!aktivNod?.audioUrl) return;
 
-    // Stoppa föregående
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.onended = null;
@@ -266,30 +358,36 @@ export default function BrfFlödesdiagramSlide() {
 
     const audio = new Audio(aktivNod.audioUrl);
     audioRef.current = audio;
-    audio.play().catch(() => {});
 
-    // När klart — gå till nästa i sekvensen
+    // Paus innan ljudet startar (ger tid att hinna läsa innan rösten kommer)
+    const startTimer = setTimeout(() => {
+      audio.play().catch(() => {});
+    }, 1500);
+
     audio.onended = () => {
       const idx    = AUTOPLAY_ORDER.indexOf(aktiv);
       const nextId = AUTOPLAY_ORDER[idx + 1];
-      if (nextId) setAktiv(nextId);
+      // Paus innan nästa nod aktiveras
+      if (nextId) {
+        setTimeout(() => setAktiv(nextId), 1500);
+      }
     };
 
     return () => {
+      clearTimeout(startTimer);
       audio.pause();
       audio.onended = null;
     };
   }, [aktiv]);
 
   const handleKlick = (id) => {
-  if (!id) return;
-  setAktiv(id);
-  // Spela om videon från början vid varje klick
-  if (videoRef.current) {
-    videoRef.current.currentTime = 0;
-    videoRef.current.play().catch(() => {});
-  }
-};
+    if (!id) return;
+    setAktiv(id);
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+    }
+  };
 
   return (
     <div className="h-full overflow-hidden relative"
@@ -322,7 +420,7 @@ export default function BrfFlödesdiagramSlide() {
             </h2>
             <p className="text-white/30 text-xs mt-2">Spelar automatiskt — klicka för att hoppa.</p>
           </div>
-          <div className="flex-1 flex items-center justify-center">
+          <div className="flex-1 flex items-center justify-center py-4">
             <div className="w-full max-w-lg">
               <OrgChart aktiv={aktiv} onKlick={handleKlick} />
             </div>
@@ -369,6 +467,40 @@ export default function BrfFlödesdiagramSlide() {
                   </div>
                 </div>
 
+                {/* PDF-nedladdning */}
+                <motion.a
+                  href="/pdf/brf-struktur.pdf"
+                  download
+                  whileHover={{ scale: 1.01, y: -2 }}
+                  whileTap={{ scale: 0.99 }}
+                  className="mt-5 w-full rounded-2xl border-2 flex items-center gap-4 px-6 py-5 cursor-pointer transition-all"
+                  style={{
+                    background: 'rgba(255,255,255,0.08)',
+                    borderColor: 'rgba(255,255,255,0.15)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+                  }}>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ background: `${O}25`, border: `1px solid ${O}40` }}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={O} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: O }}>
+                      Ladda ner
+                    </p>
+                    <p className="text-white font-black text-lg leading-tight"
+                      style={{ fontFamily: "'Nunito', sans-serif" }}>
+                      BRF-struktur som PDF
+                    </p>
+                    <p className="text-xs text-white/45 mt-0.5">Sammanfattning av alla roller · 2 sidor</p>
+                  </div>
+                </motion.a>
+
               </motion.div>
             )}
           </AnimatePresence>
@@ -381,10 +513,32 @@ export default function BrfFlödesdiagramSlide() {
           <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>
             Grunderna · BRF-struktur
           </p>
-          <h2 className="text-4xl font-black text-white mb-1"
-            style={{ fontFamily: "'Nunito', sans-serif" }}>
-            Så fungerar <span style={{ color: O }}>BRF:en</span>
-          </h2>
+          <div className="flex items-start justify-between gap-3 mb-1">
+            <h2 className="text-4xl font-black text-white flex-1"
+              style={{ fontFamily: "'Nunito', sans-serif" }}>
+              Så fungerar <span style={{ color: O }}>BRF:en</span>
+            </h2>
+            {/* PDF-nedladdning — kompakt ikonversion för mobil */}
+            <motion.a
+              href="/pdf/brf-struktur.pdf"
+              download
+              whileTap={{ scale: 0.92 }}
+              className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center border mt-1"
+              style={{
+                background: 'rgba(255,255,255,0.08)',
+                borderColor: 'rgba(255,255,255,0.15)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+              }}
+              aria-label="Ladda ner PDF"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={O} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </motion.a>
+          </div>
           <p className="text-white/35 text-xs mb-5">Tryck på varje nivå för att läsa mer</p>
         </div>
         <MobilAccordion aktiv={aktiv} onKlick={handleKlick} />
