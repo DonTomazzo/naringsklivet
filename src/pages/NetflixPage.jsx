@@ -164,7 +164,7 @@ const Hero = () => {
             transition={{ duration: 0.65, delay: 0.25 }} className="relative">
             <div className="relative">
               <div className="rounded-3xl overflow-hidden aspect-[4/5] bg-slate-200 shadow-2xl">
-                <img src="/founder.png" alt="Tomas Mauritzson — Styrelsekörkortet"
+                <img src="/founder3.png" alt="Tomas Mauritzson — Styrelsekörkortet"
                   className="w-full h-full object-cover object-top" />
               </div>
               <div className="absolute -bottom-5 -right-5 bg-white rounded-2xl px-5 py-4 shadow-xl border border-slate-100">

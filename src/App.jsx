@@ -10,6 +10,7 @@ import StyrelsesupportPage from './pages/StyrelsesupportPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import NewsCards from './components/blog/NewsCards';
+import { supabase } from './lib/supabase.ts';
 import ModuleRouter from './components/ModuleRouter';
 import CoursePage from './pages/CoursePage';
 import FinalQuiz from './pages/FinalQuiz'
@@ -17,6 +18,7 @@ import Events from './pages/Events';
 import EventDetail from './pages/EventDetailPage';
 import NetflixPage from './pages/NetflixPage.jsx';
 import NetflixPage2 from './pages/NetflixPage2.jsx';
+import NetflixPage3 from './pages/NetflixPage3.tsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LandingPage from './pages/LandingPage';
@@ -47,6 +49,7 @@ import VillkorPage from './pages/VillkorPage'
 import IntegritetspolicyPage from './pages/IntegritetspolicyPage'
 import StyrelsekorkortetLanding from './pages/StyrelsekorkortetLanding';
 import OmOssPage from './pages/OmOssPage'
+import KursbibliotekSK from './pages/KursbibliotekSK';
 
 // Landing page section components
 import HeroSection from './components/landing/HeroSection';
@@ -107,18 +110,17 @@ const QuizLeaderboardPage = () => (
 // Protected Route
 // ─────────────────────────────────────────────
 
-const ProtectedRoute = ({ children, requireTeamLeader = false, requireAdmin = false }) => {
-  const { isLoggedIn, isTeamLeader, currentUser } = useTeam();
+const ProtectedRoute = ({ children }) => {
+  const [session, setSession] = useState(undefined);
 
-  if (!isLoggedIn) return <Navigate to="/login" replace />;
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
-  if (requireAdmin) {
-    const isAdmin = currentUser?.email === 'admin@styrelsekorkortet.se';
-    if (!isAdmin) return <Navigate to="/dashboard" replace />;
-  }
-
-  if (requireTeamLeader && !isTeamLeader) return <Navigate to="/dashboard" replace />;
-
+  if (session === undefined) return null;
+  if (!session) return <Navigate to="/login" replace />;
   return children;
 };
 
@@ -337,7 +339,10 @@ const AppRoutes = () => {
       <Route path="/kurs/:slug" element={<CoursePage />} />
       <Route path="/styrelsesupport" element={<StyrelsesupportPage />} />
       <Route path="/styrelsekörkortet" element={<StyrelsekorkortetLanding />} />
-      <Route path="/module/:slug" element={<ModuleRouter />} />
+      <Route path="/module/:slug" element={
+  <ProtectedRoute><ModuleRouter /></ProtectedRoute>
+} />
+     
 
       {/* Auth routes */}
       <Route path="/register" element={<TeamCodeRegister />} />
@@ -387,6 +392,7 @@ const AppRoutes = () => {
       {/* Ovriga sidor */}
       <Route path="/netflix" element={<NetflixPage />} />
       <Route path="/netflix2" element={<NetflixPage2 />} />
+      <Route path="/netflix3" element={<NetflixPage3 />} />
       <Route path="/demo4" element={<DemoPage4 />} />
       <Route path="/styrelsekorkortet" element={<Styrelsekorkortet />} />
       <Route path="/aktiekorkortet" element={<Aktiekorkortet />} />

@@ -1,3 +1,4 @@
+// components/auth/TeamMemberDashboard.jsx
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTeam } from '../../contexts/MockTeamContext';

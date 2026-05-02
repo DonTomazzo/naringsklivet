@@ -15,6 +15,10 @@ import ModuleFastighetenSakerhet, { courseData as fastighetenData } from '../mod
 import ModuleFastighetenUnderhall from '../modules/Styrelsekorkortet/ModuleFastighetenUnderhall';
 import ModuleFastighetenEnergi from '../modules/Styrelsekorkortet/ModuleFastighetenEnergi';
 import ModuleFastighetenDrift from '../modules/Styrelsekorkortet/ModuleFastighetenDrift';
+import digitalSakerhetKurs from '../data/digitalSakerhetData';
+import ModuleDigitalSakerhet from '../modules/Naringsklivet/ModuleDigitalSakerhet';
+import ModulePhishing from '../modules/Naringsklivet/ModulePhishing';
+import ModuleNIS2 from '../modules/Naringsklivet/ModuleNIS2';
 
 
 // ── Delad instruktör ──────────────────────────────────────
@@ -626,6 +630,44 @@ export const modulesData = [
     ],
     testimonials: [],
   },
+
+  {
+  id: 'phishing-social-engineering',
+  slug: 'phishing-social-engineering',
+  title: 'Phishing & social engineering',
+  subtitle: 'Känna igen och stoppa attacker innan det är för sent',
+  category: 'SÄKERHET',
+  type: 'bundle',
+  duration: '25 min',
+  lessons: 13,
+  quizzes: 2,
+  rating: 5.0,
+  students: 0,
+  price: 1490,
+  short_description: 'Lär dig känna igen falska mejl, SMS och samtal — och vad du gör om du råkat klicka.',
+  image_url: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1280&q=80',
+  component: ModulePhishing,
+  instructor: INSTRUCTOR,
+},
+
+{
+  id: 'nis2-iso27001',
+  slug: 'nis2-iso27001',
+  title: 'NIS2 & ISO 27001',
+  subtitle: 'Vad EU:s cybersäkerhetsdirektiv betyder för dig',
+  category: 'SÄKERHET',
+  type: 'bundle',
+  duration: '25 min',
+  lessons: 15,
+  quizzes: 3,
+  rating: 5.0,
+  students: 0,
+  price: 1490,
+  short_description: 'Lär dig vad NIS2 kräver av dig som medarbetare och hur ISO 27001 hänger ihop.',
+  image_url: 'https://images.unsplash.com/photo-1526958097901-5e6d742d3371?w=1280&q=80',
+  component: ModuleNIS2,
+  instructor: INSTRUCTOR,
+},
  
   {
     id: 'fastigheten-drift',
@@ -1150,6 +1192,35 @@ export const modulesData = [
     ],
     testimonials: [],
   },
+
+  {
+  ...digitalSakerhetKurs.modules[0], // Lösenord
+  slug: 'digital-sakerhet-losenord',
+  component: null, // ModuleDigitalSakerhetLosenord när du importerat den
+  type: 'bundle',
+  category: 'SÄKERHET',
+  image_url: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1280&q=80',
+  instructor: INSTRUCTOR,
+  price: 1490,
+},
+
+{
+  id: 'digital-sakerhet',
+  slug: 'digital-sakerhet',
+  title: 'Digital säkerhet för alla',
+  subtitle: 'Från lösenord och phishing till AI-hot och deepfakes',
+  category: 'SÄKERHET',
+  type: 'bundle',
+  duration: '3 timmar',
+  lessons: 13,
+  quizzes: 3,
+  rating: 5.0,
+  students: 0,
+  price: 1490,
+  image_url: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1280&q=80',
+  component: ModuleDigitalSakerhet,
+  instructor: INSTRUCTOR,
+},
 
   {
     id: 'konflikthantering',

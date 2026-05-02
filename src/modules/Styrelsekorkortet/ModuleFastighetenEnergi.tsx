@@ -450,44 +450,166 @@ const ModuleFastighetenEnergi: React.FC = () => {
   const handleComplete = (id: string) => setCompletedLessons(prev => new Set([...prev, id]));
 
 
-  const KapitelIntro = ({ emoji, rubrik, desc, bild, slideNr, total, nr }: {
-    emoji: string; rubrik: string; desc: string; bild: string;
-    slideNr?: number; total?: number; nr?: number;
-  }) => (
-    <div className="h-full flex overflow-hidden" style={{ background: '#0f1623' }}>
-      <div className="hidden lg:block w-1/2 flex-shrink-0 relative">
-        <img src={bild} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.45 }} />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, transparent, #0f1623)' }} />
+ const KapitelIntro = ({ emoji, rubrik, desc, bild, slideNr, total, nr }: {
+  emoji: string; rubrik: string; desc: string; bild: string;
+  slideNr?: number; total?: number; nr?: number;
+}) => (
+  <div className="h-full overflow-hidden" style={{ background: '#0f1623' }}>
+
+    {/* Desktop — exakt 50/50 grid */}
+    <div className="hidden lg:grid h-full" style={{ gridTemplateColumns: '1fr 1fr' }}>
+
+      {/* Vänster — bild */}
+      <div className="relative overflow-hidden">
+        <img
+          src={bild}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ opacity: 0.6 }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(to right, rgba(15,22,35,0) 40%, #0f1623 100%)' }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(to top, rgba(15,22,35,0.7) 0%, transparent 50%)' }}
+        />
+        {slideNr && total && (
+          <div className="absolute bottom-8 left-8">
+            <p style={{
+              fontSize: 11, fontWeight: 800, letterSpacing: 3,
+              textTransform: 'uppercase' as const,
+              color: 'rgba(255,255,255,0.35)',
+            }}>
+              Kapitel {slideNr} av {total}
+            </p>
+          </div>
+        )}
       </div>
-      <div className="flex-1 flex items-center overflow-y-auto px-8 sm:px-14 py-10">
-        <div>
-          <div style={{ fontSize: 64, marginBottom: 16 }}>{emoji}</div>
-          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: 3, textTransform: 'uppercase' as const, color: O, marginBottom: 10 }}>
+
+      {/* Höger — text */}
+      <div
+        className="flex items-center overflow-y-auto"
+        style={{ padding: 'clamp(32px, 5vw, 72px) clamp(32px, 4vw, 60px)' }}
+      >
+        <div style={{ maxWidth: 480, width: '100%' }}>
+          <div style={{ fontSize: 'clamp(48px, 6vw, 80px)', lineHeight: 1, marginBottom: 'clamp(16px, 2vw, 24px)' }}>
+            {emoji}
+          </div>
+          <p style={{
+            fontSize: 'clamp(10px, 1vw, 12px)', fontWeight: 800,
+            letterSpacing: '0.2em', textTransform: 'uppercase' as const,
+            color: O, marginBottom: 10,
+          }}>
             Fastigheten · {rubrik}
           </p>
-          <h2 style={{ fontSize: 'clamp(28px,4vw,44px)', fontWeight: 900, color: '#fff', fontFamily: "'Nunito', sans-serif", lineHeight: 1.1, marginBottom: 16 }}>
+          <h2 style={{
+            fontSize: 'clamp(28px, 4vw, 52px)', fontWeight: 900,
+            color: '#fff', fontFamily: "'Nunito', sans-serif",
+            lineHeight: 1.05, letterSpacing: '-0.02em',
+            marginBottom: 'clamp(12px, 1.5vw, 20px)',
+          }}>
             {rubrik}
           </h2>
-          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: 28, maxWidth: 420 }}>
+          <p style={{
+            fontSize: 'clamp(14px, 1.4vw, 18px)',
+            color: 'rgba(255,255,255,0.55)', lineHeight: 1.7,
+            marginBottom: 'clamp(24px, 3vw, 40px)', maxWidth: 420,
+          }}>
             {desc}
           </p>
-          <div className="flex items-center gap-3 flex-wrap">
-            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' as const }}>
+            <motion.button
+              whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               onClick={() => setCurrentIndex(1)}
-              style={{ padding: '14px 28px', borderRadius: 14, background: `linear-gradient(135deg, ${O}, ${OD})`, border: 'none', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer' }}>
+              style={{
+                padding: 'clamp(12px, 1.3vw, 16px) clamp(24px, 2.5vw, 36px)',
+                borderRadius: 14,
+                background: `linear-gradient(135deg, ${O}, ${OD})`,
+                border: 'none', color: '#fff',
+                fontSize: 'clamp(13px, 1.2vw, 16px)',
+                fontWeight: 800, cursor: 'pointer',
+                fontFamily: "'Nunito', sans-serif",
+                boxShadow: `0 4px 20px ${O}40`,
+              }}
+            >
               Starta →
             </motion.button>
-            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            <motion.button
+              whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               onClick={() => navigate('/modules/fastigheten')}
-              style={{ padding: '14px 20px', borderRadius: 14, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+              style={{
+                padding: 'clamp(12px, 1.3vw, 16px) clamp(16px, 1.8vw, 24px)',
+                borderRadius: 14,
+                background: 'rgba(255,255,255,0.07)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                color: 'rgba(255,255,255,0.65)',
+                fontSize: 'clamp(12px, 1vw, 15px)',
+                fontWeight: 700, cursor: 'pointer',
+                fontFamily: "'Nunito', sans-serif",
+              }}
+            >
               ← Alla kapitel
             </motion.button>
           </div>
         </div>
       </div>
     </div>
-  );
 
+    {/* Mobil */}
+    <div className="lg:hidden flex flex-col h-full overflow-y-auto">
+      <div className="w-full flex-shrink-0" style={{ height: 200 }}>
+        <img src={bild} alt="" className="w-full h-full object-cover" style={{ opacity: 0.8 }} />
+      </div>
+      <div className="flex-1 px-6 py-8">
+        <div style={{ fontSize: 48, marginBottom: 12 }}>{emoji}</div>
+        <p style={{
+          fontSize: 10, fontWeight: 800, letterSpacing: '0.2em',
+          textTransform: 'uppercase' as const, color: O, marginBottom: 8,
+        }}>
+          Fastigheten · {rubrik}
+        </p>
+        <h2 style={{
+          fontSize: 28, fontWeight: 900, color: '#fff',
+          fontFamily: "'Nunito', sans-serif", lineHeight: 1.1, marginBottom: 12,
+        }}>
+          {rubrik}
+        </h2>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: 28 }}>
+          {desc}
+        </p>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' as const }}>
+          <motion.button
+            whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            onClick={() => setCurrentIndex(1)}
+            style={{
+              padding: '13px 28px', borderRadius: 14,
+              background: `linear-gradient(135deg, ${O}, ${OD})`,
+              border: 'none', color: '#fff', fontSize: 14,
+              fontWeight: 800, cursor: 'pointer',
+            }}
+          >
+            Starta →
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            onClick={() => navigate('/modules/fastigheten')}
+            style={{
+              padding: '13px 20px', borderRadius: 14,
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              color: 'rgba(255,255,255,0.65)', fontSize: 13,
+              fontWeight: 700, cursor: 'pointer',
+            }}
+          >
+            ← Alla kapitel
+          </motion.button>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
   const QuizSlide = ({ quizId, bild, badge, rubrik, questions }: {
     quizId: string; bild: string; badge: string; rubrik: string; questions: any[];
@@ -693,9 +815,9 @@ const ModuleFastighetenEnergi: React.FC = () => {
       <div className="flex-1 overflow-hidden"
         style={{ marginLeft: isDesktop ? 'var(--sidebar-width, 320px)' : '0px' }}>
         <ModuleSlideLayout slides={slides} currentIndex={currentIndex}
-          onNavigate={setCurrentIndex} showHeader={currentIndex > 0}>
-          {slides[currentIndex].component}
-        </ModuleSlideLayout>
+  onNavigate={setCurrentIndex} showHeader={false}>
+  {slides[currentIndex].component}
+</ModuleSlideLayout>
       </div>
       <FloatingFAQ faqs={[{ question: 'Energideklaration?', answer: 'Obligatorisk — vart 10:e år.' }, { question: 'Bygglov solceller?', answer: 'Vanligtvis inte om de följer takets form.' }, { question: 'Neka laddstolpar?', answer: 'Nej — lagstadgad rätt sedan 2022.' }]}
         title="Frågor om energi & miljö"

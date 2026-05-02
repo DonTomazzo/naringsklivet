@@ -227,16 +227,15 @@ const ModuleSlideLayout = ({
   return (
     <div
       className="flex flex-col h-full"
-      style={{ background: '#0f1623' }}
+      style={{ background: 'transparent' }}
       onMouseMove={showBar}
       onClick={showBar}
     >
-      {/* Progress-linje */}
-      <SlideProgressBar total={total} current={currentIndex} />
+    
 
       {/* Slide-titel + dots */}
-      {showHeader !== false && (
-        <div className="flex-shrink-0 pt-3 pb-2 px-4 space-y-2">
+     {showHeader !== false && currentIndex !== 0 && (
+  <div className="flex-shrink-0 pt-3 pb-2 px-4 space-y-2">
           <div className="text-center">
             <AnimatePresence mode="wait">
               <motion.p
@@ -288,8 +287,11 @@ const ModuleSlideLayout = ({
             transition={{ duration: 0.2 }}
             onMouseEnter={() => { setHovering(true); clearTimeout(hideTimer.current); }}
             onMouseLeave={() => { setHovering(false); if (isFullscreen) hideTimer.current = setTimeout(() => setBarVisible(false), 2000); }}
-            className="fixed bottom-0 right-0 z-50 pointer-events-none w-full"
-            style={{ left: isFullscreen ? '0px' : 'var(--sidebar-width, 320px)' }}
+            className="fixed bottom-0 z-50 pointer-events-none"
+style={{
+  left: isFullscreen ? '0px' : 'var(--sidebar-width, 320px)',
+  right: 0,
+}}
           >
             {/* Gradient */}
             <div
@@ -319,11 +321,14 @@ const ModuleSlideLayout = ({
               </div>
             </div>
 
-            {/* Knapp-rad */}
             <div
-              className="w-full px-4 pb-2 flex items-center gap-4 pointer-events-auto"
-              style={{ background: '#0f1623' }}
-            >
+  className="w-full px-4 pb-2 flex items-center gap-4 pointer-events-auto"
+  style={{
+    background: 'rgba(15,22,35,0.95)',
+    backdropFilter: 'blur(8px)',
+    paddingRight: '1rem',
+  }}
+>
               {/* VÄNSTER */}
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button
@@ -408,16 +413,16 @@ const ModuleSlideLayout = ({
              {/* MITTEN: spacer */}
   <div className="flex-1" />
 
-  {/* HÖGER: Fullscreen */}
-  <div className="flex-shrink-0">
-    <button
-      onClick={toggleFullscreen}
-      className={`${btnBase} w-8 h-8`}
-      style={{ color: 'rgba(255,255,255,0.85)' }}
-    >
-      {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
-    </button>
-  </div>
+ {/* HÖGER: Fullscreen */}
+<div className="flex-shrink-0 pointer-events-auto ml-auto">
+  <button
+    onClick={toggleFullscreen}
+    className={`${btnBase} w-8 h-8`}
+    style={{ color: 'rgba(255,255,255,0.85)' }}
+  >
+    {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+  </button>
+</div>
 
             </div>
           </motion.div>

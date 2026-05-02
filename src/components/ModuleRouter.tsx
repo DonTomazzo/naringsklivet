@@ -29,6 +29,9 @@ import ModuleFastighetenSakerhet  from '../modules/Styrelsekorkortet/ModuleFasti
 import ModuleFastighetenUnderhall from '../modules/Styrelsekorkortet/ModuleFastighetenUnderhall';
 import ModuleFastighetenEnergi    from '../modules/Styrelsekorkortet/ModuleFastighetenEnergi';
 import ModuleFastighetenDrift     from '../modules/Styrelsekorkortet/ModuleFastighetenDrift';
+import ModuleDigitalSakerhetLosenord from '../modules/Naringsklivet/ModuleDigitalSakerhet_Losenord';
+import ModuleDigitalSakerhetAI from '../modules/Naringsklivet/ModuleDigitalSakerhet_AI';
+import ModulePhishing from '../modules/Naringsklivet/ModulePhishing';
 
 
 
@@ -42,6 +45,9 @@ import ModuleJavaScript, { courseData as jsData } from '../modules/Naringsklivet
 import ModuleGDPR, { courseData as gdprData } from '../modules/Naringsklivet/ModuleGDPR';
 import ModuleMejl, { courseData as mejlData } from '../modules/Naringsklivet/ModuleMejl';
 import ModuleMotesledning, { courseData as motenData } from '../modules/Styrelsekorkortet/ModuleMotesledning';
+import ModuleDigitalSakerhet from '../modules/Naringsklivet/ModuleDigitalSakerhet';
+import ModuleNIS2 from '../modules/Naringsklivet/ModuleNIS2';
+
 
 // ════════════════════════════════════════════════════════════════════════════
 // MAP: slug → komponent
@@ -77,6 +83,11 @@ const MODULE_MAP: Record<string, React.ComponentType> = {
 'fastigheten-underhall':  ModuleFastighetenUnderhall,
 'fastigheten-energi':     ModuleFastighetenEnergi,
 'fastigheten-drift':      ModuleFastighetenDrift,
+'digital-sakerhet-losenord':  ModuleDigitalSakerhetLosenord,
+'digital-sakerhet-ai':        ModuleDigitalSakerhetAI,
+'digital-sakerhet': ModuleDigitalSakerhet,
+'phishing-social-engineering': ModulePhishing,
+'nis2-iso27001': ModuleNIS2,
   
 
   // Kurser utan komponent ännu – lägg till när de byggs:

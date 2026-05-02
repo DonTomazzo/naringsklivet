@@ -1,3 +1,4 @@
+//ModulePage.jsx
 import { useParams, Navigate } from 'react-router-dom';
 import { getModuleBySlug } from '../../data/modules2';
 import { getAktieModuleBySlug } from '../../data/modules3';
