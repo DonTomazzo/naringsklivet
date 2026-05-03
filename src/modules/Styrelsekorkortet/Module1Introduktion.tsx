@@ -1,47 +1,59 @@
 // src/modules/Styrelsekorkortet/ModuleStyrelsenArbete.tsx
-// Modul: Styrelsens arbete – roller, möten, ansvar och mötesteknik
-// Stil: Bakgrundsbilder, vita rubriker, klickbara cirklar, InlineQuiz, slutquiz
-// Baserad på: HSB Styrelsens arbete (exkl. HSB-specifikt innehåll)
+// Modul: Hur BRF:en fungerar — historia, dokumentation, lagar & regler
+// Quiz-design: QuizSalesPage-stil (persona + bubbla vänster, vit frågepanel höger)
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Users, Gavel, FileText, Calendar, MessageSquare,
-  Shield, HelpCircle, Award, Search, CheckCircle, X
+  Users, FileText, Shield, HelpCircle, Award,
+  CheckCircle, X, ChevronRight, XCircle, ArrowRight,
 } from 'lucide-react';
 
-import CourseHeader      from '../../components/CourseElements/CourseHeader';
-import GlobalSidebar     from '../../components/GlobalSidebar';
-import FloatingFAQ       from '../../components/CourseElements/FloatingFAQ';
-import ModuleSlideLayout from '../../components/CourseElements/ModuleSlideLayout';
-import ModuleIntroSlide from '../../components/CourseElements/ModuleIntroSlide';
-import BrfFlödesdiagramSlide from '../../components/CourseElements/BrfFlödesdiagramSlide';
+import CourseHeader               from '../../components/CourseElements/CourseHeader';
+import GlobalSidebar              from '../../components/GlobalSidebar';
+import FloatingFAQ                from '../../components/CourseElements/FloatingFAQ';
+import ModuleSlideLayout          from '../../components/CourseElements/ModuleSlideLayout';
+import ModuleIntroSlide           from '../../components/CourseElements/ModuleIntroSlide';
+import BrfFlödesdiagramSlide      from '../../components/CourseElements/BrfFlödesdiagramSlide';
 import BuildingCrossSectionSection from '../../components/CourseElements/IntressenterSection';
 import SplitSlide, { StegLista, InfoRuta } from '../../components/CourseElements/SplitSlide';
-import AudioPlayer from '../../components/AudioPlayer';
-import InlineQuiz        from '../../components/CourseElements/InlineQuiz';
-import GdprQuizOverlay   from '../../components/CourseElements/GdprQuizOverlay';
 import IntressenterElevatorSection from '../../components/CourseElements/IntressenterElevatorSection';
-import ScenarioAndrahand from '../../components/CourseElements/ScenarioAndrahand';
-import BrfMissuppfattningsQuiz from '../../components/CourseElements/BrfMissuppfattningsQuiz';
+import ScenarioAndrahand          from '../../components/CourseElements/ScenarioAndrahand';
+import BrfMissuppfattningsQuiz    from '../../components/CourseElements/BrfMissuppfattningsQuiz';
+import GdprQuizOverlay            from '../../components/CourseElements/GdprQuizOverlay';
+import BrfHistorieTidslinje from '../../components/CourseElements/BrfHistorieTidslinje';
 
 const O    = '#FF5421';
 const OD   = '#E04619';
 const OL   = '#FFF0EB';
 const DARK = '#0f1623';
 
+// ─── Bilder ──────────────────────────────────────────────
 const IMGS = {
-  möte:      'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&q=80',
-  dokument:  'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&q=80',
-  juridik:   'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1920&q=80',
-  bygg:      'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=80',
-  team:      'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920&q=80',
-  kalender:  'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=1920&q=80',
-  protokoll: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&q=80',
-  ansvar:    'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1920&q=80',
+  historia:   'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=80',
+  kooperativ: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1920&q=80',
+  modern:     'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&q=80',
+  dokument:   'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&q=80',
+  stadgar:    'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&q=80',
+  arkiv:      'https://images.unsplash.com/photo-1568667256549-094345857637?w=1920&q=80',
+  juridik:    'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1920&q=80',
+  lag:        'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1920&q=80',
+  eu:         'https://images.unsplash.com/photo-1526958097901-5e6d742d3371?w=1920&q=80',
+  avslut:     'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&q=80',
 };
 
-// ─── Hjälpkomponenter ────────────────────────────────────
+// Personas för quiz
+const PERSONAS = {
+  eva:    'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&q=80',
+  magnus: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80',
+  anna:   'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=200&q=80',
+  karin:  'https://images.unsplash.com/photo-1554151228-14d9def656e4?w=200&q=80',
+  lars:   'https://images.unsplash.com/photo-1557862921-37829c790f19?w=200&q=80',
+  sofia:  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80',
+  peter:  'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=200&q=80',
+};
+
+// ─── Hjälpkomponenter ─────────────────────────────────────
 const BgSlide = ({ bild, children, overlay = 'rgba(15,22,35,0.82)' }: {
   bild: string; children: React.ReactNode; overlay?: string;
 }) => (
@@ -69,261 +81,533 @@ const H = ({ icon: Icon, title }: { icon: React.ElementType; title: string }) =>
   </h2>
 );
 
-// ─── Klickbara cirklar + modal ───────────────────────────
-interface KortItem {
-  id: string; nr: string; label: string; short: string;
-  bild: string; body: string; tips?: string;
+// ─── HighlightText ────────────────────────────────────────
+const HighlightText = ({ text, words }: { text: string; words: string[] }) => {
+  if (!words?.length) return <>{text}</>;
+  const pattern = new RegExp(
+    `(${words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi'
+  );
+  const parts = text.split(pattern);
+  return <>{parts.map((p, i) =>
+    words.some(w => w.toLowerCase() === p.toLowerCase())
+      ? <span key={i} style={{ color: O, fontWeight: 900 }}>{p}</span>
+      : <span key={i}>{p}</span>
+  )}</>;
+};
+
+// ═══════════════════════════════════════════════════════════
+// QUIZ-KOMPONENT — QuizSalesPage-stil
+// ═══════════════════════════════════════════════════════════
+interface QuizFraga {
+  id: string;
+  persona: string;
+  roll: string;
+  bild: string;
+  kategori: string;
+  highlight: string[];
+  bubbla: string;
+  fraga: string;
+  alternativ: { text: string; korrekt: boolean; feedback: string }[];
+  tips: string[];
 }
 
-const KortModal = ({ item, onClose }: { item: KortItem | null; onClose: () => void }) => (
-  <AnimatePresence>
-    {item && (
-      <>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" onClick={onClose} />
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96, y: 24 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 24 }}
-          transition={{ duration: 0.28, ease: [0.32, 0.72, 0, 1] }}
-          className="fixed z-50"
-          style={{ top: 'var(--header-height, 60px)', left: 0, right: 0, bottom: 0 }}>
-          <div className="h-full flex items-center justify-center p-0 md:p-6">
-            <div className="bg-white w-full h-full md:h-auto md:max-w-2xl md:rounded-3xl md:max-h-[85vh] shadow-2xl overflow-hidden flex flex-col">
-              <div className="relative flex-shrink-0 h-44 sm:h-52">
-                <img src={item.bild} alt={item.label} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,0.25),rgba(0,0,0,0.65))' }} />
-                <button onClick={onClose}
-                  className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/20"
-                  style={{ background: 'rgba(0,0,0,0.4)' }}>
-                  <X size={16} className="text-white" />
-                </button>
-                <div className="absolute bottom-4 left-5 right-14">
-                  <span className="inline-block text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2 text-white"
-                    style={{ background: O }}>{item.nr}</span>
-                  <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight">{item.label}</h3>
-                  <p className="text-white/70 text-base mt-1">{item.short}</p>
-                </div>
-              </div>
-              <div className="px-5 sm:px-7 py-6 overflow-y-auto space-y-5 flex-1">
+const AlternativKnapp = ({ alt, valt, visar, onVälj }: {
+  alt: { text: string; korrekt: boolean; feedback: string };
+  valt: string | null; visar: boolean; onVälj: (t: string) => void;
+}) => {
+  const isValt = valt === alt.text;
+  const visaRes = visar && isValt;
+  const isCorrectUnselected = visar && alt.korrekt && !isValt;
+  return (
+    <motion.button
+      onClick={() => !visar && onVälj(alt.text)}
+      whileHover={!visar ? { scale: 1.01, x: 3, boxShadow: `0 4px 20px ${O}25` } : {}}
+      whileTap={!visar ? { scale: 0.98 } : {}}
+      style={{
+        width: '100%', textAlign: 'left', padding: '16px 20px', minHeight: 64,
+        borderRadius: 14,
+        background: visaRes ? (alt.korrekt ? `${O}15` : 'rgba(80,80,90,0.08)')
+          : isCorrectUnselected ? `${O}08` : isValt ? OL : '#fff',
+        border: `2px solid ${visaRes ? (alt.korrekt ? O : '#9ca3af')
+          : isCorrectUnselected ? `${O}50` : isValt ? O : '#e5e7eb'}`,
+        cursor: visar ? 'default' : 'pointer',
+        display: 'flex', alignItems: 'center', gap: 16, transition: 'all 0.18s',
+        boxShadow: isValt && !visar ? `0 4px 16px ${O}20` : 'none',
+      }}>
+      <div style={{
+        width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
+        background: visaRes ? (alt.korrekt ? O : '#9ca3af')
+          : isCorrectUnselected ? `${O}30` : isValt ? O : '#f0f0f0',
+        border: `2px solid ${visaRes ? 'transparent' : isValt ? O : '#d1d5db'}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: 13, fontWeight: 900,
+        color: isValt || visaRes ? '#fff' : '#9ca3af', transition: 'all 0.18s',
+      }}>
+        {visaRes ? (alt.korrekt ? '✓' : '✗') : isValt ? '●' : null}
+      </div>
+      <p style={{
+        fontSize: 16, lineHeight: 1.45, flex: 1, fontWeight: isValt ? 700 : 500,
+        color: visaRes ? (alt.korrekt ? '#b84400' : '#6b7280') : '#1f2937',
+      }}>
+        {alt.text}
+      </p>
+    </motion.button>
+  );
+};
+
+const KapitelQuiz = ({
+  quizId, fragor, bild, badge, onComplete, isDone,
+}: {
+  quizId: string; fragor: QuizFraga[]; bild: string;
+  badge: string; onComplete: (id: string) => void; isDone: boolean;
+}) => {
+  const [idx, setIdx]       = useState(0);
+  const [valt, setValt]     = useState<string | null>(null);
+  const [visar, setVisar]   = useState(false);
+  const [ratt, setRatt]     = useState(0);
+  const [fas, setFas]       = useState<'quiz' | 'avslut'>('quiz');
+  const videoRef             = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => { if (videoRef.current) videoRef.current.play().catch(() => {}); }, [idx]);
+
+  const current  = fragor[idx];
+  const valtAlt  = valt ? current.alternativ.find(a => a.text === valt) : null;
+
+  const handleVälj = (text: string) => {
+    if (visar) return;
+    const alt = current.alternativ.find(a => a.text === text)!;
+    setValt(text); setVisar(true);
+    if (alt.korrekt) setRatt(r => r + 1);
+  };
+
+  const handleNästa = () => {
+    if (idx < fragor.length - 1) { setIdx(i => i + 1); setValt(null); setVisar(false); }
+    else { setFas('avslut'); onComplete(quizId); }
+  };
+
+  const handleOm = () => { setIdx(0); setValt(null); setVisar(false); setRatt(0); setFas('quiz'); };
+
+  if (fas === 'avslut') return (
+    <div className="h-full relative overflow-hidden flex items-center justify-center"
+      style={{ background: DARK }}>
+      <video ref={videoRef} src="/video/intro-brf-1.mp4" muted playsInline loop
+        className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.15 }} />
+      <div className="absolute inset-0" style={{ background: 'rgba(15,22,35,0.88)' }} />
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+        className="relative z-10 text-center max-w-md mx-auto px-8">
+        <div style={{ fontSize: 64, marginBottom: 16 }}>
+          {ratt === fragor.length ? '🏆' : ratt >= fragor.length / 2 ? '⭐' : '💪'}
+        </div>
+        <h3 className="text-3xl font-black text-white mb-3" style={{ fontFamily: "'Nunito', sans-serif" }}>
+          {ratt === fragor.length ? 'Perfekt!' : 'Bra jobbat!'}
+        </h3>
+        <p className="text-lg mb-8" style={{ color: 'rgba(255,255,255,0.5)' }}>
+          {ratt} av {fragor.length} rätt
+        </p>
+        {isDone && (
+          <div className="rounded-2xl p-5 mb-6 flex items-center gap-3"
+            style={{ background: `${O}18`, border: `1px solid ${O}35` }}>
+            <CheckCircle size={22} style={{ color: O, flexShrink: 0 }} />
+            <p className="text-white font-bold text-left">Avklarat! Gå vidare till nästa del.</p>
+          </div>
+        )}
+        <button onClick={handleOm}
+          className="flex items-center justify-center gap-2 mx-auto px-6 py-3 rounded-xl text-sm font-bold"
+          style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)', border: 'none', cursor: 'pointer' }}>
+          Gör om quizet
+        </button>
+      </motion.div>
+    </div>
+  );
+
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative', fontFamily: "'Nunito', sans-serif" }}>
+      <video ref={videoRef} src="/video/intro-brf-1.mp4" muted playsInline loop
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(10,16,28,0.88)', zIndex: 1 }} />
+
+      {/* Topbar */}
+      <div style={{ position: 'relative', zIndex: 20, flexShrink: 0 }}>
+        <div style={{ height: 4, background: 'rgba(255,255,255,0.1)' }}>
+          <motion.div animate={{ width: `${(idx / fragor.length) * 100}%` }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            style={{ height: '100%', background: `linear-gradient(to right, ${O}, ${OD})` }} />
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '10px 24px', background: 'rgba(10,16,28,0.95)', borderBottom: '1px solid rgba(255,255,255,0.08)', gap: 12 }}>
+          <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase' as const, color: O }}>{badge}</span>
+          <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)' }}>{idx + 1} / {fragor.length}</span>
+          <div style={{ display: 'flex', gap: 4 }}>
+            {fragor.map((_, i) => (
+              <div key={i} style={{
+                width: i === idx ? 20 : 8, height: 8, borderRadius: 4,
+                background: i < idx ? O : i === idx ? O : 'rgba(255,255,255,0.12)',
+                transition: 'all 0.3s',
+              }} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* DESKTOP */}
+      <div className="hidden lg:grid" style={{ flex: 1, gridTemplateColumns: '1fr 1fr', position: 'relative', zIndex: 10, overflow: 'hidden' }}>
+        {/* Vänster — persona */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 48px', gap: 24 }}>
+          <AnimatePresence mode="wait">
+            <motion.div key={idx} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, width: '100%', maxWidth: 400 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+                <img src={current.bild} alt={current.persona}
+                  style={{ width: 88, height: 88, borderRadius: '50%', objectFit: 'cover', border: `4px solid ${O}`, boxShadow: `0 0 36px ${O}50`, flexShrink: 0 }} />
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: O }}>Vad innebär det?</p>
-                  <p className="text-base text-gray-600 leading-relaxed">{item.body}</p>
+                  <p style={{ fontSize: 22, fontWeight: 900, color: '#fff' }}>{current.persona}</p>
+                  <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{current.roll}</p>
                 </div>
-                {item.tips && (
-                  <div className="rounded-2xl p-5 border" style={{ background: OL, borderColor: `${O}20` }}>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>Tänk på detta</p>
-                    <p className="text-base text-gray-700 leading-relaxed">{item.tips}</p>
-                  </div>
-                )}
-                <div className="h-4 md:hidden" />
               </div>
+              <div style={{ padding: '24px 28px', borderRadius: '4px 22px 22px 22px', background: 'rgba(255,255,255,0.13)', border: '1px solid rgba(255,255,255,0.22)', backdropFilter: 'blur(20px)', width: '100%' }}>
+                <p style={{ fontSize: 19, color: '#ffffff', lineHeight: 1.75, fontWeight: 400, textAlign: 'center' }}>
+                  "{current.bubbla}"
+                </p>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Höger — fråga */}
+        <div style={{ background: '#FAFAF8', overflowY: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '36px 48px' }}>
+          <AnimatePresence mode="wait">
+            {!visar ? (
+              <motion.div key={`q${idx}`} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.25 }}>
+                <h3 style={{ fontSize: 28, fontWeight: 900, color: '#111827', lineHeight: 1.25, marginBottom: 28 }}>
+                  <HighlightText text={current.fraga} words={current.highlight || []} />
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {current.alternativ.map(alt => (
+                    <AlternativKnapp key={alt.text} alt={alt} valt={valt} visar={visar} onVälj={handleVälj} />
+                  ))}
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div key={`f${idx}`} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.25 }}>
+                <div style={{ padding: '20px 24px', borderRadius: 16, marginBottom: 18, background: valtAlt?.korrekt ? `${O}12` : 'rgba(80,80,90,0.08)', border: `2px solid ${valtAlt?.korrekt ? O + '55' : '#9ca3af40'}` }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+                    {valtAlt?.korrekt
+                      ? <CheckCircle size={26} style={{ color: O, flexShrink: 0 }} />
+                      : <XCircle size={26} style={{ color: '#9ca3af', flexShrink: 0 }} />}
+                    <p style={{ fontSize: 20, fontWeight: 900, color: '#111827' }}>
+                      {valtAlt?.korrekt ? 'Rätt svar! 🎉' : 'Inte riktigt'}
+                    </p>
+                  </div>
+                  <p style={{ fontSize: 16, color: '#374151', lineHeight: 1.7 }}>{valtAlt?.feedback}</p>
+                </div>
+                <div style={{ padding: '16px 20px', borderRadius: 14, background: OL, border: `1px solid ${O}30`, marginBottom: 20 }}>
+                  <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase' as const, color: O, marginBottom: 10 }}>Kom ihåg</p>
+                  {current.tips.map((tip, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 7 }}>
+                      <div style={{ width: 6, height: 6, borderRadius: '50%', background: O, flexShrink: 0, marginTop: 8 }} />
+                      <p style={{ fontSize: 15, color: '#374151', lineHeight: 1.6 }}>{tip}</p>
+                    </div>
+                  ))}
+                </div>
+                <motion.button initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} onClick={handleNästa}
+                  style={{ width: '100%', padding: '18px', borderRadius: 14, cursor: 'pointer', background: `linear-gradient(135deg, ${O}, ${OD})`, border: 'none', color: '#fff', fontSize: 17, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: `0 6px 24px ${O}40` }}>
+                  {idx < fragor.length - 1 ? <>Nästa fråga <ChevronRight size={20} /></> : <>Se sammanfattning <ChevronRight size={20} /></>}
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* MOBIL */}
+      <div className="lg:hidden flex flex-col" style={{ flex: 1, overflow: 'hidden', position: 'relative', zIndex: 10 }}>
+        <div style={{ padding: '18px 18px 20px', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+            <img src={current.bild} alt={current.persona}
+              style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', border: `3px solid ${O}`, flexShrink: 0 }} />
+            <div>
+              <p style={{ fontSize: 18, fontWeight: 900, color: '#fff' }}>{current.persona}</p>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>{current.roll}</p>
             </div>
           </div>
-        </motion.div>
-      </>
-    )}
-  </AnimatePresence>
-);
-
-const KortGrid = ({ items }: { items: KortItem[] }) => {
-  const [active, setActive] = useState<KortItem | null>(null);
-  const [viewed, setViewed] = useState<Set<string>>(new Set());
-  const handleClick = (item: KortItem) => {
-    setActive(item);
-    setViewed(prev => new Set([...prev, item.id]));
-  };
-  return (
-    <div className="w-full">
-      <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto py-6 px-2">
-        {items.map((item, i) => {
-          const isViewed = viewed.has(item.id);
-          return (
-            <motion.button key={item.id}
-              initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.06 }}
-              whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}
-              onClick={() => handleClick(item)}
-              className="w-24 h-24 sm:w-28 sm:h-28 rounded-full flex items-center justify-center text-center p-3 font-bold text-xs leading-tight"
-              style={{
-                background: isViewed ? OD : O, color: 'white',
-                boxShadow: isViewed ? `0 0 0 3px white, 0 0 0 5px ${OD}, 0 4px 16px ${O}60` : `0 4px 20px ${O}50`,
-              }}>
-              {item.label}
-            </motion.button>
-          );
-        })}
+          <div style={{ padding: '16px 18px', borderRadius: '4px 18px 18px 18px', background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.20)' }}>
+            <p style={{ fontSize: 15, color: '#fff', lineHeight: 1.7 }}>"{current.bubbla}"</p>
+          </div>
+        </div>
+        <div style={{ borderRadius: '24px 24px 0 0', background: '#FAFAF8', flex: 1, overflowY: 'auto', padding: '20px 16px 36px' }}>
+          <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(0,0,0,0.12)', margin: '0 auto 16px' }} />
+          <AnimatePresence mode="wait">
+            {!visar ? (
+              <motion.div key={`mq${idx}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+                <h3 style={{ fontSize: 20, fontWeight: 900, color: '#111827', lineHeight: 1.3, marginBottom: 16 }}>
+                  <HighlightText text={current.fraga} words={current.highlight || []} />
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                  {current.alternativ.map(alt => (
+                    <AlternativKnapp key={alt.text} alt={alt} valt={valt} visar={visar} onVälj={handleVälj} />
+                  ))}
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div key={`mf${idx}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+                <div style={{ padding: '16px 18px', borderRadius: 16, marginBottom: 12, background: valtAlt?.korrekt ? `${O}12` : 'rgba(80,80,90,0.07)', border: `2px solid ${valtAlt?.korrekt ? O + '55' : '#9ca3af35'}` }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                    {valtAlt?.korrekt ? <CheckCircle size={22} style={{ color: O, flexShrink: 0 }} /> : <XCircle size={22} style={{ color: '#9ca3af', flexShrink: 0 }} />}
+                    <p style={{ fontSize: 17, fontWeight: 900, color: '#111827' }}>{valtAlt?.korrekt ? 'Rätt svar! 🎉' : 'Inte riktigt'}</p>
+                  </div>
+                  <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.65 }}>{valtAlt?.feedback}</p>
+                </div>
+                <div style={{ padding: '13px 15px', borderRadius: 12, background: OL, border: `1px solid ${O}30`, marginBottom: 14 }}>
+                  <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase' as const, color: O, marginBottom: 8 }}>Kom ihåg</p>
+                  {current.tips.map((tip, i) => (
+                    <div key={i} style={{ display: 'flex', gap: 9, marginBottom: 5 }}>
+                      <div style={{ width: 5, height: 5, borderRadius: '50%', background: O, flexShrink: 0, marginTop: 8 }} />
+                      <p style={{ fontSize: 13, color: '#374151', lineHeight: 1.55 }}>{tip}</p>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={handleNästa}
+                  style={{ width: '100%', padding: '16px', borderRadius: 14, cursor: 'pointer', background: `linear-gradient(135deg, ${O}, ${OD})`, border: 'none', color: '#fff', fontSize: 16, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                  {idx < fragor.length - 1 ? 'Nästa fråga' : 'Se sammanfattning'} <ChevronRight size={17} />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
-      {viewed.size > 0 && viewed.size < items.length && (
-        <p className="text-center text-xs text-white/40 pb-4">{viewed.size}/{items.length} utforskade – klicka på fler</p>
-      )}
-      {viewed.size === items.length && (
-        <p className="text-center text-xs font-semibold pb-4" style={{ color: OL }}>✓ Du har utforskat alla!</p>
-      )}
-      <KortModal item={active} onClose={() => setActive(null)} />
     </div>
   );
 };
 
-const MODULE_FAQ = [
-  { question: 'Hur ofta måste styrelsen ha möte?', answer: 'Det finns ingen lagstadgad minimifrekvens, men ordföranden ansvarar för att möten hålls regelbundet. Viktiga tillfällen är konstituerande möte, planeringsmöte, budgetmöte och möte inför stämman.' },
-  { question: 'Vad händer om styrelsen fattar ett felaktigt beslut?', answer: 'Om styrelsen medvetet bryter mot lagen eller orsakar ekonomisk skada genom slarv kan stämman vägra ansvarsfrihet. Ledamöter kan i allvarliga fall bli skadeståndsskyldiga.' },
-  { question: 'Måste protokollen vara offentliga för alla i föreningen?', answer: 'Nej. Den som inte är styrelseledamot eller vald revisor har inte rätt att ta del av styrelseprotokollen. Styrelsen bestämmer utifrån sin vårdnadsplikt vilken information som lämnas ut.' },
-  { question: 'Vad är skillnaden på bordläggning och återremiss?', answer: 'Bordläggning skjuter upp en fråga utan att utreda den vidare. Återremiss innebär att styrelsen får tillbaka en fråga som behöver utredas ytterligare innan beslut fattas.' },
-];
-
-const IntroSlide = ({ onStart }: { onStart: () => void }) => (
-  <ModuleIntroSlide
-    kategori="JURIDIK"
-    titel="Välkommen till <span style='color:#FF5421'>bostadsrättsföreningen</span>"
-    ingress="I det här avsnittet kommer vi att kika närmre på hur bostadsrättsföreningen fungerar"
-    bild="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80"
-    längd="2 timmar"
-    avsnitt={11}
-    onStart={onStart}
-   videoUrl="/video/intro-brf2.mp4"
-    videoTitel="Introduktion till bostadsrättsföreningen"
-    vadLärDuDig={[
-      'Styrelsens tre kärnuppgifter ',
-  'Rollerna – ordförande,  ',
-  'Hur styrelsen fattar beslut och ',
-  'Protokollets juridiska betydelse t',
-  'Jäv, bordläggning och',
-  'Vad som händer om styrelsen ',
-    ]}
-  />
-);
-
 // ═══════════════════════════════════════════════════════════
-// SLIDE 2 – ROLLERNA (klickbara cirklar)
+// KAPITEL 1: HISTORIA — 3 slides
 // ═══════════════════════════════════════════════════════════
-const RollernaSlide = () => {
-  const roller: KortItem[] = [
-    {
-      id: 'ordforande', nr: 'Roll 1', label: 'Ordförande',
-      short: 'Leder styrelsen och ansvarar för att beslut verkställs.',
-      bild: IMGS.möte,
-      body: 'Ordföranden ska regelbundet följa föreningens verksamhet, se till att styrelseprotokoll förs och justeras, ansvara för att Bolagsverket anmäls om ändringar och hålla medlemmarna informerade. Det är ordförandens ansvar att kalla till möten och säkerställa att beslut fattas demokratiskt och korrekt.',
-      tips: 'Ordföranden leder processen — inte innehållet. Alla ledamöter ska ha samma möjlighet att komma till tals och påverka besluten.',
-    },
-    {
-      id: 'sekreterare', nr: 'Roll 2', label: 'Sekreterare',
-      short: 'Ansvarar för protokoll och uppföljning av beslut.',
-      bild: IMGS.dokument,
-      body: 'Enligt lagen om ekonomiska föreningar är alla föreningar skyldiga att föra protokoll vid sina sammanträden. Det är sekreterarens uppgift. Sekreteraren håller också reda på bordlagda frågor och bevakar att styrelsens beslut verkställs.',
-      tips: 'Protokollet är juridiskt viktigt — frågor med ekonomiska konsekvenser måste dokumenteras ordentligt. Justera protokollet inom 2–4 veckor.',
-    },
-    {
-      id: 'kassör', nr: 'Roll 3', label: 'Kassör',
-      short: 'Hanterar ekonomi, budget och bokföring.',
-      bild: IMGS.protokoll,
-      body: 'Kassören ansvarar för föreningens löpande ekonomi och ser till att bokföringen sköts korrekt. Budgetuppföljning bör vara en stående punkt på styrelsemötets dagordning.',
-      tips: 'Styrelsen ansvarar för ekonomin även om en förvaltare sköter redovisningen. Säkerställ att ni förstår siffrorna — det är ert ansvar, inte förvaltarens.',
-    },
-    {
-      id: 'ledamot', nr: 'Roll 4', label: 'Ledamot',
-      short: 'Deltar i beslut och tar ansvar för tilldelade områden.',
-      bild: IMGS.team,
-      body: 'Alla styrelseledamöter kallas ledamöter. De deltar i beslut, tar ansvar för sina ansvarsområden och ser till att styrelsens arbete fungerar som ett team. En ledamot som inte kan närvara kan ersättas av en suppleant om sådan finns.',
-      tips: 'Se till att alla ledamöter har "sina" ansvarsområden. Det ökar engagemanget och minskar risken för att viktiga frågor faller mellan stolarna.',
-    },
-    {
-      id: 'revisor', nr: 'Extern', label: 'Revisorn',
-      short: 'Granskar styrelsens förvaltning och årsredovisning.',
-      bild: IMGS.ansvar,
-      body: 'Revisorn väljs av föreningsstämman — inte av styrelsen. Revisorn granskar att årsredovisningen ger en rättvisande bild av ekonomin och uttalar sig om styrelsens förvaltning. Det är viktigt att revisorn inte blir för involverad i styrelsearbetet eftersom hens uppgift är att granska det.',
-      tips: 'En revisor får inte vara styrelseledamot, suppleant eller VD. Revisorn är medlemmarnas ögon — inte styrelsens redskap.',
-    },
-    {
-      id: 'valberedning', nr: 'Extern', label: 'Valberedning',
-      short: 'Föreslår nya ledamöter till styrelsen.',
-      bild: IMGS.team,
-      body: 'Valberedningen väljs av stämman och föreslår vilka som ska väljas in i styrelsen. De ska ha god kontakt med många medlemmar och veta vilka kompetenser som behövs. En välfungerande valberedning tänker på ålder, bakgrund och kön för en balanserad styrelse.',
-      tips: 'Valberedningen arbetar på förtroende från medlemmarna — inte på uppdrag av styrelsen. De ska vara oberoende.',
-    },
-    {
-  id: 'Suppleanterna',
-  nr: 'Extern',
-  label: 'Suppleanterna',
-  color: '#171f32', // <--- Lägg till denna rad
-  short: 'Granskar styrelsens förvaltning och årsredovisning.',
-  // ... resten av objektet
-},
-{
-  id: 'valberedning',
-  nr: 'Extern',
-  label: 'Valberedning',
-  color: '#171f32', // <--- Lägg till denna rad
-  short: 'Föreslår nya ledamöter till styrelsen.',
-  // ... resten av objektet
-},
-  ];
-
-  return (
-    <BgSlide bild={IMGS.team}>
-    {/* Denna div sköter centreringen */}
-    <div className="flex flex-col items-center justify-center text-center h-full max-w-4xl mx-auto px-6">
-      
-      <Badge text="Block 1 · Avsnitt 01" />
-      
-      <H icon={Users} title="De olika rollerna i föreningen" />
-      
-      <p className="text-white/70 text-base leading-relaxed mb-8 max-w-2xl">
-        Klicka på varje roll för att förstå ansvar och befogenheter.
-      </p>
-
-      {/* Grid-komponenten behöver ofta w-full för att inte krympa ihop i flex-boxen */}
-      <div className="w-full">
-        <KortGrid items={roller} />
-      </div>
-      
-    </div>
-  </BgSlide>
-  );
-};
-
-// ═══════════════════════════════════════════════════════════
-// SLIDE 3 – STYRELSENS ANSVAR
-// ═══════════════════════════════════════════════════════════
-const AnsvarSlide = () => (
-  <BgSlide bild={IMGS.juridik}>
-    <Badge text="Avsnitt 02 · Ansvar" />
-    <H icon={Shield} title="Styrelsens ansvar – och konsekvenserna" />
+const Historia1 = () => (
+  <BgSlide bild={IMGS.historia}>
+    <Badge text="Kapitel 1 · Historia" />
+    <H icon={Users} title="Hur BRF:en uppstod" />
     <p className="text-white/70 text-base leading-relaxed mb-6">
-      Styrelseuppdraget är ett förtroendeuppdrag med reellt juridiskt ansvar.
-      Att inte förstå sitt ansvar är ingen ursäkt inför lagen.
+      Bostadsrättsföreningen är en svensk uppfinning med rötter i 1800-talets industrialisering.
+      Förstå ursprunget — förstå varför modellen ser ut som den gör idag.
     </p>
-
-    {/* Tre ansvarsområden */}
     <div className="space-y-3 mb-6">
       {[
-        { nr: '01', titel: 'Förvalta fastigheter', text: 'Byggnader och tillgångar ska hållas i gott skick. Underhållsplan ska finnas och följas.' },
-        { nr: '02', titel: 'Sköta ekonomin', text: 'Redovisning enligt lag, budget och intern kontroll. Styrelsen ansvarar även om en förvaltare anlitas.' },
-        { nr: '03', titel: 'Väl fungerande organisation', text: 'Tydliga roller, attesträtt, protokoll och rutiner. Ingen enskild person ska avgöra stora ekonomiska frågor på egen hand.' },
+        { år: '1850–1900', rubrik: 'Urbaniseringen', text: 'Sverige industrialiserades snabbt. Arbetare strömmade till städerna men det saknades bostäder. Hyresspekulanter tog ut höga hyror för undermåliga lägenheter.' },
+        { år: '1916', rubrik: 'HSB grundades', text: 'Hyresgästernas Sparkasse- och Byggnadsförening (HSB) bildades i Stockholm av Sven Wallander. Idén: arbetarna skulle äga sina egna bostäder gemensamt — kooperativt.' },
+        { år: '1930', rubrik: 'Bostadsrättslagen', text: 'Sveriges första bostadsrättslag stiftades. Den gav den kooperativa bostadsmodellen en juridisk ram och skyddade innehavarna mot godtyckliga hyresvärdar.' },
+        { år: '1971', rubrik: 'Modern lag', text: 'En moderniserad bostadsrättslag stiftades som lade grunden för nuvarande regler om föreningens skyldigheter, innehavarens rättigheter och stämmans befogenheter.' },
       ].map((item, i) => (
-        <motion.div key={i}
-          initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
+        <motion.div key={i} initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-          className="flex items-start gap-4 p-4 rounded-xl border"
+          className="flex items-start gap-4 p-4 rounded-xl"
           style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
-          <span className="text-3xl font-black flex-shrink-0 w-10" style={{ color: `${O}50` }}>{item.nr}</span>
+          <span className="text-xs font-black flex-shrink-0 px-2 py-1 rounded-lg mt-0.5"
+            style={{ background: `${O}30`, color: O }}>{item.år}</span>
           <div>
-            <p className="text-white font-bold text-sm sm:text-base mb-1">{item.titel}</p>
+            <p className="text-white font-bold text-sm mb-1">{item.rubrik}</p>
             <p className="text-white/60 text-sm leading-relaxed">{item.text}</p>
           </div>
         </motion.div>
       ))}
     </div>
+    <div className="rounded-xl p-4 border-l-4" style={{ borderColor: O, background: `${O}12` }}>
+      <p className="text-white text-sm leading-relaxed">
+        <span className="font-bold" style={{ color: O }}>Kärnan: </span>
+        BRF-modellen byggdes för att ge vanliga människor makt över sitt eget boende — utan att vara beroende av en hyresvärd. Det kooperativa tänket lever kvar i varje stämmobeslut du fattar idag.
+      </p>
+    </div>
+  </BgSlide>
+);
 
-    {/* Konsekvenser */}
-    <div className="rounded-2xl p-5 border" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)' }}>
-      <p className="text-xs font-bold uppercase tracking-widest mb-3 text-red-400">Om styrelsen inte sköter sig</p>
+const Historia2 = () => (
+  <SplitSlide
+    badge="Kapitel 1 · Historia"
+    title="Det <span style='color:#FF5421'>kooperativa</span> tänket"
+    ingress="En bostadsrättsförening är ingen vanlig fastighetsägare. Det är en ekonomisk förening där medlemmarna äger och styr gemensamt — med demokrati som fundament."
+    bild={IMGS.kooperativ}
+    bildPosition="right"
+    badge2="Demokrati i praktiken"
+    badge2Sub="En röst per lägenhet"
+  >
+    <StegLista steg={[
+      { nr: '01', titel: 'Föreningen äger fastigheten', desc: 'Inte du som individ — utan föreningen gemensamt. Du äger rätten att nyttja din lägenhet, inte murarna i sig.' },
+      { nr: '02', titel: 'Stämman är högsta beslutande organ', desc: 'Alla medlemmar har röst. Styrelsen fattar beslut i det dagliga — men de stora frågorna avgörs demokratiskt på stämman.' },
+      { nr: '03', titel: 'Ekonomin är gemensam', desc: 'Fastighetens underhåll, lån och kostnader bärs av alla. En välskött förening gynnar alla innehavares värden.' },
+      { nr: '04', titel: 'Transparens är ett krav', desc: 'Årsredovisning, protokoll och budget ska vara tillgängliga. Styrelsen förvaltar på uppdrag av alla.' },
+    ]} />
+    <InfoRuta>
+      Det kooperativa tänket innebär att du som ledamot inte bara förvaltar en fastighet — du förvaltar ett demokratiskt uppdrag.
+    </InfoRuta>
+  </SplitSlide>
+);
+
+const Historia3 = () => (
+  <BgSlide bild={IMGS.modern}>
+    <Badge text="Kapitel 1 · Historia" />
+    <H icon={Users} title="BRF:en idag — i siffror" />
+    <p className="text-white/70 text-base leading-relaxed mb-8">
+      Bostadsrätten har blivit den dominerande boendeformen i svenska städer.
+      Förstå skalan — och varför välskötta föreningar är samhällsviktiga.
+    </p>
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+      {[
+        { v: '1,6M', l: 'bostadsrättslägenheter', sub: 'i Sverige' },
+        { v: '27 000', l: 'bostadsrättsföreningar', sub: 'aktiva föreningar' },
+        { v: '~3M', l: 'personer bor i BRF', sub: 'ca 30% av befolkningen' },
+        { v: '1916', l: 'HSB grundades', sub: 'kooperativets år noll' },
+        { v: '2004', l: 'ny bostadsrättslag', sub: 'senast reviderad' },
+        { v: '100%', l: 'demokratiskt styrd', sub: 'en röst per lägenhet' },
+      ].map((s, i) => (
+        <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+          className="rounded-2xl p-4 text-center"
+          style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.10)' }}>
+          <p className="text-2xl sm:text-3xl font-black" style={{ color: O }}>{s.v}</p>
+          <p className="text-white text-xs font-bold mt-1">{s.l}</p>
+          <p className="text-white/35 text-xs mt-0.5">{s.sub}</p>
+        </motion.div>
+      ))}
+    </div>
+    <div className="rounded-2xl p-5" style={{ background: `${O}15`, border: `1px solid ${O}35` }}>
+      <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>Varför det spelar roll</p>
+      <p className="text-white/80 text-sm leading-relaxed">
+        En välskött BRF bevarar och ökar fastighetsvärdet för alla innehavare. En dåligt skött förening kan tvinga till dramatiska avgiftshöjningar och minska boendenas marknadsvärde med hundratusentals kronor. Ditt styrelsearbete har direkt ekonomisk påverkan på alla som bor i föreningen.
+      </p>
+    </div>
+  </BgSlide>
+);
+
+const historiaFragor: QuizFraga[] = [
+  {
+    id: 'h1', persona: 'Eva', roll: 'Ny styrelseledamot, BRF Kastanjen',
+    bild: PERSONAS.eva, kategori: 'Historia', highlight: ['kooperativ', 'äger'],
+    bubbla: 'Jag är ny i styrelsen och undrar — vad innebär det egentligen att vi "äger" vår lägenhet i en BRF? Det känns annorlunda mot att äga ett hus.',
+    fraga: 'Vad äger en bostadsrättsinnehavare egentligen?',
+    alternativ: [
+      { text: 'Lägenheten och alla murarna i fastigheten', korrekt: false, feedback: 'Nej. Det är föreningen som äger fastigheten — inte den enskilde innehavaren.' },
+      { text: 'Nyttjanderätten till lägenheten, inte fastigheten i sig', korrekt: true, feedback: 'Rätt. Du äger rätten att nyttja din lägenhet (bostadsrätten) — föreningen äger fastigheten gemensamt.' },
+      { text: 'En andel av marken under fastigheten', korrekt: false, feedback: 'Fel. Marken ägs av föreningen, inte av de enskilda innehavarna.' },
+      { text: 'Ingenting — man hyr av föreningen', korrekt: false, feedback: 'Fel. Bostadsrätt skiljer sig från hyresrätt — du äger en nyttjanderätt och kan sälja den på marknaden.' },
+    ],
+    tips: ['Föreningen äger fastigheten — du äger nyttjanderätten', 'Bostadsrätten kan säljas, pantsättas och ärvas', 'Värdet på din bostadsrätt påverkas av hur föreningen sköts'],
+  },
+  {
+    id: 'h2', persona: 'Magnus', roll: 'Ordförande, BRF Ekbacken',
+    bild: PERSONAS.magnus, kategori: 'Historia', highlight: ['HSB', '1916'],
+    bubbla: 'En member frågade mig varför vi har den här föreningsmodellen alls — varför inte bara ha en vanlig hyresvärd?',
+    fraga: 'Varför uppstod bostadsrättsmodellen i Sverige?',
+    alternativ: [
+      { text: 'Staten ville ha ett alternativ till villaägande för skatteändamål', korrekt: false, feedback: 'Fel. Modellen uppstod som ett svar på hyresspekulanter — inte av skatteskäl.' },
+      { text: 'För att ge arbetare makt över sitt boende utan att vara beroende av spekulativa hyresvärdar', korrekt: true, feedback: 'Rätt. HSB grundades 1916 just för att ge vanliga människor kontroll över sitt boende genom kooperativt ägande.' },
+      { text: 'För att underlätta för banker att ge bostadslån', korrekt: false, feedback: 'Fel. Bankernas roll kom senare — modellen skapades för att skydda hyresgästerna.' },
+      { text: 'Modellen importerades från USA på 1920-talet', korrekt: false, feedback: 'Fel. Den svenska bostadsrättsmodellen är i huvudsak en inhemsk uppfinning med kooperativa rötter.' },
+    ],
+    tips: ['HSB grundades 1916 av Sven Wallander', 'Kooperativt ägande = gemensam makt över boendet', 'Första bostadsrättslagen kom 1930'],
+  },
+  {
+    id: 'h3', persona: 'Anna', roll: 'Sekreterare, BRF Linden',
+    bild: PERSONAS.anna, kategori: 'Historia', highlight: ['stämman', 'demokrati'],
+    bubbla: 'En ledamot säger att styrelsen kan fatta alla beslut eftersom "vi är valda". Men är inte stämman viktigare?',
+    fraga: 'Vem är det högsta beslutande organet i en BRF?',
+    alternativ: [
+      { text: 'Styrelsen, eftersom de är valda och har mandat', korrekt: false, feedback: 'Fel. Styrelsen sköter den löpande förvaltningen — men de stora besluten fattas av stämman.' },
+      { text: 'Föreningsstämman, där alla medlemmar har röst', korrekt: true, feedback: 'Rätt. Stämman är det högsta beslutande organet. Styrelsen väljs av och rapporterar till stämman.' },
+      { text: 'Revisorn, som granskar och godkänner beslut', korrekt: false, feedback: 'Fel. Revisorn granskar i efterhand — de fattar inte beslut.' },
+      { text: 'Ordföranden, som har utslagsröst vid lika röstetal', korrekt: false, feedback: 'Ordföranden har utslagsröst i styrelsen — inte i förhållande till stämman.' },
+    ],
+    tips: ['Stämman = demokratisk grund, alla medlemmar röstar', 'Styrelsen förvaltar på stämmans uppdrag', 'Stora beslut (lån, stadgar, stora renoveringar) kräver stämmobeslut'],
+  },
+];
+
+// ═══════════════════════════════════════════════════════════
+// KAPITEL 2: DOKUMENTATION — 3 slides
+// ═══════════════════════════════════════════════════════════
+const Dokumentation1 = () => (
+  <BgSlide bild={IMGS.stadgar}>
+    <Badge text="Kapitel 2 · Dokumentation" />
+    <H icon={FileText} title="Stadgarna — föreningens grundlag" />
+    <p className="text-white/70 text-base leading-relaxed mb-6">
+      Stadgarna är det viktigaste dokumentet i föreningen. De styr vad styrelsen får och måste göra — och vad som kräver stämmobeslut.
+    </p>
+    <div className="space-y-3 mb-6">
+      {[
+        { ikon: '📋', titel: 'Vad stadgarna innehåller', text: 'Föreningens namn och ändamål, hur stämman fungerar, hur styrelsen väljs, antal ledamöter, räkenskapsår, och regler för överlåtelse av bostadsrätt.' },
+        { ikon: '⚖️', titel: 'Stadgarna är bindande', text: 'Alla beslut som strider mot stadgarna kan ogiltigförklaras. Styrelsen måste känna till och följa stadgarna — okunnighet är inget försvar.' },
+        { ikon: '🔄', titel: 'Ändra stadgarna', text: 'Kräver normalt 2/3 majoritet på två på varandra följande stämmor. Det är avsiktligt svårt — stadgarna ska vara stabila.' },
+        { ikon: '🏛️', titel: 'Boverkets normalstadgar', text: 'Många föreningar baserar sina stadgar på HSBs eller Riksbyggens mallar. Alltid kontrollera era egna — de kan avvika.' },
+      ].map((item, i) => (
+        <motion.div key={i} initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }} transition={{ delay: i * 0.07 }}
+          className="flex items-start gap-4 p-4 rounded-xl"
+          style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
+          <span style={{ fontSize: 22, flexShrink: 0, marginTop: 2 }}>{item.ikon}</span>
+          <div>
+            <p className="text-white font-bold text-sm mb-1">{item.titel}</p>
+            <p className="text-white/60 text-sm leading-relaxed">{item.text}</p>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+    <div className="rounded-xl p-4 border-l-4" style={{ borderColor: O, background: `${O}12` }}>
+      <p className="text-white text-sm leading-relaxed">
+        <span className="font-bold" style={{ color: O }}>Praktisk tips: </span>
+        Läs igenom stadgarna vid varje nytt styrelseår. Skriv ut de viktigaste paragraferna och lägg dem som bilaga till protokollen.
+      </p>
+    </div>
+  </BgSlide>
+);
+
+const Dokumentation2 = () => (
+  <SplitSlide
+    badge="Kapitel 2 · Dokumentation"
+    title="Vilka <span style='color:#FF5421'>dokument</span> måste finnas?"
+    ingress="En välskött BRF har ett komplett dokumentarkiv. Det skyddar föreningen vid tvister, revisioner och ägarbyten — och det är styrelsens ansvar att hålla det uppdaterat."
+    bild={IMGS.dokument}
+    bildPosition="left"
+    badge2="Juridiskt skydd"
+    badge2Sub="Dokumenterat = bevisat"
+  >
+    <StegLista steg={[
+      { nr: '01', titel: 'Stadgar & föreningsregistrering', desc: 'Alltid tillgängliga. Bolagsverket har kopia. Ska finnas hos styrelsen och vara tillgängliga för medlemmar.' },
+      { nr: '02', titel: 'Årsredovisning & revisionsberättelse', desc: 'Ska upprättas varje år och hållas tillgängliga minst en vecka före stämman. Ska sparas minst 10 år.' },
+      { nr: '03', titel: 'Styrelseprotokoll', desc: 'Alla styrelsebeslut dokumenteras. Justeras av ordförande + en ledamot. Sparas permanent.' },
+      { nr: '04', titel: 'Lägenhetsförteckning', desc: 'Förteckning över alla lägenheter, innehavare och insatser. Ska alltid vara aktuell.' },
+      { nr: '05', titel: 'Underhållsplan', desc: 'Planerat underhåll med kostnadsuppskattningar. Grunden för rätt avgiftssättning.' },
+    ]} />
+    <InfoRuta>
+      Tappa inte kontrollen över arkivet vid styrelsebyte. Överlämning ska ske skriftligt och kvitteras.
+    </InfoRuta>
+  </SplitSlide>
+);
+
+const Dokumentation3 = () => (
+  <BgSlide bild={IMGS.arkiv}>
+    <Badge text="Kapitel 2 · Dokumentation" />
+    <H icon={FileText} title="Årsredovisningen — mer än siffror" />
+    <p className="text-white/70 text-base leading-relaxed mb-6">
+      Årsredovisningen är föreningens visitkort. Den läses av mäklare, banker och köpare inför varje försäljning. En välskriven årsredovisning höjer förtroendet — och värdet.
+    </p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      {[
+        { titel: 'Förvaltningsberättelse', text: 'Styrelsens berättelse om verksamhetsåret. Vad som hänt, vad som planeras. Ska vara informativ — inte bara formell.' },
+        { titel: 'Resultaträkning', text: 'Intäkter (avgifter, hyror) mot kostnader (drift, räntor, avskrivningar). Visar om föreningen går med vinst eller förlust.' },
+        { titel: 'Balansräkning', text: 'Tillgångar (fastigheten) mot skulder (lån) och eget kapital. Visar föreningens ekonomiska ställning vid årets slut.' },
+        { titel: 'Noter & nyckeltal', text: 'Fördjupad information om poster i räkenskaperna. Bankerna och mäklarna granskar skuldsättning per kvm.' },
+      ].map((item, i) => (
+        <div key={i} className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
+          <p className="text-white font-bold text-sm mb-2" style={{ color: O }}>{item.titel}</p>
+          <p className="text-white/60 text-sm leading-relaxed">{item.text}</p>
+        </div>
+      ))}
+    </div>
+    <div className="rounded-2xl p-5" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)' }}>
+      <p className="text-xs font-bold uppercase tracking-widest mb-2 text-red-400">Vanliga misstag</p>
       <div className="space-y-2">
         {[
-          'Föreningsstämman kan vägra ansvarsfrihet',
-          'Ledamöter kan stämmas och bli skadeståndsskyldiga',
-          'Vid brott mot lagen kan åtal väckas',
-          'Stämman kan avsätta en eller flera ledamöter — utan att motivera beslutet',
+          'Förvaltningsberättelse som inte nämner planerade renoveringar',
+          'Skuldsättning per kvm som inte förklaras — väcker oro hos banker',
+          'Underhållsfond som inte avsatts korrekt — felaktig bild av ekonomin',
+          'Årsredovisning lämnad in efter deadline (7 månader efter räkenskapsårets slut)',
         ].map((item, i) => (
           <div key={i} className="flex items-start gap-2">
             <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-2 bg-red-400" />
@@ -335,512 +619,333 @@ const AnsvarSlide = () => (
   </BgSlide>
 );
 
-// ═══════════════════════════════════════════════════════════
-// SLIDE 4 – QUIZ 1
-// ═══════════════════════════════════════════════════════════
-const Quiz1Slide = ({ onComplete, isDone }: { onComplete: (id: string) => void; isDone: boolean }) => (
-  <BgSlide bild={IMGS.juridik} overlay="rgba(15,22,35,0.90)">
-    <Badge text="Kunskapstest · Block 1" />
-    <H icon={HelpCircle} title="Roller och ansvar" />
-    <p className="text-white/60 text-sm mb-6">Tre frågor om styrelsens roller och juridiska ansvar.</p>
-    <InlineQuiz dark onComplete={() => onComplete('quiz-1')} questions={[
-      {
-        id: 'q1', question_text: "Vems uppgift är det att föra protokoll vid styrelsemöten?",
-        question_type: 'single_choice', question_order: 1,
-        options: { choices: ['Ordförandens', 'Sekreterarens', 'Kassörens', 'Revisorns'] },
-        correct_answer: 'Sekreterarens',
-        explanation: 'Enligt lagen om ekonomiska föreningar är alla föreningar skyldiga att föra protokoll. Det är sekreterarens uppgift.',
-        points: 100,
-      },
-      {
-        id: 'q2', question_text: "Vad kan hända om en styrelseledamot medvetet bryter mot lagen?",
-        question_type: 'single_choice', question_order: 2,
-        options: { choices: [
-          'Ingenting – styrelseuppdraget skyddar mot personligt ansvar',
-          'Stämman kan vägra ansvarsfrihet och ledamoten kan bli skadeståndsskyldig',
-          'Bara ordföranden kan hållas ansvarig',
-          'Revisorn tar över ansvaret',
-        ]},
-        correct_answer: 'Stämman kan vägra ansvarsfrihet och ledamoten kan bli skadeståndsskyldig',
-        explanation: 'Styrelseuppdraget ger inget skydd mot personligt ansvar. Vid slarv eller medvetna brott kan stämman vägra ansvarsfrihet och ledamöter kan bli skadeståndsskyldiga.',
-        points: 100,
-      },
-      {
-        id: 'q3', question_text: "Varför ska revisorn inte bli för involverad i styrelsearbetet?",
-        question_type: 'single_choice', question_order: 3,
-        options: { choices: [
-          'Det är inte tillåtet enligt lagen',
-          'Revisorn har inte rätt kompetens',
-          'Revisorns uppgift är att granska styrelsens arbete – inte delta i det',
-          'Det finns inga regler om detta',
-        ]},
-        correct_answer: 'Revisorns uppgift är att granska styrelsens arbete – inte delta i det',
-        explanation: 'Revisorn är medlemmarnas granskare. Om revisorn deltar aktivt i styrelsearbetet kan hen inte vara objektiv i sin granskning.',
-        points: 100,
-      },
-    ]} />
-  </BgSlide>
-);
+const dokumentationFragor: QuizFraga[] = [
+  {
+    id: 'd1', persona: 'Karin', roll: 'Ordförande, BRF Solbacken',
+    bild: PERSONAS.karin, kategori: 'Dokumentation', highlight: ['stadgarna', 'bindande'],
+    bubbla: 'Vi vill ta ett beslut som vi vet strider mot en paragraf i stadgarna — men alla i styrelsen är överens. Kan vi göra det?',
+    fraga: 'Vad händer om styrelsen fattar ett beslut som strider mot stadgarna?',
+    alternativ: [
+      { text: 'Det är okej om alla ledamöter är eniga', korrekt: false, feedback: 'Fel. Enighet i styrelsen gör inte ett stadgestridigt beslut lagligt.' },
+      { text: 'Beslutet kan ogiltigförklaras — stadgarna är bindande', korrekt: true, feedback: 'Rätt. Beslut som strider mot stadgarna kan angripas rättsligt och ogiltigförklaras. Stämman kan också vägra ansvarsfrihet.' },
+      { text: 'Det beror på hur viktigt beslutet är', korrekt: false, feedback: 'Fel. Stadgarna gäller oavsett hur viktig frågan anses vara.' },
+      { text: 'Revisorn kan godkänna ett undantag', korrekt: false, feedback: 'Fel. Revisorn granskar — de kan inte godkänna stadgebrott.' },
+    ],
+    tips: ['Stadgarna är föreningens grundlag — de gäller alltid', 'Okunnighet om stadgarna är inget försvar', 'Vill ni ändra stadgarna — ta det till stämman'],
+  },
+  {
+    id: 'd2', persona: 'Lars', roll: 'Kassör, BRF Björken',
+    bild: PERSONAS.lars, kategori: 'Dokumentation', highlight: ['årsredovisning', 'tillgänglig'],
+    bubbla: 'Stämman är om 5 dagar och årsredovisningen är inte klar. Kan vi hålla stämman ändå och dela ut den på plats?',
+    fraga: 'När måste årsredovisningen vara tillgänglig för medlemmarna?',
+    alternativ: [
+      { text: 'Det räcker att dela ut den på stämman', korrekt: false, feedback: 'Fel. Årsredovisningen ska vara tillgänglig minst en vecka innan stämman.' },
+      { text: 'Minst en vecka innan stämman', korrekt: true, feedback: 'Rätt. Lagen kräver att årsredovisning och revisionsberättelse finns tillgängliga minst en vecka innan stämman.' },
+      { text: 'Minst en månad innan stämman', korrekt: false, feedback: 'Lagens krav är en vecka — men god sed är att skicka den ännu tidigare.' },
+      { text: 'Det finns inget lagkrav på när den ska vara klar', korrekt: false, feedback: 'Fel. Det finns tydliga lagkrav på både tidpunkt och tillgänglighet.' },
+    ],
+    tips: ['Minst 1 vecka innan stämman — helst 2–3 veckor', 'Årsredovisningen ska vara klar inom 6 månader efter räkenskapsårets slut', 'Skicka digitalt till alla medlemmar — spara tid och papper'],
+  },
+  {
+    id: 'd3', persona: 'Sofia', roll: 'Ny ledamot, BRF Granbacken',
+    bild: PERSONAS.sofia, kategori: 'Dokumentation', highlight: ['underhållsplan', 'avgift'],
+    bubbla: 'Den avgående styrelsen lämnade ingen underhållsplan. Vi vet inte ens när taket eller hissen senast byttes. Vad gör vi?',
+    fraga: 'Varför är underhållsplanen ett av föreningens viktigaste dokument?',
+    alternativ: [
+      { text: 'Den krävs för att få bygglov', korrekt: false, feedback: 'Fel. Underhållsplanen krävs inte för bygglov — men den är ändå avgörande för föreningens ekonomi.' },
+      { text: 'Den är grunden för rätt avgiftssättning och förhindrar avgiftschocker', korrekt: true, feedback: 'Rätt. Utan underhållsplan riskerar föreningen att tvingas till drastiska avgiftshöjningar när stora åtgärder inte är budgeterade.' },
+      { text: 'Den behövs bara vid nybyggda fastigheter', korrekt: false, feedback: 'Fel. Alla föreningar behöver en underhållsplan — äldre fastigheter kanske allra mest.' },
+      { text: 'Den är bara ett rekommenderat hjälpmedel', korrekt: false, feedback: 'Den är i praktiken obligatorisk för en välskött förening och efterfrågas av revisorer och banker.' },
+    ],
+    tips: ['Underhållsplan = ekonomisk trygghet för alla innehavare', 'Ta in en besiktningsman för att upprätta en korrekt plan', 'Uppdatera planen varje år'],
+  },
+];
 
 // ═══════════════════════════════════════════════════════════
-// SLIDE 5 – STYRELSEMÖTET
+// KAPITEL 3: LAGAR & REGLER — 3 slides
 // ═══════════════════════════════════════════════════════════
-const MötetSlide = () => (
-  <BgSlide bild={IMGS.kalender}>
-    <Badge text="Avsnitt 03 · Styrelsemötet" />
-    <H icon={Calendar} title="Styrelsemötet – förberedelse och beslut" />
+const LagarRegler1 = () => (
+  <BgSlide bild={IMGS.juridik}>
+    <Badge text="Kapitel 3 · Lagar & regler" />
+    <H icon={Shield} title="Lagarna som styr BRF:en" />
     <p className="text-white/70 text-base leading-relaxed mb-6">
-      Det är på mötet som besluten fattas. Välförberedda möten sparar tid
-      och säkerställer demokratiska och korrekta beslut.
+      Tre lagar är särskilt viktiga för varje styrelseledamot. Du behöver inte kunna dem utantill — men du måste veta var de gäller och vad de kräver av dig.
     </p>
-
-    {/* Viktiga mötestillfällen */}
-    <div className="rounded-2xl p-5 border mb-5" style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
-      <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: O }}>Obligatoriska mötestillfällen</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {[
-          { tid: 'Jan–Mar', rubrik: 'Bokslut & årsredovisning', desc: 'Godkänna årsredovisningen inför stämman' },
-          { tid: 'Apr–Maj', rubrik: 'Föreningsstämman', desc: 'Konstituerande möte direkt efteråt – fördela roller' },
-          { tid: 'Maj–Jun', rubrik: 'Verksamhetsplanering', desc: 'Planera det kommande verksamhetsåret' },
-          { tid: 'Nov', rubrik: 'Budgetmöte', desc: 'Fastställ budget och avgiftsnivå' },
-        ].map((item, i) => (
-          <div key={i} className="bg-white/5 rounded-xl p-3">
-            <span className="text-xs font-bold" style={{ color: O }}>{item.tid}</span>
-            <p className="text-white font-bold text-sm mt-0.5">{item.rubrik}</p>
-            <p className="text-white/50 text-xs">{item.desc}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    {/* Beslutsregler */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="rounded-xl p-4 border" style={{ background: `${O}15`, border: `1px solid ${O}30` }}>
-        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>Beslutsmässighet</p>
-        <p className="text-white text-sm leading-relaxed">
-          Styrelsen kan besluta när <strong>mer än hälften</strong> av ledamöterna är närvarande.
-          I en styrelse med 7 ledamöter krävs minst 4 närvarande.
-        </p>
-      </div>
-      <div className="rounded-xl p-4 border" style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
-        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>Majoritet</p>
-        <p className="text-white text-sm leading-relaxed">
-          Enkel majoritet (mer än hälften av rösterna) krävs normalt.
-          Vid minsta antalet ledamöter krävs <strong>enhällighet</strong>.
-          Lika röstetal — ordföranden avgör.
-        </p>
-      </div>
-    </div>
-  </BgSlide>
-);
-
-// ═══════════════════════════════════════════════════════════
-// SLIDE 6 – PROTOKOLLET
-// ═══════════════════════════════════════════════════════════
-const ProtokollSlide = () => (
-  <BgSlide bild={IMGS.protokoll}>
-    <Badge text="Avsnitt 04 · Protokollet" />
-    <H icon={FileText} title="Protokollet är mötets spegel" />
-    <p className="text-white/70 text-base leading-relaxed mb-6">
-      Protokollet är juridiskt bindande dokumentation av styrelsens beslut.
-      Det ska justeras av ordföranden och ytterligare en person som utses vid mötet.
-    </p>
-
-    {/* Tre typer */}
-    <div className="space-y-3 mb-6">
+    <div className="space-y-4 mb-6">
       {[
-        { typ: 'Beslutsprotokoll', desc: 'Återger bara de beslut som fattats. Inget av det deltagarna sagt finns med. Vanligast i praktiken.' },
-        { typ: 'Diskussionsprotokoll', desc: 'Återger mer eller mindre utförligt vad deltagarna sagt, vilka yrkanden som framförts och vilka beslut som fattats.' },
-        { typ: 'Kombinerat protokoll', desc: 'De flesta frågor noteras kort, men frågor med ekonomiska konsekvenser dokumenteras mer utförligt.' },
+        {
+          lag: 'Bostadsrättslagen (BRL)',
+          år: 'SFS 1991:614',
+          color: O,
+          punkter: [
+            'Innehavarens rättigheter och skyldigheter',
+            'Föreningens skyldigheter mot innehavarna',
+            'Regler för överlåtelse och pantsättning',
+            'Villkor för andrahandsuthyrning',
+            'Stämmans och styrelsens befogenheter',
+          ],
+        },
+        {
+          lag: 'Lagen om ekonomiska föreningar (LEF)',
+          år: 'SFS 2018:672',
+          color: '#6366f1',
+          punkter: [
+            'Hur styrelsen ska fungera och fatta beslut',
+            'Revisorns roll och krav på revision',
+            'Krav på bokföring och årsredovisning',
+            'Regler för stämman och röstning',
+          ],
+        },
+        {
+          lag: 'Plan- och bygglagen (PBL)',
+          år: 'SFS 2010:900',
+          color: '#10b981',
+          punkter: [
+            'När bygglov krävs för åtgärder på fastigheten',
+            'Krav på OVK (obligatorisk ventilationskontroll)',
+            'Regler för tillgänglighet och säkerhet',
+          ],
+        },
       ].map((item, i) => (
-        <motion.div key={i}
-          initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-          className="flex items-start gap-4 p-4 rounded-xl border"
-          style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
-          <div className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ background: O }} />
-          <div>
-            <p className="text-white font-bold text-sm mb-1">{item.typ}</p>
-            <p className="text-white/60 text-sm leading-relaxed">{item.desc}</p>
+        <motion.div key={i} initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+          className="rounded-xl overflow-hidden"
+          style={{ border: `1px solid ${item.color}30` }}>
+          <div className="px-4 py-3 flex items-center justify-between"
+            style={{ background: `${item.color}20` }}>
+            <p className="font-bold text-white text-sm">{item.lag}</p>
+            <span className="text-xs font-mono px-2 py-0.5 rounded"
+              style={{ background: `${item.color}30`, color: item.color }}>{item.år}</span>
+          </div>
+          <div className="px-4 py-3" style={{ background: 'rgba(255,255,255,0.05)' }}>
+            {item.punkter.map((p, j) => (
+              <div key={j} className="flex items-start gap-2 mb-1.5">
+                <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5"
+                  style={{ background: item.color }} />
+                <p className="text-white/65 text-sm">{p}</p>
+              </div>
+            ))}
           </div>
         </motion.div>
       ))}
     </div>
-
-    <div className="rounded-xl p-4 border-l-4" style={{ borderColor: O, background: 'rgba(255,84,33,0.1)' }}>
-      <p className="text-white text-sm leading-relaxed">
-        <span className="font-bold" style={{ color: O }}>Viktigt: </span>
-        Protokollen är <strong>inte offentliga</strong>. Den som inte är styrelseledamot eller
-        vald revisor har inte rätt att ta del av dem. Styrelsen bestämmer vilken information
-        som lämnas ut.
-      </p>
-    </div>
   </BgSlide>
 );
 
-// ═══════════════════════════════════════════════════════════
-// SLIDE 7 – QUIZ 2
-// ═══════════════════════════════════════════════════════════
-const Quiz2Slide = ({ onComplete, isDone }: { onComplete: (id: string) => void; isDone: boolean }) => (
-  <BgSlide bild={IMGS.möte} overlay="rgba(15,22,35,0.90)">
-    <Badge text="Kunskapstest · Block 2" />
-    <H icon={HelpCircle} title="Möten och protokoll" />
-    <p className="text-white/60 text-sm mb-6">Tre frågor om hur styrelsen fattar beslut och dokumenterar dem.</p>
-    <InlineQuiz dark onComplete={() => onComplete('quiz-2')} questions={[
-      {
-        id: 'q1', question_text: "Hur många ledamöter måste vara närvarande för att styrelsen ska kunna fatta beslut (vid 7 ledamöter)?",
-        question_type: 'single_choice', question_order: 1,
-        options: { choices: ['Minst 2', 'Minst 3', 'Minst 4', 'Alla 7'] },
-        correct_answer: 'Minst 4',
-        explanation: 'Styrelsen kan besluta när mer än hälften av ledamöterna är närvarande. Med 7 ledamöter krävs minst 4.',
-        points: 100,
-      },
-      {
-        id: 'q2', question_text: "Vem avgör om röstantalet är lika vid en omröstning?",
-        question_type: 'single_choice', question_order: 2,
-        options: { choices: ['Sekreteraren', 'Den äldste ledamoten', 'Ordföranden', 'Revisorn'] },
-        correct_answer: 'Ordföranden',
-        explanation: 'Om röstantalet är lika avgör ordföranden. Det är en av anledningarna till att ordföranderollen är central.',
-        points: 100,
-      },
-      {
-        id: 'q3', question_text: "Vem har rätt att ta del av styrelseprotokollen?",
-        question_type: 'single_choice', question_order: 3,
-        options: { choices: [
-          'Alla boende i föreningen',
-          'Alla betalande medlemmar',
-          'Bara styrelseledamöter och valda revisorer',
-          'Alla som begär det skriftligt',
-        ]},
-        correct_answer: 'Bara styrelseledamöter och valda revisorer',
-        explanation: 'Protokollen är inte offentliga. Den som inte är styrelseledamot eller vald revisor har inte rätt att ta del av dem.',
-        points: 100,
-      },
-    ]} />
-  </BgSlide>
-);
-
-// ═══════════════════════════════════════════════════════════
-// SLIDE 8 – MÖTESTEKNIK (klickbara cirklar)
-// ═══════════════════════════════════════════════════════════
-const MötesteknikSlide = () => {
-  const tekniker: KortItem[] = [
-    {
-      id: 'foredragning', nr: 'Steg 1', label: 'Föredragning',
-      short: 'Varje ärende presenteras sakligt.',
-      bild: IMGS.möte,
-      body: 'Varje ärende ska presenteras av en föredragande som belyser frågan så sakligt och fullständigt som möjligt. Syftet är att ge alla ledamöter tillräcklig information för att fatta ett välgrundat beslut.',
-      tips: 'Förbered föredragningar i förväg och skicka beslutsunderlag med kallelsen. Det kortar ner mötestiden och höjer kvaliteten på besluten.',
-    },
-    {
-      id: 'overlaggning', nr: 'Steg 2', label: 'Överläggning',
-      short: 'Öppen diskussion med tydlig talarordning.',
-      bild: IMGS.team,
-      body: 'Ordföranden förklarar ordet fritt. Den som vill tala anmäler sig. Ordningsfråga kan ropas om talaren inte håller sig till ämnet. Proposition (streck) kan föreslås när diskussionen inte tillför något nytt.',
-      tips: 'Ordföranden ska se till att alla kommer till tals — inte dominera innehållet. En ledamot som inte känner sig hörd slutar engagera sig.',
-    },
-    {
-      id: 'beslut', nr: 'Steg 3', label: 'Beslut',
-      short: 'Acklamation eller votering.',
-      bild: IMGS.juridik,
-      body: 'Acklamation: ordföranden frågar om mötet kan godkänna förslaget. Entydigt ja = beslut klart. Votering: handuppräckning (öppen) eller röstsedlar (sluten). Reservation måste anmälas under mötet och tas med i protokollet.',
-      tips: 'Det är viktigt att alla förstår när ett beslut faktiskt fattats. Ordföranden ska tydligt konstatera beslutet och protokollföra det omedelbart.',
-    },
-    {
-      id: 'bordlaggning', nr: 'Verktyg', label: 'Bordläggning',
-      short: 'Skjuta upp ett ärende till nästa möte.',
-      bild: IMGS.kalender,
-      body: 'Bordläggning innebär att man skjuter upp en fråga till ett senare möte, ofta på grund av tidsbrist. En bordlagd fråga kräver ingen ytterligare utredning — den tas bara upp igen vid nästa möte.',
-    },
-    {
-      id: 'aterremiss', nr: 'Verktyg', label: 'Återremiss',
-      short: 'Skicka tillbaka för ytterligare utredning.',
-      bild: IMGS.dokument,
-      body: 'Återremiss innebär att styrelsen skickar tillbaka en fråga för ytterligare utredning. Till skillnad från bordläggning ska frågan aktivt bearbetas vidare och presenteras med nytt underlag vid nästa möte.',
-      tips: 'Använd återremiss när ni behöver mer fakta — inte för att undvika ett svårt beslut. Beslut som skjuts upp utan anledning skadar förtroendet.',
-    },
-    {
-      id: 'jav', nr: 'Viktigt', label: 'Jäv',
-      short: 'Personligt intresse i en fråga.',
-      bild: IMGS.ansvar,
-      body: 'En styrelseledamot är jävig om hen har ett direkt eller indirekt intresse i en fråga som kan strida mot föreningens bästa. En jävig ledamot ska lämna sammanträdet under hela behandlingen av ärendet — inte bara omröstningen.',
-      tips: 'Gör det till en rutin att fråga om jäv i början av varje möte. Protokollför att den jävige ledamoten lämnade rummet.',
-    },
-  ];
-
-  return (
-    <BgSlide bild={IMGS.möte}>
-      <Badge text="Avsnitt 05 · Mötesteknik" />
-      <H icon={MessageSquare} title="Mötesteknik – demokratiska beslut" />
-      <p className="text-white/70 text-base leading-relaxed mb-4">
-        Med bra mötesteknik säkerställer ni att besluten är demokratiska och korrekta.
-        Klicka för att lära dig de viktigaste verktygen.
-      </p>
-      <KortGrid items={tekniker} />
-    </BgSlide>
-  );
-};
-
-// ═══════════════════════════════════════════════════════════
-// SLIDE 8b – PER CAPSULAM
-// ═══════════════════════════════════════════════════════════
-const PerCapsulamSlide = () => (
+const LagarRegler2 = () => (
   <SplitSlide
-    badge="Avsnitt 05 · Fördjupning"
-    title="Per <span style='color:#FF5421'>capsulam</span>"
-    ingress="Beslut utan fysiskt möte — juridiskt giltigt men med strikta krav. Används när ett möte inte hinner kallas."
-    bild="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&q=80"
+    badge="Kapitel 3 · Lagar & regler"
+    title="<span style='color:#FF5421'>Likhetsprincipen</span> — allas lika värde"
+    ingress="Likhetsprincipen är ett av de viktigaste juridiska skydden för enskilda bostadsrättsinnehavare. Den förbjuder styrelsen att gynna eller missgynna enskilda utan sakliga skäl."
+    bild={IMGS.lag}
     bildPosition="right"
-    badge2="Krav: enhällighet"
-    badge2Sub="Ett nej stoppar beslutet"
+    badge2="BRL 7 kap 16 §"
+    badge2Sub="Gäller alla beslut"
   >
     <StegLista steg={[
-      {
-        nr: '01',
-        titel: 'Skicka skriftligt underlag',
-        desc: 'Ordföranden skickar ett tydligt beslutsunderlag till alla ledamöter via e-post.',
-      },
-      {
-        nr: '02',
-        titel: 'Inhämta skriftlig bekräftelse',
-        desc: 'Varje ledamot svarar skriftligt — ja eller nej. Alla måste svara för att beslutet ska vara giltigt.',
-      },
-      {
-        nr: '03',
-        titel: 'Enhällighet krävs',
-        desc: 'Till skillnad från ett vanligt möte räcker det inte med majoritet — alla ledamöter måste vara eniga.',
-      },
-      {
-        nr: '04',
-        titel: 'Protokollför i efterhand',
-        desc: 'Beslutet måste protokollföras och justeras precis som ett vanligt styrelsebeslut.',
-      },
+      { nr: '01', titel: 'Alla ska behandlas lika', desc: 'Styrelsen får inte fatta beslut som gynnar eller missgynnar en enskild innehavare jämfört med andra i samma situation.' },
+      { nr: '02', titel: 'Sakliga skäl kan motivera skillnad', desc: 'Det är tillåtet att behandla situationer olika — men bara om det finns objektiva, sakliga skäl för skillnaden.' },
+      { nr: '03', titel: 'Dokumentera alltid motiveringen', desc: 'Om ni nekar en ansökan eller godkänner ett undantag — skriv ner varför. Osäkra beslut utan dokumentation är sårbara.' },
+      { nr: '04', titel: 'Konsekvenser vid brott', desc: 'Beslut som bryter mot likhetsprincipen kan ogiltigförklaras av domstol. Ledamöter kan bli skadeståndsskyldiga.' },
     ]} />
     <InfoRuta>
-      Använd per capsulam för tidskänsliga och okomplicerade beslut. För komplexa frågor — kalla alltid till möte.
+      Nekade du en ansökan förra året? Då måste du neka samma typ av ansökan i år — om inte omständigheterna tydligt skiljer sig åt.
     </InfoRuta>
   </SplitSlide>
 );
 
-// ═══════════════════════════════════════════════════════════
-// SLIDE 9 – VAD SKA DU TÄNKA PÅ? (6 signaler)
-// ═══════════════════════════════════════════════════════════
-const SignalerSlide = () => {
-  const signaler: KortItem[] = [
-    {
-      id: 'planering', nr: 'Signal 1', label: 'Planera i tid',
-      short: 'Årsplan för möten och verksamhet.',
-      bild: IMGS.kalender,
-      body: 'Med en årsplan för styrelsemötena är det lättare för alla att hålla datum fria. En effektiv styrelse pratar igenom vilka mål gruppen har och planerar verksamheten utifrån stämmobeslut och underhållsplan.',
-      tips: 'Boka in alla mötesdatum för hela året på det konstituerande mötet. Det minskar risken för att viktiga möten ställs in.',
-    },
-    {
-      id: 'fordelning', nr: 'Signal 2', label: 'Fördela arbetet',
-      short: 'Alla ledamöter ska ha tydliga ansvarsområden.',
-      bild: IMGS.team,
-      body: 'Se till att alla ledamöter har sina arbetsuppgifter och ansvarsområden. Då växer engagemanget och risken minskar att frågor faller mellan stolarna. En styrelse där en person gör allt är sårbar.',
-    },
-    {
-      id: 'information', nr: 'Signal 3', label: 'Informera löpande',
-      short: 'Medlemmar som inte informeras blir passiva.',
-      bild: IMGS.dokument,
-      body: 'De föreningar som är öppna och generösa med information har ofta de mest engagerade medlemmarna. Information kan spridas via anslag, hemsida, sociala medier och informationskvällar. Årsredovisningen är en viktig informationskanal.',
-      tips: 'Informera även om det inte hänt så mycket. Tystnaden tolkas alltid som att styrelsen döljer något.',
-    },
-    {
-      id: 'underhall', nr: 'Signal 4', label: 'Underhållsplan',
-      short: 'Fastigheten ska hållas i gott skick.',
-      bild: IMGS.bygg,
-      body: 'Styrelsen är skyldig att upprätta en underhållsplan. Planen beskriver det kommande behovet av underhåll och är grunden för att budgetera rätt avgiftsnivå. Utan plan riskerar ni att tvingas till drastiska avgiftshöjningar.',
-      tips: 'Ta in professionell hjälp för besiktning och upprättande av underhållsplan. En bra plan är en av styrelsens viktigaste investeringar.',
-    },
-    {
-      id: 'ekonomi', nr: 'Signal 5', label: 'Förstå siffrorna',
-      short: 'Styrelsen ansvarar för ekonomin — oavsett om en förvaltare anlitas.',
-      bild: IMGS.protokoll,
-      body: 'Av alla styrelsebeslut är fastställande av budget bland de viktigaste. Det kan vara frestande att hålla avgiften låg — men en styrelse som skjuter kostnader på framtiden skadar föreningen och dess medlemmar.',
-      tips: 'Ha budgetuppföljning som en stående punkt på varje styrelsemöte. Det är styrelsen som ansvarar för ekonomin, inte förvaltaren.',
-    },
-    {
-      id: 'trygghet', nr: 'Signal 6', label: 'Trygghet & gemenskap',
-      short: 'Styrelsen sätter tonen i föreningen.',
-      bild: IMGS.team,
-      body: 'Trygghet skapas inte med enskilda åtgärder. Det handlar om att bryta anonymiteten och skapa samhörighetskänsla. Styrelsen är de som initierar gemensamma aktiviteter och visar att boendet är mer än ett kontrakt.',
-    },
-  ];
-
-  return (
-    <BgSlide bild={IMGS.bygg}>
-      <Badge text="Avsnitt 06 · Praktiken" />
-      <H icon={Search} title="Vad ska du tänka på?" />
-      <p className="text-white/70 text-base leading-relaxed mb-4">
-        Sex signaler för en välfungerande styrelse. Klicka för att läsa mer.
-      </p>
-      <KortGrid items={signaler} />
-    </BgSlide>
-  );
-};
-
-// ═══════════════════════════════════════════════════════════
-// SLIDE 10 – QUIZ 3
-// ═══════════════════════════════════════════════════════════
-const Quiz3Slide = ({ onComplete, isDone }: { onComplete: (id: string) => void; isDone: boolean }) => (
-  <BgSlide bild={IMGS.team} overlay="rgba(15,22,35,0.90)">
-    <Badge text="Kunskapstest · Block 3" />
-    <H icon={HelpCircle} title="Mötesteknik och praktiken" />
-    <p className="text-white/60 text-sm mb-6">Tre frågor om mötesteknik och effektivt styrelsearbete.</p>
-    <InlineQuiz dark onComplete={() => onComplete('quiz-3')} questions={[
-      {
-        id: 'q1', question_text: "Vad innebär det att en ledamot är jävig?",
-        question_type: 'single_choice', question_order: 1,
-        options: { choices: [
-          'Ledamoten är sjuk och kan inte närvara',
-          'Ledamoten har ett personligt intresse i frågan som kan strida mot föreningens bästa',
-          'Ledamoten har inte fått kallelsen i tid',
-          'Ledamoten röstar emot majoriteten',
-        ]},
-        correct_answer: 'Ledamoten har ett personligt intresse i frågan som kan strida mot föreningens bästa',
-        explanation: 'Jäv innebär att ledamoten har ett direkt eller indirekt intresse i en fråga. En jävig ledamot ska lämna sammanträdet under hela behandlingen av ärendet.',
-        points: 100,
-      },
-      {
-        id: 'q2', question_text: "Vad är skillnaden mellan bordläggning och återremiss?",
-        question_type: 'single_choice', question_order: 2,
-        options: { choices: [
-          'Det är samma sak – båda innebär att frågan skjuts upp',
-          'Bordläggning skjuter upp utan utredning, återremiss kräver ytterligare utredning',
-          'Återremiss är bara för ekonomiska frågor',
-          'Bordläggning kan bara beslutas av ordföranden',
-        ]},
-        correct_answer: 'Bordläggning skjuter upp utan utredning, återremiss kräver ytterligare utredning',
-        explanation: 'Bordläggning = skjut upp till nästa möte utan åtgärd. Återremiss = skicka tillbaka för ytterligare utredning och nytt underlag.',
-        points: 100,
-      },
-      {
-        id: 'q3', question_text: "Varför är underhållsplanen så viktig?",
-        question_type: 'single_choice', question_order: 3,
-        options: { choices: [
-          'Den krävs bara av Bolagsverket',
-          'Den är grunden för att budgetera rätt avgiftsnivå och undvika framtida avgiftschocker',
-          'Den ersätter behovet av en revisor',
-          'Den är frivillig men rekommenderad',
-        ]},
-        correct_answer: 'Den är grunden för att budgetera rätt avgiftsnivå och undvika framtida avgiftschocker',
-        explanation: 'Utan underhållsplan riskerar föreningen att tvingas till drastiska avgiftshöjningar när stora underhållsprojekt inte är budgeterade.',
-        points: 100,
-      },
-    ]} />
+const LagarRegler3 = () => (
+  <BgSlide bild={IMGS.eu}>
+    <Badge text="Kapitel 3 · Lagar & regler" />
+    <H icon={Shield} title="GDPR och föreningens data" />
+    <p className="text-white/70 text-base leading-relaxed mb-6">
+      Föreningen hanterar personuppgifter dagligen — namn, personnummer, kontaktuppgifter och betalningshistorik. GDPR gäller fullt ut, och styrelsen är personuppgiftsansvarig.
+    </p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      {[
+        { ikon: '📋', titel: 'Lägenhetsförteckning', text: 'Innehåller personuppgifter. Ska bara vara tillgänglig för dem som har legitimt behov.' },
+        { ikon: '📧', titel: 'Medlemsregister & e-post', text: 'Kontaktuppgifter får bara användas för föreningsändamål. Inga listor till tredje part.' },
+        { ikon: '🔐', titel: 'Protokoll med personuppgifter', text: 'Protokoll som namnger enskilda i känsliga sammanhang bör hanteras varsamt.' },
+        { ikon: '🗑️', titel: 'Gallring', text: 'Uppgifter ska raderas när de inte längre behövs. Gamla listor och register ska rensas.' },
+      ].map((item, i) => (
+        <div key={i} className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
+          <div style={{ fontSize: 22, marginBottom: 8 }}>{item.ikon}</div>
+          <p className="text-white font-bold text-sm mb-1">{item.titel}</p>
+          <p className="text-white/60 text-sm leading-relaxed">{item.text}</p>
+        </div>
+      ))}
+    </div>
+    <div className="rounded-2xl p-5" style={{ background: `${O}15`, border: `1px solid ${O}35` }}>
+      <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: O }}>Styrelsens skyldigheter</p>
+      <div className="space-y-2">
+        {[
+          'Upprätta en förteckning över vilka personuppgifter som behandlas (registerförteckning)',
+          'Informera innehavare om vilka uppgifter som lagras och varför',
+          'Svara på begäran om registerutdrag inom 30 dagar',
+          'Anmäla dataintrång till Integritetsskyddsmyndigheten (IMY) inom 72 timmar',
+        ].map((item, i) => (
+          <div key={i} className="flex items-start gap-2">
+            <CheckCircle size={14} style={{ color: O, flexShrink: 0, marginTop: 3 }} />
+            <p className="text-white/80 text-sm">{item}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   </BgSlide>
 );
 
+const lagarFragor: QuizFraga[] = [
+  {
+    id: 'l1', persona: 'Peter', roll: 'Ordförande, BRF Almarna',
+    bild: PERSONAS.peter, kategori: 'Lagar & regler', highlight: ['likhetsprincipen', 'lika'],
+    bubbla: 'Vi gav en innehavare på plan 2 tillstånd att installera en altan. Nu vill grannen på plan 3 göra samma sak — men styrelsen vill neka för att de ogillar grannen personligen.',
+    fraga: 'Vad strider detta mot?',
+    alternativ: [
+      { text: 'Ingenting — styrelsen bestämmer fritt vem som får bygga', korrekt: false, feedback: 'Fel. Styrelsen kan inte neka godtyckligt — besluten måste vara sakliga och konsekventa.' },
+      { text: 'Likhetsprincipen — alla innehavare i samma situation ska behandlas lika', korrekt: true, feedback: 'Rätt. Om ni godkänt en altan för en innehavare måste ni godkänna det för en annan i samma situation — personliga sympatier räknas inte.' },
+      { text: 'Plan- och bygglagen, som kräver bygglov för altaner', korrekt: false, feedback: 'PBL kan vara relevant, men det primära problemet här är likhetsprincipen i bostadsrättslagen.' },
+      { text: 'Inget — grannen på plan 3 kan ju överklaga till hyresnämnden', korrekt: false, feedback: 'Rätt att hen kan överklaga — men styrelsen bör fatta korrekta beslut från början.' },
+    ],
+    tips: ['Dokumentera alltid skälen för era beslut', 'Lika situationer ska behandlas lika', 'Personliga sympatier är aldrig sakliga skäl'],
+  },
+  {
+    id: 'l2', persona: 'Eva', roll: 'Sekreterare, BRF Kastanjen',
+    bild: PERSONAS.eva, kategori: 'Lagar & regler', highlight: ['GDPR', 'personuppgifter'],
+    bubbla: 'En ny ledamot vill skicka hela lägenhetsförteckningen med personnummer och e-postadresser till ett lokalt företag som erbjuder rabatter till boende.',
+    fraga: 'Får föreningen dela lägenhetsförteckningen med ett externt företag?',
+    alternativ: [
+      { text: 'Ja, om styrelsen röstar för det', korrekt: false, feedback: 'Fel. Styrelsens röst kan inte godkänna brott mot GDPR.' },
+      { text: 'Nej — personuppgifter får bara användas för föreningsändamål', korrekt: true, feedback: 'Rätt. GDPR förbjuder att personuppgifter delas med tredje part utan laglig grund. Rabatterbjudanden är inte ett föreningsändamål.' },
+      { text: 'Ja, om boende informeras i efterhand', korrekt: false, feedback: 'Fel. Personuppgifter kräver laglig grund i förväg — inte information i efterhand.' },
+      { text: 'Det beror på om företaget är lokalt eller nationellt', korrekt: false, feedback: 'Fel. GDPR gäller oavsett företagets storlek eller geografiska spridning.' },
+    ],
+    tips: ['Föreningen är personuppgiftsansvarig under GDPR', 'Personuppgifter får bara användas för föreningsändamål', 'Dataintrång ska anmälas till IMY inom 72 timmar'],
+  },
+  {
+    id: 'l3', persona: 'Magnus', roll: 'Kassör, BRF Ekbacken',
+    bild: PERSONAS.magnus, kategori: 'Lagar & regler', highlight: ['andrahandsuthyrning', 'beaktansvärda skäl'],
+    bubbla: 'En innehavare vill hyra ut i andra hand i 18 månader medan hon arbetar i ett annat land. Styrelsen vill neka för att "det inte är föreningens policy".',
+    fraga: 'Har innehavaren rätt att hyra ut i andra hand i detta fall?',
+    alternativ: [
+      { text: 'Nej — styrelsen bestämmer policy för andrahandsuthyrning', korrekt: false, feedback: 'Fel. Styrelsen kan inte neka utan sakliga skäl när innehavaren har beaktansvärda skäl.' },
+      { text: 'Ja — tillfälligt arbete utomlands är ett beaktansvärt skäl', korrekt: true, feedback: 'Rätt. Bostadsrättslagen ger innehavare rätt till andrahandsuthyrning vid beaktansvärda skäl. Hyresnämnden kan överpröva nekandet.' },
+      { text: 'Det beror på hur länge hon ägt lägenheten', korrekt: false, feedback: 'Ägandetiden påverkar inte rätten till andrahandsuthyrning.' },
+      { text: 'Ja, men bara om hyresgästen godkänns av styrelsen i förväg', korrekt: false, feedback: 'Styrelsen godkänner hyresgästen — men kan inte neka utan sakliga skäl när grundkravet (beaktansvärt skäl) är uppfyllt.' },
+    ],
+    tips: ['Beaktansvärda skäl: arbete/studier på annan ort, provsamboende, vård av närstående', 'Neka alltid skriftligt med motivering', 'Hyresnämnden kan överpröva styrelsens beslut'],
+  },
+];
+
 // ═══════════════════════════════════════════════════════════
-// SLIDE 11 – SLUTTEST
+// SLUTQUIZ — QuizSalesPage-stil med GdprQuizOverlay
 // ═══════════════════════════════════════════════════════════
-const SlutprovSlide = ({ isDone, onComplete }: { isDone: boolean; onComplete: (id: string) => void }) => {
+const SlutquizSlide = ({ isDone, onComplete }: { isDone: boolean; onComplete: (id: string) => void }) => {
   const [quizOpen, setQuizOpen] = useState(false);
   const fragor = [
     {
-      id: 'sq1', question_text: 'Vilka är styrelsens tre kärnuppgifter?',
+      id: 'sq1', question_text: 'Vad äger en bostadsrättsinnehavare egentligen?',
       question_type: 'single_choice', question_order: 1,
-      options: { choices: [
-        'Välja revisor, upprätta stadgar och hålla stämma',
-        'Förvalta fastigheter, sköta ekonomin och ha en väl fungerande organisation',
-        'Protokollföra möten, betala räkningar och informera media',
-        'Anmäla till Bolagsverket, budgetera och renovera',
-      ]},
-      correct_answer: 'Förvalta fastigheter, sköta ekonomin och ha en väl fungerande organisation',
-      explanation: 'Styrelsens tre kärnuppgifter är: förvalta fastigheter och tillgångar, sköta redovisningen enligt lag, och upprätthålla en väl fungerande organisation.',
-      points: 100,
+      options: { choices: ['Lägenheten och all mark under fastigheten', 'Nyttjanderätten till lägenheten — inte fastigheten i sig', 'En andel av fastighetens marknadsvärde', 'Ingenting — man hyr av föreningen'] },
+      correct_answer: 'Nyttjanderätten till lägenheten — inte fastigheten i sig',
+      explanation: 'Föreningen äger fastigheten gemensamt. Du äger rätten att nyttja din lägenhet (bostadsrätten) och kan sälja den på marknaden.', points: 100,
     },
     {
-      id: 'sq2', question_text: 'Vad krävs för att styrelsen ska vara beslutsmässig?',
+      id: 'sq2', question_text: 'Vilket organ är det högsta beslutande i en BRF?',
       question_type: 'single_choice', question_order: 2,
-      options: { choices: [
-        'Att alla ledamöter är närvarande',
-        'Att mer än hälften av ledamöterna är närvarande',
-        'Att ordföranden och sekreteraren är närvarande',
-        'Att minst en tredjedel av ledamöterna är närvarande',
-      ]},
-      correct_answer: 'Att mer än hälften av ledamöterna är närvarande',
-      explanation: 'Styrelsen kan besluta när antalet närvarande ledamöter är mer än hälften av det totala antalet ledamöter.',
-      points: 100,
+      options: { choices: ['Styrelsen', 'Ordföranden', 'Föreningsstämman', 'Revisorn'] },
+      correct_answer: 'Föreningsstämman',
+      explanation: 'Stämman är det högsta beslutande organet. Styrelsen väljs av och rapporterar till stämman.', points: 100,
     },
     {
-      id: 'sq3', question_text: 'Vad innebär jäv?',
+      id: 'sq3', question_text: 'Vad innebär likhetsprincipen för styrelsearbetet?',
       question_type: 'single_choice', question_order: 3,
-      options: { choices: [
-        'Att en ledamot är sjuk',
-        'Att en ledamot röstar emot förslaget',
-        'Att en ledamot har ett personligt intresse som kan strida mot föreningens bästa',
-        'Att en ledamot saknar rätt kompetens',
-      ]},
-      correct_answer: 'Att en ledamot har ett personligt intresse som kan strida mot föreningens bästa',
-      explanation: 'En jävig ledamot ska lämna sammanträdet under hela behandlingen av ärendet och detta ska protokollföras.',
-      points: 100,
+      options: { choices: ['Alla ledamöter ska ha lika lång mandatperiod', 'Innehavare i samma situation ska behandlas lika — utan godtyckliga undantag', 'Avgifterna ska vara lika höga för alla lägenheter', 'Alla beslut kräver enhällighet i styrelsen'] },
+      correct_answer: 'Innehavare i samma situation ska behandlas lika — utan godtyckliga undantag',
+      explanation: 'Likhetsprincipen förbjuder styrelsen att gynna eller missgynna enskilda innehavare utan sakliga skäl.', points: 100,
     },
     {
-      id: 'sq4', question_text: 'Hur ofta ska underhållsplanen uppdateras?',
+      id: 'sq4', question_text: 'När måste årsredovisningen vara tillgänglig för medlemmarna?',
       question_type: 'single_choice', question_order: 4,
-      options: { choices: ['En gång per mandatperiod', 'Varje år', 'Vart femte år', 'Bara vid stora renoveringar'] },
-      correct_answer: 'Varje år',
-      explanation: 'Underhållsplanen ska uppdateras varje år utifrån den årliga besiktningen. Den är grunden för att budgetera rätt avgiftsnivå.',
-      points: 100,
+      options: { choices: ['På stämmodagen', 'Minst en vecka innan stämman', 'Minst en månad innan stämman', 'Det finns inget lagkrav'] },
+      correct_answer: 'Minst en vecka innan stämman',
+      explanation: 'Lagen kräver att årsredovisning och revisionsberättelse finns tillgängliga minst en vecka innan stämman.', points: 100,
     },
     {
-      id: 'sq5', question_text: 'Vem har rätt att ta del av styrelseprotokollen?',
+      id: 'sq5', question_text: 'Vad gäller vid andrahandsuthyrning när innehavaren arbetar utomlands?',
       question_type: 'single_choice', question_order: 5,
-      options: { choices: [
-        'Alla boende i föreningen',
-        'Alla betalande medlemmar som begär det',
-        'Bara styrelseledamöter och valda revisorer',
-        'Alla som är inskrivna i lägenhetsförteckningen',
-      ]},
-      correct_answer: 'Bara styrelseledamöter och valda revisorer',
-      explanation: 'Protokollen är inte offentliga. Styrelsen bestämmer utifrån sin vårdnadsplikt vilken information som lämnas ut till övriga.',
-      points: 100,
+      options: { choices: ['Styrelsen kan alltid neka', 'Innehavaren har rätt att hyra ut — arbete utomlands är ett beaktansvärt skäl', 'Kräver stämmobeslut', 'Hyresnämnden måste godkänna i förväg'] },
+      correct_answer: 'Innehavaren har rätt att hyra ut — arbete utomlands är ett beaktansvärt skäl',
+      explanation: 'Bostadsrättslagen ger innehavare rätt till andrahandsuthyrning vid beaktansvärda skäl. Hyresnämnden kan överpröva ett orättfärdigt nekande.', points: 100,
+    },
+    {
+      id: 'sq6', question_text: 'Vilken lag reglerar primärt styrelsens arbete och protokollkrav?',
+      question_type: 'single_choice', question_order: 6,
+      options: { choices: ['Bostadsrättslagen', 'Lagen om ekonomiska föreningar', 'Plan- och bygglagen', 'GDPR'] },
+      correct_answer: 'Lagen om ekonomiska föreningar',
+      explanation: 'LEF reglerar hur styrelsen ska fungera, krav på protokoll, revision och årsredovisning.', points: 100,
     },
   ];
 
   return (
-    <BgSlide bild={IMGS.ansvar} overlay="rgba(15,22,35,0.92)">
-      <div className="text-center">
-        <Badge text="Sluttest · Styrelsens arbete" />
+    <BgSlide bild={IMGS.avslut} overlay="rgba(15,22,35,0.92)">
+      <div className="text-center max-w-lg mx-auto">
+        <Badge text="Sluttest · Hur BRF:en fungerar" />
+        <div style={{ fontSize: 64, marginBottom: 16 }}>🏆</div>
         <h2 className="text-3xl sm:text-4xl font-black text-white mb-3" style={{ fontFamily: "'Nunito', sans-serif" }}>
           Testa dina kunskaper
         </h2>
-        <p className="text-white/50 text-sm mb-8">5 frågor · 80% rätt krävs för godkänt</p>
-        <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-          onClick={() => setQuizOpen(true)}
-          className="w-full py-5 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-3 shadow-xl mb-4"
-          style={{ background: `linear-gradient(135deg, ${O}, ${OD})` }}>
-          <HelpCircle className="w-6 h-6" /> Starta sluttest
-        </motion.button>
+        <p className="mb-8" style={{ color: 'rgba(255,255,255,0.5)', fontSize: 17, lineHeight: 1.6 }}>
+          6 frågor om historia, dokumentation och lagar. 80% rätt krävs för godkänt.
+        </p>
         <AnimatePresence>
           {isDone && (
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-              className="bg-white/10 border-2 border-green-400 rounded-2xl p-6 text-center">
-              <Award className="w-12 h-12 text-yellow-400 mx-auto mb-3" />
-              <h3 className="text-xl font-bold text-white mb-1">Modul klar!</h3>
-              <p className="text-white/60 text-sm">Du har klarat modulen om styrelsens arbete.</p>
+              className="rounded-2xl p-5 mb-6 flex items-center gap-3"
+              style={{ background: `${O}18`, border: `1px solid ${O}35` }}>
+              <Award size={24} style={{ color: O, flexShrink: 0 }} />
+              <div className="text-left">
+                <p className="text-white font-bold">Modul avklarad! 🎉</p>
+                <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>Du har klarat modulen om hur BRF:en fungerar.</p>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
+        <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+          onClick={() => setQuizOpen(true)}
+          className="w-full py-5 rounded-2xl font-black text-white text-xl flex items-center justify-center gap-3 mb-4"
+          style={{ background: `linear-gradient(135deg, ${O}, ${OD})`, boxShadow: `0 8px 32px ${O}40` }}>
+          <HelpCircle size={24} /> Starta sluttest
+        </motion.button>
+        <p className="text-sm" style={{ color: 'rgba(255,255,255,0.25)' }}>
+          Du kan göra om testet hur många gånger du vill
+        </p>
       </div>
       <GdprQuizOverlay
         isOpen={quizOpen}
         onClose={() => setQuizOpen(false)}
         questions={fragor}
         passingPercent={80}
-        onComplete={(passed) => { if (passed) onComplete('slutprov'); }}
+        onComplete={(passed: boolean) => { if (passed) onComplete('slutquiz'); }}
       />
     </BgSlide>
   );
 };
 
 // ═══════════════════════════════════════════════════════════
+// FAQ
+// ═══════════════════════════════════════════════════════════
+const MODULE_FAQ = [
+  { question: 'Vad är skillnaden på bostadsrätt och hyresrätt?', answer: 'Med bostadsrätt äger du nyttjanderätten till lägenheten och kan sälja den på marknaden. Med hyresrätt hyr du av en hyresvärd utan att äga något.' },
+  { question: 'Vem äger fastigheten i en BRF?', answer: 'Föreningen äger fastigheten gemensamt. De enskilda innehavarna äger sin nyttjanderätt (bostadsrätt) — inte murarna i sig.' },
+  { question: 'Måste föreningen ha en underhållsplan?', answer: 'Det finns inget uttryckligt lagkrav, men det är god sed och förväntas av revisorer och banker. Utan underhållsplan riskerar föreningen oväntade avgiftschocker.' },
+  { question: 'Kan styrelsen neka andrahandsuthyrning?', answer: 'Ja, men bara av sakliga skäl. Om innehavaren har beaktansvärda skäl (arbete, studier, vård) kan hyresnämnden överpröva nekandet.' },
+  { question: 'Vad händer om styrelsen bryter mot likhetsprincipen?', answer: 'Beslutet kan ogiltigförklaras av domstol. Ledamöter kan bli skadeståndsskyldiga. Stämman kan vägra ansvarsfrihet.' },
+];
+
+// ═══════════════════════════════════════════════════════════
 // HUVUD-KOMPONENT
 // ═══════════════════════════════════════════════════════════
-const Module1Introduktion: React.FC = () => {
+const ModuleStyrelsenArbete: React.FC = () => {
   const [currentIndex, setCurrentIndex]         = useState(0);
   const [completedLessons, setCompletedLessons] = useState(new Set<string>(['intro']));
   const [isDesktop, setIsDesktop]               = useState(false);
@@ -857,109 +962,169 @@ const Module1Introduktion: React.FC = () => {
     setCompletedLessons(prev => new Set([...prev, id]));
 
   const slides = [
-    { 
-      id: 'intro', 
-      title: 'Introduktion', 
-      // 1. Detta visar spelaren i navigationsfältet längst ner:
-      audioSrc: '/audio/intro-brf-1.mp3', 
-      // 2. Detta skickar in spelaren till själva slide-ytan (den stora vyn):
+    // ── 0: Intro ──────────────────────────────────────────
+    {
+      id: 'intro', title: 'Introduktion',
+      audioSrc: '/audio/intro-brf-1.mp3',
       component: (
-        <IntroSlide 
-          onStart={() => setCurrentIndex(1)} 
-          onQuizOpen={() => setQuizOpen(true)} 
+        <ModuleIntroSlide
+          kategori="JURIDIK"
+          titel="Välkommen till <span style='color:#FF5421'>bostadsrättsföreningen</span>"
+          ingress="I det här avsnittet kommer vi att kika närmre på hur bostadsrättsföreningen fungerar"
+          bild="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80"
+          längd="2 timmar"
+          avsnitt={11}
+          onStart={() => setCurrentIndex(1)}
+          videoUrl="/video/intro-brf2.mp4"
+          videoTitel="Introduktion till bostadsrättsföreningen"
+          vadLärDuDig={[
+            'BRF:ens historia och kooperativa ursprung',
+            'Föreningens viktigaste dokument',
+            'Lagarna som styr styrelsearbetet',
+            'Likhetsprincipen i praktiken',
+            'GDPR och personuppgifter i föreningen',
+            'Hur stämman och styrelsen samverkar',
+          ]}
         />
-      ) 
+      ),
     },
 
+    // ── 1: Flödesdiagram ──────────────────────────────────
     { id: 'brf-struktur', title: 'Så fungerar BRF:en', component: <BrfFlödesdiagramSlide /> },
 
-    {
-  id: 'brf-missuppfattningar',
-  title: '❓ Vanliga missuppfattningar',
+ { id: 'historia-tidslinje', title: '🏛️ BRF:ens historia',
   component: (
-    <BrfMissuppfattningsQuiz
+    <BrfHistorieTidslinje
+      isCompleted={completedLessons.has('historia-tidslinje')}
       onComplete={handleComplete}
-      isDone={completedLessons.has('brf-missuppfattningar')}
-      onNext={() => setCurrentIndex(i => i + 1)}
     />
-  ),
+  )
 },
 
+    // ── KAPITEL 2: DOKUMENTATION ──────────────────────────
+    { id: 'dok-1', title: '📋 Stadgarna', component: <Dokumentation1 /> },
+    { id: 'dok-2', title: '📁 Föreningens dokument', component: <Dokumentation2 /> },
+    { id: 'dok-3', title: '📈 Årsredovisningen', component: <Dokumentation3 /> },
     {
-  id: 'scenario-andrahand',
-  title: '📋 Scenario: Andrahandsuthyrning',
-  component: (
-    <ScenarioAndrahand
-      onComplete={handleComplete}
-      isDone={completedLessons.has('scenario-andrahand')}
-    />
-  ),
-},
+      id: 'quiz-dokumentation', title: '🧠 Quiz: Dokumentation',
+      component: (
+        <KapitelQuiz
+          quizId="quiz-dokumentation"
+          fragor={dokumentationFragor}
+          bild={IMGS.dokument}
+          badge="Quiz · Dokumentation"
+          onComplete={handleComplete}
+          isDone={completedLessons.has('quiz-dokumentation')}
+        />
+      ),
+    },
 
+    // ── KAPITEL 3: LAGAR & REGLER ─────────────────────────
+    { id: 'lag-1', title: '⚖️ Lagarna som styr BRF:en', component: <LagarRegler1 /> },
+    { id: 'lag-2', title: '🔄 Likhetsprincipen', component: <LagarRegler2 /> },
+    { id: 'lag-3', title: '🔐 GDPR i föreningen', component: <LagarRegler3 /> },
     {
-  id: 'intressenter',
-  title: 'Föreningens intressenter',
-  component: (
-    <IntressenterElevatorSection
-      isCompleted={completedLessons.has('intressenter')}
-      onComplete={() => handleComplete('intressenter')}
-    />
-  ),
-},
-     {
-    id: 'byggnad',
-    title: 'Fastigheten',
-    component: (
-      <BuildingCrossSectionSection
-        isCompleted={completedLessons.has('byggnad')}
-        onComplete={handleComplete}
-      />
-    ),
-  },
-    { id: 'rollerna',   title: 'Rollerna i styrelsen', component: <RollernaSlide /> },
-    
-    { id: 'ansvar',     title: 'Styrelsens ansvar',    component: <AnsvarSlide /> },
-    { id: 'quiz-1',     title: '🧠 Kunskapstest 1',    component: <Quiz1Slide onComplete={handleComplete} isDone={completedLessons.has('quiz-1')} /> },
-    { id: 'motet',      title: 'Styrelsemötet',        component: <MötetSlide /> },
-    { id: 'protokoll',  title: 'Protokollet',          component: <ProtokollSlide /> },
-    { id: 'quiz-2',     title: '🧠 Kunskapstest 2',    component: <Quiz2Slide onComplete={handleComplete} isDone={completedLessons.has('quiz-2')} /> },
-    { id: 'motesteknik',title: 'Mötesteknik',          component: <MötesteknikSlide /> },
-    { id: 'per-capsulam',   title: 'Per capsulam',     component: <PerCapsulamSlide /> },
-    { id: 'signaler',   title: 'Vad ska du tänka på?', component: <SignalerSlide /> },
-    { id: 'quiz-3',     title: '🧠 Kunskapstest 3',    component: <Quiz3Slide onComplete={handleComplete} isDone={completedLessons.has('quiz-3')} /> },
-    { id: 'slutprov',   title: '🎯 Sluttest',          component: <SlutprovSlide isDone={completedLessons.has('slutprov')} onComplete={handleComplete} /> },
+      id: 'quiz-lagar', title: '🧠 Quiz: Lagar & regler',
+      component: (
+        <KapitelQuiz
+          quizId="quiz-lagar"
+          fragor={lagarFragor}
+          bild={IMGS.juridik}
+          badge="Quiz · Lagar & regler"
+          onComplete={handleComplete}
+          isDone={completedLessons.has('quiz-lagar')}
+        />
+      ),
+    },
+
+    // ── Befintliga importerade komponenter ────────────────
+    {
+      id: 'intressenter', title: 'Föreningens intressenter',
+      component: (
+        <IntressenterElevatorSection
+          isCompleted={completedLessons.has('intressenter')}
+          onComplete={() => handleComplete('intressenter')}
+        />
+      ),
+    },
+    {
+      id: 'byggnad', title: 'Fastigheten',
+      component: (
+        <BuildingCrossSectionSection
+          isCompleted={completedLessons.has('byggnad')}
+          onComplete={handleComplete}
+        />
+      ),
+    },
+    {
+      id: 'brf-missuppfattningar', title: '❓ Vanliga missuppfattningar',
+      component: (
+        <BrfMissuppfattningsQuiz
+          onComplete={handleComplete}
+          isDone={completedLessons.has('brf-missuppfattningar')}
+          onNext={() => setCurrentIndex(i => i + 1)}
+        />
+      ),
+    },
+    {
+      id: 'scenario-andrahand', title: '📋 Scenario: Andrahandsuthyrning',
+      component: (
+        <ScenarioAndrahand
+          onComplete={handleComplete}
+          isDone={completedLessons.has('scenario-andrahand')}
+        />
+      ),
+    },
+
+    // ── Slutquiz ──────────────────────────────────────────
+    {
+      id: 'slutquiz', title: '🎯 Sluttest',
+      component: (
+        <SlutquizSlide
+          isDone={completedLessons.has('slutquiz')}
+          onComplete={handleComplete}
+        />
+      ),
+    },
   ];
 
   return (
     <div className="h-screen flex flex-col overflow-hidden" style={{ background: DARK }}>
-      <div className="flex-shrink-0" data-course-header>
-        <CourseHeader
-          isSidebarMinimized={false}
-          isDesktop={isDesktop}
-          userName={userData.name}
-          userAvatar={userData.avatar}
-          slideProgress={{ current: currentIndex, total: slides.length }}
-        />
-      </div>
-      <GlobalSidebar />
-      <div className="flex-1 overflow-hidden"
-        style={{ marginLeft: isDesktop ? 'var(--sidebar-width, 320px)' : '0px' }}>
-        <ModuleSlideLayout
-          slides={slides}
-          currentIndex={currentIndex}
-          onNavigate={setCurrentIndex}
-          showHeader={currentIndex > 0}>
-          {slides[currentIndex].component}
-        </ModuleSlideLayout>
-      </div>
+  
+  {/* Fixed header */}
+  <div className="flex-shrink-0" data-course-header>
+    <CourseHeader
+      isSidebarMinimized={false}
+      isDesktop={isDesktop}
+      userName={userData.name}
+      userAvatar={userData.avatar}
+      slideProgress={{ current: currentIndex, total: slides.length }}
+    />
+  </div>
+
+  {/* Spacer som pushar innehållet under den fixade headern */}
+  <div style={{ height: 'var(--header-height, 60px)', flexShrink: 0 }} />
+
+  <GlobalSidebar />
+
+  <div className="flex-1 overflow-hidden"
+    style={{ marginLeft: isDesktop ? 'var(--sidebar-width, 320px)' : '0px' }}>
+    <ModuleSlideLayout
+      slides={slides}
+      currentIndex={currentIndex}
+      onNavigate={setCurrentIndex}
+      showHeader={false}>
+      {slides[currentIndex].component}
+    </ModuleSlideLayout>
+  </div>
       <FloatingFAQ
         faqs={MODULE_FAQ}
-        title="Frågor om styrelsens arbete"
-        subtitle="Vanliga frågor om möten, protokoll och ansvar"
+        title="Frågor om BRF:en"
+        subtitle="Historia, dokumentation och lagar"
         buttonColor={O}
       />
     </div>
   );
 };
 
-export default Module1Introduktion;
+export default ModuleStyrelsenArbete;
