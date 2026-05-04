@@ -50,6 +50,7 @@ import IntegritetspolicyPage from './pages/IntegritetspolicyPage'
 import StyrelsekorkortetLanding from './pages/StyrelsekorkortetLanding';
 import OmOssPage from './pages/OmOssPage'
 import KursbibliotekSK from './pages/KursbibliotekSK';
+import StyrelsekorkortetLandingUltimate from './pages/StyrelsekorkortetLandingUltimate';
 
 // Landing page section components
 import HeroSection from './components/landing/HeroSection';
@@ -330,6 +331,7 @@ const AppRoutes = () => {
       <Route path="/survey/:slug" element={<PublicSurvey />} />
       <Route path="/purchase/:courseId" element={<PurchasePage />} />
       <Route path="/testa-dig" element={<QuizSalesPage />} />
+      <Route path="/test" element={<StyrelsekorkortetLandingUltimate />} />
       <Route path="/mina-sidor" element={<MinaSidor />} />
       <Route path="/slutprov" element={<FinalQuiz />} />
       <Route path="/villkor" element={<VillkorPage />} />

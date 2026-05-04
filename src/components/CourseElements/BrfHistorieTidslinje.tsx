@@ -41,12 +41,12 @@ const HÄNDELSER: Händelse[] = [
     kort: 'Industrialism, trångboddhet och de första bostadsidéerna',
     ikon: '🏚️',
     färg: '#7A3B1E',
-    audioSrc: '/audio/historia-del1.mp3',
-    ingress: 'Det som en gång byggdes för en trångbodd arbetarklass utanför stadskärnorna kan idag vara attraktiva bostäder för en köpstark medel- och överklass. Men vägen dit gick genom fattigdom, sjukdom och kamp.',
+    audioSrc: '/audio/indu.mp3',
+    
     stycken: [
       {
         text: 'I mitten av 1800-talet fick industrialismen sitt riktiga genombrott i Sverige. Mängder av nya företag etablerades inom verkstad, kraft, pappers- och konfektionsindustrin. Bönderna lämnade åkrarna och i de industriella städerna behövdes arbetskraft. Malmö, Göteborg och Stockholm svällde på ett sätt som ingen hade förberett sig för — och ingen hade heller byggt bostäder åt alla som kom.',
-        bild: 'https://images.unsplash.com/photo-1569025743873-ea3a9ade89f9?w=800&q=80',
+        bild: '/images/urbanisering.png',
         bildtext: 'Industrialisering och fabriksarbete, 1800-talets Sverige',
         nyckelhändelser: [
           'Industrialiseringen leder till massiv inflyttning till städerna',
@@ -373,7 +373,7 @@ const BrfHistorieTidslinje: React.FC<Props> = ({ isCompleted, onComplete }) => {
           {/* Retro-ram top */}
           <div style={{
             background: 'linear-gradient(to bottom, #2a1e0a, #1a1208)',
-            padding: '10px 16px',
+            padding: '30px 16px',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             borderBottom: '2px solid #8B6914',
           }}>
@@ -518,7 +518,7 @@ const BrfHistorieTidslinje: React.FC<Props> = ({ isCompleted, onComplete }) => {
                   <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>
   <img src="/icons/icon1.png" alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
 </div>
-                  <p style={{ fontSize: 12, fontWeight: 900, color: '#fff', fontFamily: "'Nunito', sans-serif", lineHeight: 1.2 }}>{h.år}</p>
+                  <p style={{ fontSize: 14, fontWeight: 900, color: '#fff', fontFamily: "'Nunito', sans-serif", lineHeight: 1.2 }}>{h.år}</p>
                   <p style={{ fontSize: 10, color: isAktiv ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.55)', lineHeight: 1.3, marginTop: 3 }}>{h.rubrik}</p>
                   {h.audioSrc && (
                     <div className="flex items-center justify-center gap-1 mt-2">
