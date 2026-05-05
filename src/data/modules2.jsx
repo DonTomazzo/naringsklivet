@@ -23,7 +23,7 @@ import ModuleNIS2 from '../modules/Naringsklivet/ModuleNIS2';
 
 // ── Delad instruktör ──────────────────────────────────────
 const INSTRUCTOR = {
-  name:  'Tomas Mauritzson',
+  name:  'Styrelsekörkortet',
   title: 'Kursledare, Styrelsekörkortet',
   img:   '/founder.png',
   bio:   '15+ års erfarenhet av styrelsearbete, föreningsjuridik och utbildning. Grundare av Styrelsekörkortet.',
@@ -52,7 +52,7 @@ const STYRELSEKORKORTET_LIVE = {
     name:  'Tomas Mauritzson',
     title: 'Kursledare — Styrelsekörkortet',
     img:   '/founder.png',
-    bio:   'Tomas Mauritzson har 15+ års erfarenhet av styrelsearbete, föreningsjuridik och utbildning. Han har utbildat hundratals styrelseledamöter i hela Sverige och är känd för sin pedagogiska och jordnära stil. Som grundare av Styrelsekörkortet är han den enda kursledaren i Sverige med ett komplett utbildningsprogram skräddarsytt för BRF-styrelser.',
+    bio:   'Tomas Mauritzson har 12+ års erfarenhet av styrelsearbete, föreningsjuridik och utbildning. Han har utbildat hundratals styrelseledamöter i hela Sverige och är känd för sin pedagogiska och jordnära stil. Som grundare av Styrelsekörkortet är han den enda kursledaren i Sverige med ett komplett utbildningsprogram skräddarsytt för BRF-styrelser.',
   },
   learningPoints: [
     'Styrelsens roller, ansvar och befogenheter',
@@ -419,7 +419,7 @@ export const modulesData = [
   {
     id: 'styrelseroller',
     slug: 'styrelseroller',
-    title: 'Lär känna din nya kollega i teamet',
+    title: 'Så fungerar bostadsrättsföreningen',
     subtitle: 'Förstå rollerna i styrelsen – vem gör vad och varför det spelar roll',
     category: 'STYRELSEN',
     short_description: 'Lär dig om de olika rollerna i en bostadsrättsförenings styrelse.',

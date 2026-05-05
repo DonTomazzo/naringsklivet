@@ -969,7 +969,7 @@ const ModuleStyrelsenArbete: React.FC = () => {
       component: (
         <ModuleIntroSlide
           kategori="JURIDIK"
-          titel="Välkommen till <span style='color:#FF5421'>bostadsrättsföreningen</span>"
+          titel="Så fungerar <span style='color:#FF5421'>bostadsrättsföreningen</span>"
           ingress="I det här avsnittet kommer vi att kika närmre på hur bostadsrättsföreningen fungerar"
           bild="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80"
           längd="2 timmar"
