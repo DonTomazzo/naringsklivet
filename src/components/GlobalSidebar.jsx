@@ -91,8 +91,8 @@ const GlobalSidebar = () => {
 
       <motion.aside
         animate={{
-          x: isDesktop ? 0 : isMobileOpen ? 0 : -sidebarWidth,
-          width: sidebarWidth,
+          x: isDesktop ? 0 : isMobileOpen ? 0 : '-100%',
+  width: isDesktop ? sidebarWidth : '100vw',
         }}
         transition={{ type: 'tween', duration: 0.35, ease: 'easeInOut' }}
         className="fixed left-0 top-0 h-screen overflow-y-auto z-40"
@@ -143,14 +143,8 @@ const GlobalSidebar = () => {
                 }
               </button>
 
-              <button
-                onClick={() => setIsMobileOpen(false)}
-                className="lg:hidden ml-auto p-2 rounded-lg"
-                style={{ color: C.mid }}
-                aria-label="Stäng"
-              >
-                <X className="w-4 h-4" />
-              </button>
+
+              
             </div>
 
             {/* ══════════════════════════════
