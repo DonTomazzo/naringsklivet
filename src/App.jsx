@@ -325,7 +325,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Publika routes */}
-      <Route path="/" element={<PremiumCoursePage />} />
+      <Route path="/" element={<NetflixPage />} />
       <Route path="/anmalan" element={<LandingPage />} />
       <Route path="/course-form" element={<CourseFormPage />} />
       <Route path="/survey/:slug" element={<PublicSurvey />} />

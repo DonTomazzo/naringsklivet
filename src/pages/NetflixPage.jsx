@@ -127,16 +127,16 @@ const Hero = () => {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-8"
           style={{ background: C.orangeL, color: C.orange }}>
           <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: C.orange }} />
-          Utbildning för BRF-styrelser sedan 2024
+          Certfieringsutbildning för förtroendevalda i bostadsrättsföreningar 
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           {/* Vänster */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.08 }}>
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight mb-8"
+            <h1 className="text-5xl sm:text-7xl lg:text-7xl font-black leading-[0.95] tracking-tight mb-8"
               style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>
-              Trygg i<br />
-              <span style={{ color: C.orange }}>styrelserollen.</span><br />
+              Bli tryggare<br />
+              <span style={{ color: C.orange }}>i din styrelseroll.</span><br />
               Äntligen.
             </h1>
             <p className="text-lg sm:text-xl leading-relaxed mb-8 max-w-lg" style={{ color: C.mid }}>
@@ -164,12 +164,12 @@ const Hero = () => {
             transition={{ duration: 0.65, delay: 0.25 }} className="relative">
             <div className="relative">
               <div className="rounded-3xl overflow-hidden aspect-[4/5] bg-slate-200 shadow-2xl">
-                <img src="/founder3.png" alt="Tomas Mauritzson — Styrelsekörkortet"
+                <img src="/founder.png" alt="Tomas Mauritzson — Styrelsekörkortet"
                   className="w-full h-full object-cover object-top" />
               </div>
               <div className="absolute -bottom-5 -right-5 bg-white rounded-2xl px-5 py-4 shadow-xl border border-slate-100">
                 <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: C.orange }}>Styrelsekörkortet®</p>
-                <p className="text-sm font-bold text-slate-800">100+ utbildade styrelser</p>
+                <p className="text-sm font-bold text-slate-800">164+ utbildade styrelser</p>
               </div>
               <div className="absolute -top-6 -left-6 w-32 h-32 rounded-full opacity-10 -z-10" style={{ background: C.orange }} />
             </div>
@@ -211,7 +211,7 @@ const Hero = () => {
             <div className="lg:col-span-1 flex justify-center">
               <div className="relative w-full max-w-[200px] lg:max-w-full">
                 <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white rotate-3 hover:rotate-0 transition-transform duration-300">
-                  <img src="/founder.png" alt="" className="w-full h-auto object-cover" />
+                  <img src="/founder3.png" alt="" className="w-full h-auto object-cover" />
                 </div>
                 <div className="absolute -z-10 -bottom-3 -left-3 w-12 h-12 rounded-full opacity-20" style={{ background: C.orange }} />
               </div>
