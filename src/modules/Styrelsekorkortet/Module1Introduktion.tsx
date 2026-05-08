@@ -22,6 +22,10 @@ import ScenarioAndrahand          from '../../components/CourseElements/Scenario
 import BrfMissuppfattningsQuiz    from '../../components/CourseElements/BrfMissuppfattningsQuiz';
 import GdprQuizOverlay            from '../../components/CourseElements/GdprQuizOverlay';
 import BrfHistorieTidslinje from '../../components/CourseElements/BrfHistorieTidslinje';
+import LagandringarSection from '../../components/CourseElements/LagandringarSection';
+import DokumentationSection from '../../components/CourseElements/DokumentationSection';
+import KapitelIntro from '../../components/CourseElements/KapitelIntro';
+
 
 const O    = '#FF5421';
 const OD   = '#E04619';
@@ -963,34 +967,55 @@ const ModuleStyrelsenArbete: React.FC = () => {
 
   const slides = [
     // ── 0: Intro ──────────────────────────────────────────
+   {
+  id: 'intro',
+  title: 'Introduktion',
+  component: (
+    <KapitelIntro
+      
+      rubrik="Så fungerar bostadsrättsföreningen"
+      badge="Styrelsekörkortet · Juridik"
+      desc="Historia, dokumentation och lagarna som styr styrelsearbetet."
+      bild="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80"
+      pills={['Historia', 'Dokumentation', 'BRL', 'GDPR', 'Likhetsprincipen']}
+      audioSrc="/audio/intro-brf-1.mp3"  // ← här
+      onStart={() => setCurrentIndex(1)}
+    />
+  ),
+},
+
     {
-      id: 'intro', title: 'Introduktion',
-      audioSrc: '/audio/intro-brf-1.mp3',
-      component: (
-        <ModuleIntroSlide
-          kategori="JURIDIK"
-          titel="Så fungerar <span style='color:#FF5421'>bostadsrättsföreningen</span>"
-          ingress="I det här avsnittet kommer vi att kika närmre på hur bostadsrättsföreningen fungerar"
-          bild="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80"
-          längd="2 timmar"
-          avsnitt={11}
-          onStart={() => setCurrentIndex(1)}
-          videoUrl="/video/intro-brf2.mp4"
-          videoTitel="Introduktion till bostadsrättsföreningen"
-          vadLärDuDig={[
-            'BRF:ens historia och kooperativa ursprung',
-            'Föreningens viktigaste dokument',
-            'Lagarna som styr styrelsearbetet',
-            'Likhetsprincipen i praktiken',
-            'GDPR och personuppgifter i föreningen',
-            'Hur stämman och styrelsen samverkar',
-          ]}
-        />
-      ),
-    },
+  id: 'lagändringar',
+  title: 'Aktuella lagändringar',
+  component: (
+    <div className="h-full relative overflow-hidden">
+      <img
+        src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&q=80"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-black/55" />
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-full max-w-4xl mx-auto px-4 sm:px-8 py-10 pb-24">
+        <div className="mb-6 text-center">
+          <p className="font-black text-4xl sm:text-5xl lg:text-6xl mb-4" style={{ color: '#FF5421' }}>
+            Håll dig uppdaterad
+          </p>
+          <p className="font-bold text-white text-xl sm:text-2xl mb-1">
+            Aktuella lagändringar 2023–2027
+          </p>
+          <p className="text-white/60 text-sm">Klicka på varje cirkel för att läsa mer</p>
+        </div>
+        <LagandringarSection />
+      </div>
+    </div>
+  ),
+},
+
 
     // ── 1: Flödesdiagram ──────────────────────────────────
     { id: 'brf-struktur', title: 'Så fungerar BRF:en', component: <BrfFlödesdiagramSlide /> },
+
+    { id: 'dok-grid', title: '📋 Föreningens dokument', component: <DokumentationSection /> },
 
  { id: 'historia-tidslinje', title: '🏛️ BRF:ens historia',
   component: (

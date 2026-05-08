@@ -32,6 +32,7 @@ import ModuleFastighetenDrift     from '../modules/Styrelsekorkortet/ModuleFasti
 import ModuleDigitalSakerhetLosenord from '../modules/Naringsklivet/ModuleDigitalSakerhet_Losenord';
 import ModuleDigitalSakerhetAI from '../modules/Naringsklivet/ModuleDigitalSakerhet_AI';
 import ModulePhishing from '../modules/Naringsklivet/ModulePhishing';
+import ModuleBeslut from '../modules/Styrelsekorkortet/ModuleBeslut';
 
 
 
@@ -70,7 +71,7 @@ const MODULE_MAP: Record<string, React.ComponentType> = {
   'hallbarhet':                    ModuleHallbarhet,
   'foreningens-intressenter':      ModuleIntressenter,
   'bostadsrattsforeningen':        Bostadsrattsforeningen,
-  'fastigheten': ModuleFastigheten,
+  
   'ted-ai':           ModuleTedAI,
 'ted-ledarskap':    ModuleTedLedarskap,
 'ted-produktivitet': ModuleTedProduktivitet,
@@ -93,7 +94,7 @@ const MODULE_MAP: Record<string, React.ComponentType> = {
   // Kurser utan komponent ännu – lägg till när de byggs:
   // 'foreningens-principer':      ModulePrinciper,
   // 'konflikthantering':          ModuleKonflikt,
-  // 'fatta-ratt-beslut':          ModuleBeslut,
+  'fatta-ratt-beslut':          ModuleBeslut,
   // 'effektivt-styrelsearbete':   ModuleEffektivt,
   // 'fastigheten':                ModuleFastigheten,
   // 'forhandlingsteknik-upphandling': ModuleForhandling,

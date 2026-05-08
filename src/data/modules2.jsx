@@ -19,6 +19,7 @@ import digitalSakerhetKurs from '../data/digitalSakerhetData';
 import ModuleDigitalSakerhet from '../modules/Naringsklivet/ModuleDigitalSakerhet';
 import ModulePhishing from '../modules/Naringsklivet/ModulePhishing';
 import ModuleNIS2 from '../modules/Naringsklivet/ModuleNIS2';
+import ModuleBeslut from '../modules/Styrelsekorkortet/ModuleBeslut';
 
 
 // ── Delad instruktör ──────────────────────────────────────
@@ -1327,7 +1328,7 @@ export const modulesData = [
     price: 1490,
     priceTeam: 'Volymrabatt från 2 licenser',
     previewVideoUrl: null,
-    component: null,
+    component: ModuleBeslut,
     instructor: INSTRUCTOR,
     learningPoints: [
       'Beslutsprocessen steg-för-steg',

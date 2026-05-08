@@ -29,6 +29,14 @@ import { CheckCircle } from 'lucide-react';
 const O  = '#FF5421';
 const OD = '#E04619';
 
+const NAVY  = '#171f32';
+const NAVY2 = '#1e2d3d';
+const NAVY3 = '#2a3f55';
+const CREAM = '#FFF4EF';
+const SAND  = '#F2E8DF';
+const SAND2 = '#E5D5C8';
+const MID   = '#3a4a5c';
+
 // Re-export av SlideJ som ligger i egen fil
 export { SlideJ } from './SlideJ';
 export type { SlideJFraga, SlideJAlternativ, SlideJProps } from './SlideJ';
@@ -812,5 +820,299 @@ export const SlideI = ({
     </div>
   </div>
 );
+
+export interface SlideLTargetgrupp {
+  titel: string;
+  desc: string;
+  accentColor?: string; // standard: O
+}
+ 
+export interface SlideLItem {
+  accent: string;      // hex-färg på cirkeln
+  titel: string;
+  desc: string;
+}
+ 
+export interface SlideLProps {
+  eyebrow?: string;
+  rubrik: string;
+  subRubrik?: string;
+  ingress?: string;
+  målgrupper?: SlideLTargetgrupp[];
+  listaRubrik?: string;
+  lista: SlideLItem[];
+  högerBg?: 'white' | 'cream' | 'sand';
+}
+ 
+export const SlideL: React.FC<SlideLProps> = ({
+  eyebrow,
+  rubrik,
+  subRubrik,
+  ingress,
+  målgrupper,
+  listaRubrik = 'Avsnitten',
+  lista,
+  högerBg = 'cream',
+}) => {
+  const högerBakgrund = högerBg === 'cream' ? CREAM : högerBg === 'sand' ? SAND : '#FFFFFF';
+ 
+  return (
+    <div style={{ height: '100%', display: 'flex', overflow: 'hidden' }}>
+ 
+      {/* ── VÄNSTER: navy med blobbar ── */}
+      <div style={{
+        width: '42%', flexShrink: 0,
+        background: NAVY,
+        position: 'relative', overflow: 'hidden',
+        display: 'flex', flexDirection: 'column',
+        justifyContent: 'center',
+        padding: '48px 36px',
+      }}
+        className="hidden lg:flex"
+      >
+        {/* Blobbar */}
+        <svg style={{ position: 'absolute', top: -40, right: -50, width: 260, height: 240, opacity: 0.80 }} viewBox="0 0 260 240">
+          <path d="M148,22 C194,6 254,48 246,118 C238,188 182,238 122,226 C62,214 16,158 32,90 C48,22 102,38 148,22Z" fill={NAVY2}/>
+        </svg>
+        <svg style={{ position: 'absolute', bottom: -30, left: -30, width: 190, height: 175, opacity: 0.70 }} viewBox="0 0 190 175">
+          <path d="M90,16 C124,4 168,32 162,80 C156,128 118,162 76,156 C34,150 4,114 10,68 C16,22 56,28 90,16Z" fill={NAVY3}/>
+        </svg>
+        <svg style={{ position: 'absolute', top: 50, right: 30, width: 88, height: 80, opacity: 0.88 }} viewBox="0 0 88 80">
+          <path d="M46,6 C64,1 82,16 78,40 C74,64 56,78 36,73 C16,68 3,48 10,26 C17,4 28,11 46,6Z" fill={O}/>
+        </svg>
+ 
+        <div style={{ position: 'relative', zIndex: 10 }}>
+          {eyebrow && (
+            <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: O, fontFamily: 'monospace', margin: '0 0 12px' }}>
+              {eyebrow}
+            </p>
+          )}
+          <h2 style={{ fontSize: 'clamp(24px, 2.8vw, 34px)', fontWeight: 900, color: '#fff', lineHeight: 1.08, fontFamily: "'Nunito', sans-serif", margin: '0 0 6px', letterSpacing: '-0.01em' }}>
+            {rubrik}
+          </h2>
+          {subRubrik && (
+            <p style={{ fontSize: 'clamp(13px, 1.3vw, 15px)', color: O, fontFamily: "'Nunito', sans-serif", margin: '0 0 14px', fontWeight: 700 }}>
+              {subRubrik}
+            </p>
+          )}
+          {ingress && (
+            <p style={{ fontSize: 'clamp(12px, 1.2vw, 14px)', color: 'rgba(255,255,255,0.52)', lineHeight: 1.75, fontFamily: "'Nunito', sans-serif", margin: '0 0 28px' }}>
+              {ingress}
+            </p>
+          )}
+ 
+          {/* Målgrupps-kort */}
+          {målgrupper && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {målgrupper.map((m, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -12 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  style={{
+                    padding: '12px 16px', borderRadius: 12,
+                    background: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.10)',
+                  }}
+                >
+                  <p style={{ fontSize: 13, fontWeight: 800, color: m.accentColor ?? O, margin: '0 0 3px', fontFamily: "'Nunito', sans-serif" }}>
+                    {m.titel}
+                  </p>
+                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', margin: 0, fontFamily: "'Nunito', sans-serif", lineHeight: 1.5 }}>
+                    {m.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+ 
+      {/* ── HÖGER: lista ── */}
+      <div style={{
+        flex: 1,
+        background: högerBakgrund,
+        overflowY: 'auto',
+        padding: '48px 44px',
+        display: 'flex', flexDirection: 'column',
+      }}>
+        {/* Mobil: kompakt rubrik */}
+        <div className="lg:hidden" style={{ marginBottom: 20 }}>
+          {eyebrow && <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: O, fontFamily: 'monospace', margin: '0 0 6px' }}>{eyebrow}</p>}
+          <h2 style={{ fontSize: 22, fontWeight: 900, color: NAVY, fontFamily: "'Nunito', sans-serif", margin: 0 }}>{rubrik}</h2>
+        </div>
+ 
+        <p style={{ fontSize: 18, fontWeight: 900, color: NAVY, fontFamily: "'Nunito', sans-serif", margin: '0 0 6px' }}>
+          {listaRubrik}
+        </p>
+        <div style={{ width: 48, height: 3, borderRadius: 2, background: O, marginBottom: 24 }} />
+ 
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {lista.map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: 14 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.07 }}
+              style={{
+                display: 'flex', alignItems: 'flex-start', gap: 16,
+                padding: '14px 0',
+                borderBottom: i < lista.length - 1 ? `1px solid ${SAND2}` : 'none',
+              }}
+            >
+              {/* Färgad cirkel */}
+              <div style={{
+                width: 14, height: 14, borderRadius: '50%',
+                background: item.accent,
+                flexShrink: 0, marginTop: 4,
+              }} />
+              <div>
+                <p style={{ fontSize: 15, fontWeight: 800, color: NAVY, margin: '0 0 3px', fontFamily: "'Nunito', sans-serif", lineHeight: 1.25 }}>
+                  {item.titel}
+                </p>
+                <p style={{ fontSize: 12, color: MID, margin: 0, fontFamily: "'Nunito', sans-serif", lineHeight: 1.55 }}>
+                  {item.desc}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+ 
+// ══════════════════════════════════════════════════════════
+// SLIDE M — Broschyr kort-grid + snabbfakta
+// Portad från DokumentationSection — generisk variant
+// Använd för alla typer av kort-grid-slides (dokument, lagar, roller etc.)
+// ══════════════════════════════════════════════════════════
+ 
+export interface SlideMKort {
+  nr: string;
+  titel: string;
+  kort: string;
+  variant: 'navy' | 'orange' | 'sand' | 'cream';
+  bild?: string;
+  body?: string;
+  punkter?: string[];
+  fakta?: { etikett: string; värde: string }[];
+}
+ 
+export interface SlideMProps {
+  eyebrow?: string;
+  rubrik: string;
+  ingress?: string;
+  kort: SlideMKort[];
+  snabbfakta?: { etikett: string; värde: string }[];
+  bg?: 'sand' | 'cream' | 'white';
+}
+ 
+const kortFärg = (variant: SlideMKort['variant']) => {
+  switch (variant) {
+    case 'navy':   return { bg: NAVY,  text: '#fff',  sub: 'rgba(255,255,255,0.60)', nr: 'rgba(255,255,255,0.22)' };
+    case 'orange': return { bg: O,     text: '#fff',  sub: 'rgba(255,255,255,0.72)', nr: 'rgba(255,255,255,0.28)' };
+    case 'sand':   return { bg: SAND,  text: NAVY,    sub: MID,                       nr: `${O}38` };
+    case 'cream':  return { bg: CREAM, text: NAVY,    sub: MID,                       nr: `${O}38` };
+  }
+};
+ 
+export const SlideM: React.FC<SlideMProps> = ({
+  eyebrow, rubrik, ingress, kort, snabbfakta, bg = 'sand',
+}) => {
+  const bakgrund = bg === 'cream' ? CREAM : bg === 'white' ? '#fff' : SAND;
+ 
+  return (
+    <div style={{ height: '100%', background: bakgrund, overflowY: 'auto', position: 'relative' }}>
+      {/* Blobbar */}
+      <svg style={{ position: 'absolute', top: -40, right: -60, width: 320, height: 295, opacity: 0.50, pointerEvents: 'none' }} viewBox="0 0 320 295">
+        <path d="M172,26 C230,7 302,52 290,136 C278,220 208,272 140,256 C72,240 12,172 30,98 C48,24 114,45 172,26Z" fill={SAND2}/>
+      </svg>
+      <svg style={{ position: 'absolute', bottom: -28, left: -38, width: 240, height: 220, opacity: 0.38, pointerEvents: 'none' }} viewBox="0 0 240 220">
+        <path d="M116,20 C156,5 210,36 204,94 C198,152 154,190 104,182 C54,174 8,132 16,78 C24,24 76,35 116,20Z" fill={CREAM}/>
+      </svg>
+ 
+      <div style={{ padding: '48px 40px', position: 'relative', zIndex: 10 }}>
+        {/* Eyebrow + rubrik */}
+        {eyebrow && (
+          <p style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: O, fontFamily: 'monospace', margin: '0 0 10px' }}>
+            {eyebrow}
+          </p>
+        )}
+        <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 36px)', fontWeight: 900, color: NAVY, lineHeight: 1.08, fontFamily: "'Nunito', sans-serif", margin: '0 0 10px', letterSpacing: '-0.01em' }}>
+          {rubrik}
+        </h2>
+        {ingress && (
+          <p style={{ fontSize: 'clamp(13px, 1.4vw, 15px)', color: MID, lineHeight: 1.7, fontFamily: "'Nunito', sans-serif", maxWidth: 540, margin: '0 0 28px' }}>
+            {ingress}
+          </p>
+        )}
+ 
+        {/* Kortgrid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(175px, 1fr))',
+          gap: 12,
+          marginBottom: snabbfakta ? 20 : 0,
+        }}>
+          {kort.map((k, i) => {
+            const s = kortFärg(k.variant);
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.07 }}
+                style={{
+                  background: s.bg, borderRadius: 14,
+                  padding: '20px 18px',
+                  display: 'flex', flexDirection: 'column', gap: 10,
+                  minHeight: 150,
+                }}
+              >
+                <span style={{ fontSize: 24, fontWeight: 900, color: s.nr, fontFamily: "'Nunito', sans-serif", lineHeight: 1 }}>
+                  {k.nr}
+                </span>
+                <p style={{ fontSize: 15, fontWeight: 800, color: s.text, fontFamily: "'Nunito', sans-serif", margin: 0, lineHeight: 1.25 }}>
+                  {k.titel}
+                </p>
+                <p style={{ fontSize: 12, color: s.sub, lineHeight: 1.55, fontFamily: "'Nunito', sans-serif", margin: 0 }}>
+                  {k.kort}
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
+ 
+        {/* Snabbfakta-remsa */}
+        {snabbfakta && (
+          <div style={{
+            borderRadius: 12, background: CREAM, border: `1px solid ${SAND2}`,
+            padding: '14px 20px',
+            display: 'grid',
+            gridTemplateColumns: `repeat(${Math.min(snabbfakta.length, 4)}, 1fr)`,
+            gap: 8,
+          }}>
+            {snabbfakta.map((f, i) => (
+              <div key={i} style={{ borderLeft: i > 0 ? `1px solid ${SAND2}` : 'none', paddingLeft: i > 0 ? 14 : 0 }}>
+                <p style={{ fontSize: 9, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: O, fontFamily: 'monospace', margin: '0 0 3px' }}>
+                  {f.etikett}
+                </p>
+                <p style={{ fontSize: 'clamp(12px, 1.3vw, 14px)', fontWeight: 800, color: NAVY, fontFamily: "'Nunito', sans-serif", margin: 0 }}>
+                  {f.värde}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+ 
 
 export default SlideA;

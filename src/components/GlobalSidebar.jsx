@@ -255,11 +255,7 @@ const GlobalSidebar = () => {
                             flexShrink: 0,
                             lineHeight: 1.25,
                             minWidth: 26,
-                            color: isActive
-                              ? C.orange
-                              : isComplete
-                              ? `${C.orange}66`
-                              : `${C.orange}35`,
+                            color: isActive ? C.orange : isComplete ? `${C.orange}99` : `${C.orange}55`,
                             transition: 'color 0.2s',
                           }}>
                             {String(index + 1).padStart(2, '0')}
@@ -272,7 +268,7 @@ const GlobalSidebar = () => {
                                 fontSize: 13,
                                 fontWeight: 700,
                                 lineHeight: 1.3,
-                                color: isActive ? C.orange : C.dark,
+                                color: isActive ? C.orange : '#6B7280',
                               }}>
                                 {module.title}
                               </p>
@@ -331,7 +327,11 @@ const GlobalSidebar = () => {
                         navigate(`/module/${module.slug}`);
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      whileHover={{ x: 4 }}
+                      whileHover={!isActive ? {
+  x: 3,
+  scale: 1.015,
+  transition: { duration: 0.15 }
+} : {}}
                       whileTap={{ scale: 0.95 }}
                       title={module.title}
                       style={{
@@ -347,15 +347,7 @@ const GlobalSidebar = () => {
                         position: 'relative',
                       }}
                     >
-                      {/* Active streck vänster */}
-                      {isActive && (
-                        <div style={{
-                          position: 'absolute',
-                          left: 0, top: '25%', bottom: '25%',
-                          width: 3, borderRadius: 2,
-                          background: C.orange,
-                        }} />
-                      )}
+                     
 
                       <span style={{
                         fontSize: 15,

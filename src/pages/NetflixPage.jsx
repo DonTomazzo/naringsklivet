@@ -241,6 +241,55 @@ const Hero = () => {
   );
 };
 
+{/* Story-sektion under hero-grid */}
+<motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.65, delay: 0.2 }} className="w-full mt-20">
+  <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 items-center">
+    
+    {/* BILDEN (Nu först i koden = till vänster) */}
+    <div className="lg:col-span-1 flex justify-center">
+      <div className="relative w-full max-w-[200px] lg:max-w-full">
+        <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white -rotate-3 hover:rotate-0 transition-transform duration-300">
+          <img src="/founder3.png" alt="" className="w-full h-auto object-cover" />
+        </div>
+        {/* Justerade cirkeln bakom till höger istället för vänster */}
+        <div className="absolute -z-10 -bottom-3 -right-3 w-12 h-12 rounded-full opacity-20" style={{ background: C.orange }} />
+      </div>
+    </div>
+
+    {/* TEXTEN (Nu efter bilden = till höger) */}
+    <div className="lg:col-span-3 text-center lg:text-left">
+      <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-6 text-white"
+        style={{ background: C.orange }}>Varför Styrelsekörkortet?</span>
+      <h2 className="text-3xl sm:text-5xl font-bold mb-8 leading-tight"
+        style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>
+        Styrelseuppdrag är <span style={{ color: C.orange }}>juridiskt ansvar.</span><br />
+        Inte frivilligarbete.
+      </h2>
+      <div className="max-w-3xl mx-auto lg:mx-0 space-y-6 text-lg text-slate-600 leading-relaxed">
+        <p>
+          Som styrelseledamot i en BRF bär du ett personligt juridiskt ansvar för fastigheten,
+          ekonomin och de boende. Det är ett uppdrag som kräver kunskap — men de flesta lämnas
+          utan utbildning, utan stöd och utan en klar bild av vad som faktiskt förväntas av dem.
+        </p>
+        <p>
+          Styrelsekörkortet® täcker allt du behöver: bostadsrättslagen, föreningsekonomi,
+          protokoll och dokumentation, underhållsplanering, GDPR och hur ni använder AI för att
+          halvera administrationen — helt utan teknisk bakgrund.
+        </p>
+      </div>
+      <div className="mt-10">
+        <button onClick={() => navigate('/modules')}
+          className="inline-flex items-center gap-2 font-bold text-base px-8 py-4 rounded-xl text-white transition-transform hover:scale-105"
+          style={{ background: `linear-gradient(135deg, ${C.orange}, ${C.orangeD})` }}>
+          Se hela utbildningen <ArrowRight size={18} />
+        </button>
+      </div>
+    </div>
+
+  </div>
+</motion.div>
+
 // ══════════════════════════════════════════════════════════
 // LOGO BAND — partner-symboler
 // ══════════════════════════════════════════════════════════
@@ -270,7 +319,7 @@ const COURSES = [
     price: 'Från 1 490 kr / styrelse',
     img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80',
     path: '/modules',
-    featured: true,
+    // featured borttaget
   },
   {
     tag: 'Seminarium',
@@ -279,7 +328,6 @@ const COURSES = [
     price: '4 900 kr / styrelse',
     img: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80',
     path: '/seminarier',
-    featured: false,
   },
   {
     tag: 'Modul',
@@ -288,17 +336,8 @@ const COURSES = [
     price: 'Ingår i programmet',
     img: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80',
     path: '/modules',
-    featured: false,
   },
-  {
-    tag: 'Modul',
-    title: 'Fastigheten — säkerhet & underhåll',
-    desc: 'Brandskydd, hissar, OVK, solceller och bygglov. Allt styrelsen måste veta om fastigheten.',
-    price: 'Ingår i programmet',
-    img: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
-    path: '/modules',
-    featured: false,
-  },
+  // Fastigheten-objektet borttaget
 ];
 
 const CourseCard = ({ course, index }) => {
@@ -349,7 +388,7 @@ const Utbildningar = () => {
             <div>
               <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: C.orange }}>Utbildningar</p>
               <h2 className="text-4xl sm:text-5xl font-black leading-tight tracking-tight"
-                style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>Välj ditt format.</h2>
+                style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>Våra utbildningar.</h2>
             </div>
           </Reveal>
           <Reveal delay={0.1}>
