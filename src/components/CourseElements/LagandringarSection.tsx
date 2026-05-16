@@ -1,7 +1,7 @@
 // src/components/CourseElements/LagandringarSection.tsx
 // Tidslinje-layout, inga ikoner, ren myndighetskänsla.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect. useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, CheckCircle, Download } from 'lucide-react';
 

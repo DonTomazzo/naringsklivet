@@ -1011,12 +1011,6 @@ const ModuleStyrelsenArbete: React.FC = () => {
   ),
 },
 
-
-    // ── 1: Flödesdiagram ──────────────────────────────────
-    { id: 'brf-struktur', title: 'Så fungerar BRF:en', component: <BrfFlödesdiagramSlide /> },
-
-    { id: 'dok-grid', title: '📋 Föreningens dokument', component: <DokumentationSection /> },
-
  { id: 'historia-tidslinje', title: '🏛️ BRF:ens historia',
   component: (
     <BrfHistorieTidslinje
@@ -1025,6 +1019,14 @@ const ModuleStyrelsenArbete: React.FC = () => {
     />
   )
 },
+
+
+    // ── 1: Flödesdiagram ──────────────────────────────────
+    { id: 'brf-struktur', title: 'Så fungerar BRF:en', component: <BrfFlödesdiagramSlide /> },
+
+    { id: 'dok-grid', title: '📋 Föreningens dokument', component: <DokumentationSection /> },
+
+
 
     // ── KAPITEL 2: DOKUMENTATION ──────────────────────────
     { id: 'dok-1', title: '📋 Stadgarna', component: <Dokumentation1 /> },
