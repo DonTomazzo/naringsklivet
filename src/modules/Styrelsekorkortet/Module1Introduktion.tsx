@@ -24,7 +24,13 @@ import GdprQuizOverlay            from '../../components/CourseElements/GdprQuiz
 import BrfHistorieTidslinje from '../../components/CourseElements/BrfHistorieTidslinje';
 import LagandringarSection from '../../components/CourseElements/LagandringarSection';
 import DokumentationSection from '../../components/CourseElements/DokumentationSection';
+import VanligaMisstag from '../../components/CourseElements/VanligaMisstag';
 import KapitelIntro from '../../components/CourseElements/KapitelIntro';
+import {
+  Dokumentation1,
+  Dokumentation2,
+  Dokumentation3,
+} from '../../components/CourseElements/KapitelDokumentation';
 
 
 const O    = '#FF5421';
@@ -523,105 +529,7 @@ const historiaFragor: QuizFraga[] = [
   },
 ];
 
-// ═══════════════════════════════════════════════════════════
-// KAPITEL 2: DOKUMENTATION — 3 slides
-// ═══════════════════════════════════════════════════════════
-const Dokumentation1 = () => (
-  <BgSlide bild={IMGS.stadgar}>
-    <Badge text="Kapitel 2 · Dokumentation" />
-    <H icon={FileText} title="Stadgarna — föreningens grundlag" />
-    <p className="text-white/70 text-base leading-relaxed mb-6">
-      Stadgarna är det viktigaste dokumentet i föreningen. De styr vad styrelsen får och måste göra — och vad som kräver stämmobeslut.
-    </p>
-    <div className="space-y-3 mb-6">
-      {[
-        { ikon: '📋', titel: 'Vad stadgarna innehåller', text: 'Föreningens namn och ändamål, hur stämman fungerar, hur styrelsen väljs, antal ledamöter, räkenskapsår, och regler för överlåtelse av bostadsrätt.' },
-        { ikon: '⚖️', titel: 'Stadgarna är bindande', text: 'Alla beslut som strider mot stadgarna kan ogiltigförklaras. Styrelsen måste känna till och följa stadgarna — okunnighet är inget försvar.' },
-        { ikon: '🔄', titel: 'Ändra stadgarna', text: 'Kräver normalt 2/3 majoritet på två på varandra följande stämmor. Det är avsiktligt svårt — stadgarna ska vara stabila.' },
-        { ikon: '🏛️', titel: 'Boverkets normalstadgar', text: 'Många föreningar baserar sina stadgar på HSBs eller Riksbyggens mallar. Alltid kontrollera era egna — de kan avvika.' },
-      ].map((item, i) => (
-        <motion.div key={i} initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-          className="flex items-start gap-4 p-4 rounded-xl"
-          style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
-          <span style={{ fontSize: 22, flexShrink: 0, marginTop: 2 }}>{item.ikon}</span>
-          <div>
-            <p className="text-white font-bold text-sm mb-1">{item.titel}</p>
-            <p className="text-white/60 text-sm leading-relaxed">{item.text}</p>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-    <div className="rounded-xl p-4 border-l-4" style={{ borderColor: O, background: `${O}12` }}>
-      <p className="text-white text-sm leading-relaxed">
-        <span className="font-bold" style={{ color: O }}>Praktisk tips: </span>
-        Läs igenom stadgarna vid varje nytt styrelseår. Skriv ut de viktigaste paragraferna och lägg dem som bilaga till protokollen.
-      </p>
-    </div>
-  </BgSlide>
-);
 
-const Dokumentation2 = () => (
-  <SplitSlide
-    badge="Kapitel 2 · Dokumentation"
-    title="Vilka <span style='color:#FF5421'>dokument</span> måste finnas?"
-    ingress="En välskött BRF har ett komplett dokumentarkiv. Det skyddar föreningen vid tvister, revisioner och ägarbyten — och det är styrelsens ansvar att hålla det uppdaterat."
-    bild={IMGS.dokument}
-    bildPosition="left"
-    badge2="Juridiskt skydd"
-    badge2Sub="Dokumenterat = bevisat"
-  >
-    <StegLista steg={[
-      { nr: '01', titel: 'Stadgar & föreningsregistrering', desc: 'Alltid tillgängliga. Bolagsverket har kopia. Ska finnas hos styrelsen och vara tillgängliga för medlemmar.' },
-      { nr: '02', titel: 'Årsredovisning & revisionsberättelse', desc: 'Ska upprättas varje år och hållas tillgängliga minst en vecka före stämman. Ska sparas minst 10 år.' },
-      { nr: '03', titel: 'Styrelseprotokoll', desc: 'Alla styrelsebeslut dokumenteras. Justeras av ordförande + en ledamot. Sparas permanent.' },
-      { nr: '04', titel: 'Lägenhetsförteckning', desc: 'Förteckning över alla lägenheter, innehavare och insatser. Ska alltid vara aktuell.' },
-      { nr: '05', titel: 'Underhållsplan', desc: 'Planerat underhåll med kostnadsuppskattningar. Grunden för rätt avgiftssättning.' },
-    ]} />
-    <InfoRuta>
-      Tappa inte kontrollen över arkivet vid styrelsebyte. Överlämning ska ske skriftligt och kvitteras.
-    </InfoRuta>
-  </SplitSlide>
-);
-
-const Dokumentation3 = () => (
-  <BgSlide bild={IMGS.arkiv}>
-    <Badge text="Kapitel 2 · Dokumentation" />
-    <H icon={FileText} title="Årsredovisningen — mer än siffror" />
-    <p className="text-white/70 text-base leading-relaxed mb-6">
-      Årsredovisningen är föreningens visitkort. Den läses av mäklare, banker och köpare inför varje försäljning. En välskriven årsredovisning höjer förtroendet — och värdet.
-    </p>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-      {[
-        { titel: 'Förvaltningsberättelse', text: 'Styrelsens berättelse om verksamhetsåret. Vad som hänt, vad som planeras. Ska vara informativ — inte bara formell.' },
-        { titel: 'Resultaträkning', text: 'Intäkter (avgifter, hyror) mot kostnader (drift, räntor, avskrivningar). Visar om föreningen går med vinst eller förlust.' },
-        { titel: 'Balansräkning', text: 'Tillgångar (fastigheten) mot skulder (lån) och eget kapital. Visar föreningens ekonomiska ställning vid årets slut.' },
-        { titel: 'Noter & nyckeltal', text: 'Fördjupad information om poster i räkenskaperna. Bankerna och mäklarna granskar skuldsättning per kvm.' },
-      ].map((item, i) => (
-        <div key={i} className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>
-          <p className="text-white font-bold text-sm mb-2" style={{ color: O }}>{item.titel}</p>
-          <p className="text-white/60 text-sm leading-relaxed">{item.text}</p>
-        </div>
-      ))}
-    </div>
-    <div className="rounded-2xl p-5" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)' }}>
-      <p className="text-xs font-bold uppercase tracking-widest mb-2 text-red-400">Vanliga misstag</p>
-      <div className="space-y-2">
-        {[
-          'Förvaltningsberättelse som inte nämner planerade renoveringar',
-          'Skuldsättning per kvm som inte förklaras — väcker oro hos banker',
-          'Underhållsfond som inte avsatts korrekt — felaktig bild av ekonomin',
-          'Årsredovisning lämnad in efter deadline (7 månader efter räkenskapsårets slut)',
-        ].map((item, i) => (
-          <div key={i} className="flex items-start gap-2">
-            <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-2 bg-red-400" />
-            <p className="text-white/80 text-sm">{item}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </BgSlide>
-);
 
 const dokumentationFragor: QuizFraga[] = [
   {
@@ -982,6 +890,12 @@ const ModuleStyrelsenArbete: React.FC = () => {
       onStart={() => setCurrentIndex(1)}
     />
   ),
+},
+
+{ 
+  id: 'vanliga-misstag', 
+  title: '⚠️ 10 vanliga misstag', 
+  component: <VanligaMisstag /> 
 },
 
     {

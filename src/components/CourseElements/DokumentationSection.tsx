@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import { playAudio, stopAudio } from '../../utils/audioManager';
 
 const O     = '#FF5421';
 const OD    = '#E04619';
@@ -21,6 +22,7 @@ const DOKUMENT = [
     id: 'stadgar',
     nr: '01',
     titel: 'Stadgarna',
+    audioSrc: '/audio/stadgarna.mp3', 
     kort: 'Föreningens grundlag — styr allt styrelsen får och måste göra.',
     variant: 'navy' as const,
     bild: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80',
@@ -40,6 +42,7 @@ const DOKUMENT = [
     id: 'arsredovisning',
     nr: '02',
     titel: 'Årsredovisning',
+    audioSrc: '/audio/arsredovisningen1.mp3', 
     kort: 'Föreningens visitkort — läses av banker, mäklare och köpare.',
     variant: 'orange' as const,
     bild: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80',
@@ -59,6 +62,7 @@ const DOKUMENT = [
     id: 'underhallsplan',
     nr: '03',
     titel: 'Underhållsplan',
+    audioSrc: '/audio/underhallsplan.mp3', 
     kort: 'Grunden för rätt avgiftssättning — förhindrar avgiftschocker.',
     variant: 'sand' as const,
     bild: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
@@ -78,6 +82,7 @@ const DOKUMENT = [
     id: 'protokoll',
     nr: '04',
     titel: 'Styrelseprotokoll',
+    audioSrc: '/audio/arsredovisningen1.mp3', 
     kort: 'Alla beslut dokumenteras — justeras av ordförande och en ledamot.',
     variant: 'cream' as const,
     bild: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80',
@@ -97,6 +102,7 @@ const DOKUMENT = [
     id: 'lagenhetsforteckning',
     nr: '05',
     titel: 'Lägenhetsförteckning',
+    audioSrc: '/audio/lagenhetsforteckningen.mp3', 
     kort: 'Förteckning över alla lägenheter, innehavare och insatser.',
     variant: 'navy' as const,
     bild: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80',
@@ -150,6 +156,13 @@ const DokModal = ({ dok, onClose }: { dok: typeof DOKUMENT[0] | null; onClose: (
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
   }, [onClose]);
+
+    // ← LÄGG TILL DENNA:
+  useEffect(() => {
+    if (!dok?.audioSrc) return;
+    playAudio(dok.audioSrc);
+    return () => stopAudio();
+  }, [dok?.id, dok?.audioSrc]);
 
   return (
     <AnimatePresence>

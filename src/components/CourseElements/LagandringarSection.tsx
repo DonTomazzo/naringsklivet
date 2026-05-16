@@ -1,7 +1,7 @@
 // src/components/CourseElements/LagandringarSection.tsx
 // Tidslinje-layout, inga ikoner, ren myndighetskänsla.
 
-import React, { useState, useEffect. useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, CheckCircle, Download } from 'lucide-react';
 
@@ -81,11 +81,31 @@ const Modal = ({
     return () => window.removeEventListener('keydown', h);
   }, [onClose]);
 
+  // Modal-ljud: spela när lag.id ändras, stoppa när modal stängs
+const audioRef = useRef<HTMLAudioElement | null>(null);
+
+useEffect(() => {
+  if (!lag?.audioSrc) return;
+
+  const audio = new Audio(lag.audioSrc);
+  audio.volume = 0.85;
+  audioRef.current = audio;
+  audio.play().catch(() => {});
+
+  return () => {
+    audio.pause();
+    audio.currentTime = 0;
+    audioRef.current = null;
+  };
+}, [lag?.id, lag?.audioSrc]);
+
   useEffect(() => {
   const audio = new Audio('/audio/lagandringar-intro.mp3');
   audio.play().catch(() => {});
   return () => { audio.pause(); };
 }, []);
+
+
 
   return (
     <AnimatePresence>
