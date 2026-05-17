@@ -78,7 +78,7 @@ const Nav = () => {
               onClick={() => navigate('/seminarier')}
               className="text-sm font-bold px-4 py-2 rounded-lg text-white"
               style={{ background: C.orange }}>
-              Boka plats
+              Boka 
             </motion.button>
             <button className="md:hidden w-9 h-9 flex flex-col justify-center items-center gap-1.5"
               onClick={() => setMobileOpen(p => !p)}>
@@ -134,27 +134,27 @@ const Hero = () => {
           {/* Vänster */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.08 }}>
             <h1 className="text-5xl sm:text-7xl lg:text-7xl font-black leading-[0.95] tracking-tight mb-8"
-              style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}>
+              style={{ color: C.dark, fontFamily: "'Nunito', sans-serif" }}> <br />
               Bli tryggare<br />
-              <span style={{ color: C.orange }}>i din styrelseroll.</span><br />
-              Äntligen.
-            </h1>
+              <span style={{ color: C.orange }}>i din styrelseroll </span><br /> 
+              för en bättre mandatperiod
+            </h1> 
             <p className="text-lg sm:text-xl leading-relaxed mb-8 max-w-lg" style={{ color: C.mid }}>
-              Den enda utbildningen i Sverige skräddarsydd för förtroendevalda i bostadsrättsföreningar.
-              Juridik, ekonomi, AI och förvaltning — utan krångel.
+              Det enda träningsprogrammet i Sverige skräddarsydd för förtroendevalda i bostadsrättsföreningar.
+              Lär dig juridik, ekonomi, AI och förvaltning — utan krångel. 
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <motion.button whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}
                 onClick={() => navigate('/modules')}
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-base text-white"
                 style={{ background: C.orange, boxShadow: `0 8px 32px ${C.orange}40` }}>
-                Se alla utbildningar <ArrowRight size={18} />
+                Se hela innehållet <ArrowRight size={18} />
               </motion.button>
               <motion.button whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}
                 onClick={() => navigate('/seminarier')}
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-base"
                 style={{ color: C.dark, border: `2px solid ${C.border}`, background: C.white }}>
-                Boka seminarium
+                Boka till din BRF
               </motion.button>
             </div>
           </motion.div>
@@ -204,7 +204,7 @@ const Hero = () => {
                 <button onClick={() => navigate('/modules')}
                   className="inline-flex items-center gap-2 font-bold text-base px-8 py-4 rounded-xl text-white transition-transform hover:scale-105"
                   style={{ background: `linear-gradient(135deg, ${C.orange}, ${C.orangeD})` }}>
-                  Se hela utbildningen <ArrowRight size={18} />
+                  Se hela innehållet <ArrowRight size={18} />
                 </button>
               </div>
             </div>
@@ -322,7 +322,7 @@ const COURSES = [
     // featured borttaget
   },
   {
-    tag: 'Seminarium',
+    tag: '+ Tilläggskurs på plats eller online',
     title: 'AI för BRF-styrelsen',
     desc: '3 timmar live. Protokoll på 10 min, brev till boende och ChatGPT/Claude i praktiken. Online eller på plats.',
     price: '4 900 kr / styrelse',
