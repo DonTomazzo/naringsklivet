@@ -78,7 +78,7 @@ const Nav = () => {
               onClick={() => navigate('/seminarier')}
               className="text-sm font-bold px-4 py-2 rounded-lg text-white"
               style={{ background: C.orange }}>
-              Boka seminarium
+              Boka plats
             </motion.button>
             <button className="md:hidden w-9 h-9 flex flex-col justify-center items-center gap-1.5"
               onClick={() => setMobileOpen(p => !p)}>
