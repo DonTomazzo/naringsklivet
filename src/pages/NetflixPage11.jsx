@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   ArrowRight, ArrowUpRight, ArrowLeft, Check, Quote,
   GraduationCap, Users, BarChart3, ShieldCheck,
-  Cpu, Landmark, Mic, PenTool, HeartHandshake, MessagesSquare,
+  Cpu, Landmark, HeartHandshake, MessagesSquare,
 } from 'lucide-react';
 
 // ══════════════════════════════════════════════════════════
@@ -144,7 +144,7 @@ const Nav = () => {
             <img src="/logo.png" alt="" className="w-8 h-8 object-contain"
               onError={(e) => { e.currentTarget.style.display = 'none'; }} />
             <span className="font-black text-base tracking-tight" style={{ color: C.dark }}>
-              Närings<span style={{ color: C.orange }}>klivet</span>
+              Utbildnings<span style={{ color: C.orange }}>bolaget</span>
             </span>
           </button>
 
@@ -156,7 +156,7 @@ const Nav = () => {
               onClick={() => setMega((v) => !v)}
               className="flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-full transition-colors"
               style={{ color: mega ? C.orange : C.mid, background: mega ? C.orangeL : 'transparent' }}>
-              Se vårt kursutbud
+              Utbildningar
               <motion.span animate={{ rotate: mega ? 180 : 0 }} transition={{ duration: 0.2 }}
                 className="inline-block">
                 <ArrowRight size={14} style={{ transform: 'rotate(90deg)' }} />
@@ -324,19 +324,23 @@ const Nav = () => {
   );
 };
 
+// ── HERO (bakgrundsbild med ugglan inbakad) ──
 const Hero = () => {
   const navigate = useNavigate();
   return (
     <section className="relative overflow-hidden" style={{ background: C.bg }}>
+      {/* Bakgrundsbilden – ugglan finns i den */}
       <img src="/bajs.png" alt="" aria-hidden="true"
         className="absolute inset-0 w-full h-full object-cover"
-        style={{ objectPosition: 'right top' }} />
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: `linear-gradient(90deg, ${C.bg} 0%, ${C.bg} 26%, ${C.bg}cc 42%, transparent 66%)` }} />
+        style={{ objectPosition: 'right center' }} />
 
+      {/* Cream-scrim till vänster så texten alltid är läsbar */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: `linear-gradient(90deg, ${C.bg} 0%, ${C.bg} 28%, ${C.bg}cc 44%, transparent 68%)` }} />
+
+      {/* Innehåll */}
       <div className="relative max-w-6xl mx-auto px-5 sm:px-8">
-        {/* Hero-text */}
-        <div className="min-h-[460px] sm:min-h-[520px] flex items-center pt-28 pb-8">
+        <div className="min-h-[540px] sm:min-h-[620px] flex items-center pt-28 pb-16">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }} className="max-w-lg">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest mb-7"
@@ -344,34 +348,33 @@ const Hero = () => {
               <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: C.orange }} />
               Utbildning som gör skillnad
             </div>
-            <h1 className="text-5xl sm:text-6xl font-black leading-[1.02] tracking-tight mb-6" style={{ color: C.dark }}>
-              Utbildningar som<br />stärker er <span style={{ color: C.orange }}>organisation</span>
-            </h1>
+
+           <h1 className="text-5xl sm:text-6xl font-black leading-[1.02] tracking-tight mb-6"
+  style={{ color: C.dark }}>
+  Utbildningar som<br />stärker er <span style={{ color: C.orange }}>organisation</span>
+</h1>
             <OrangeRule className="mb-7" />
+
             <p className="text-lg leading-relaxed mb-8 max-w-md" style={{ color: C.mid }}>
               Praktiska och engagerande utbildningar som ger kunskap, skapar resultat
               och gör skillnad — på riktigt.
             </p>
+
             <div className="flex flex-col sm:flex-row gap-3">
               <motion.button whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}
-                onClick={() => navigate('/modules')}
+                onClick={() => navigate('/utbildningar')}
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full font-bold text-base text-white"
                 style={{ background: C.orange, boxShadow: `0 10px 30px ${C.orange}40` }}>
                 Utforska utbildningar <ArrowRight size={18} />
               </motion.button>
               <motion.button whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}
-                onClick={() => navigate('/anmalan')}
+                onClick={() => navigate('/demo')}
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full font-bold text-base"
                 style={{ color: C.dark, border: `2px solid ${C.border}`, background: C.white }}>
                 Boka en demo
               </motion.button>
             </div>
           </motion.div>
-        </div>
-
-        {/* Feature-panelen ligger nu OVANPÅ ugglebakgrunden */}
-        <div className="pb-14 sm:pb-16">
-          <FeatureRow />
         </div>
       </div>
     </section>
@@ -389,120 +392,29 @@ const FEATURES = [
 ];
 
 const FeatureRow = () => (
-  <Reveal>
-    <div className="rounded-[2rem] p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-      style={{
-        background: 'rgba(255,255,255,0.72)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        border: '1px solid rgba(255,255,255,0.6)',
-        boxShadow: '0 20px 60px rgba(23,31,50,0.10)',
-      }}>
-      {FEATURES.map(({ icon: Icon, title, desc }, i) => (
-        <div key={title} className="px-6 py-6 lg:py-4"
-          style={{ borderLeft: i > 0 ? '1px solid rgba(23,31,50,0.08)' : 'none' }}>
-          <span className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
-            style={{ background: 'rgba(23,31,50,0.05)' }}>
-            <Icon size={22} style={{ color: C.dark }} />
-          </span>
-          <OrangeRule className="mb-3" />
-          <h3 className="font-black text-base mb-1.5" style={{ color: C.dark }}>{title}</h3>
-          <p className="text-sm leading-relaxed" style={{ color: C.muted }}>{desc}</p>
+  <section className="px-5 sm:px-8 -mt-2" style={{ background: C.bg }}>
+    <div className="max-w-6xl mx-auto">
+      <Reveal>
+        <div className="rounded-3xl p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+          style={{ background: C.panel, border: `1px solid ${C.border}`, boxShadow: '0 8px 30px rgba(23,31,50,0.05)' }}>
+          {FEATURES.map(({ icon: Icon, title, desc }, i) => (
+            <div key={title}
+              className="px-4 py-4 lg:py-2"
+              style={{ borderLeft: i > 0 ? `1px solid ${C.border}` : 'none' }}>
+              <span className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
+                style={{ background: C.bgAlt }}>
+                <Icon size={22} style={{ color: C.dark }} />
+              </span>
+              <OrangeRule className="mb-3" />
+              <h3 className="font-black text-base mb-1.5" style={{ color: C.dark }}>{title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: C.muted }}>{desc}</p>
+            </div>
+          ))}
         </div>
-      ))}
+      </Reveal>
     </div>
-  </Reveal>
+  </section>
 );
-
-// ══════════════════════════════════════════════════════════
-//  ERBJUDANDEN  (zigzag: bild + text, alternerande sida)
-// ══════════════════════════════════════════════════════════
-const OFFERS = [
-  {
-    tag: 'Föreläsning', icon: Mic,
-    title: 'AI-föreläsning som väcker din organisation',
-    text: 'En engagerande keynote eller halvdagsföreläsning om AI i arbetslivet. Praktiska demos, verkliga exempel och ett budskap som fastnar. Anpassas efter er bransch och era utmaningar.',
-    points: ['Från 45 min keynote till halvdag', 'Online, på plats eller hybrid', 'Branschanpassat innehåll och exempel', 'Interaktiva moment och Q&A'],
-    cta: 'Boka föreläsning', path: '/anmalan',
-    img: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=900&q=85',
-  },
-  {
-    tag: 'Workshop', icon: PenTool,
-    title: 'Hands-on workshop – lär genom att göra',
-    text: 'En praktisk halvdags- eller heldagsworkshop där deltagarna arbetar med sina egna arbetsuppgifter och AI-verktyg i realtid. Det är det snabbaste sättet att bygga kompetens som faktiskt fastnar.',
-    points: ['Halvdag (3h) eller heldag (6h)', 'Max 20 deltagare för djup interaktion', 'Alla jobbar med sina egna cases', 'Certifikat och material med hem'],
-    cta: 'Boka workshop', path: '/anmalan',
-    img: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=900&q=85',
-  },
-  {
-    tag: 'AI-implementering', icon: Cpu,
-    title: 'Strategisk AI-implementering för din organisation',
-    text: 'För organisationer som vill gå längre än enstaka utbildningar. Vi kartlägger era processer, identifierar de mest lönsamma AI-use-casen och hjälper er bygga en AI-strategi med konkret handlingsplan.',
-    points: ['Processgranskning och AI-kartläggning', 'Prioriterad lista med use cases och ROI-estimat', 'Policy och riktlinjer för säker AI-användning', 'Implementeringsstöd och uppföljning'],
-    cta: 'Boka strategisamtal', path: '/anmalan',
-    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=85',
-  },
-];
-
-const Erbjudanden = () => {
-  const navigate = useNavigate();
-  return (
-    <section className="py-16 sm:py-24 px-5 sm:px-8" style={{ background: C.bg }}>
-      <div className="max-w-6xl mx-auto space-y-16 sm:space-y-24">
-        {OFFERS.map(({ tag, icon: Icon, title, text, points, cta, path, img }, i) => {
-          const reverse = i % 2 === 1; // vartannat block speglas
-          return (
-            <Reveal key={tag}>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-                {/* Bild */}
-                <div className={`relative ${reverse ? 'lg:order-2' : ''}`}>
-                  <div className="rounded-3xl overflow-hidden aspect-[4/3] shadow-xl">
-                    <img src={img} alt="" className="w-full h-full object-cover" />
-                  </div>
-                  {/* Etikett på bilden */}
-                  <div className="absolute top-4 left-4 inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-bold text-white"
-                    style={{ background: C.orange }}>
-                    <Icon size={14} /> {tag}
-                  </div>
-                </div>
-
-                {/* Text */}
-                <div className={reverse ? 'lg:order-1' : ''}>
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest mb-5"
-                    style={{ background: C.orangeL, color: C.orange }}>
-                    <Icon size={13} /> {tag}
-                  </div>
-                  <h2 className="text-3xl sm:text-4xl font-black leading-tight tracking-tight mb-4" style={{ color: C.dark }}>
-                    {title}
-                  </h2>
-                  <p className="text-base sm:text-lg leading-relaxed mb-6" style={{ color: C.mid }}>{text}</p>
-
-                  <div className="space-y-2.5 mb-8">
-                    {points.map((p) => (
-                      <div key={p} className="flex items-center gap-3">
-                        <span className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: C.orangeL }}>
-                          <Check size={13} strokeWidth={3} style={{ color: C.orange }} />
-                        </span>
-                        <span className="font-semibold text-sm" style={{ color: C.dark }}>{p}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <motion.button whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}
-                    onClick={() => navigate(path)}
-                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full font-bold text-base text-white"
-                    style={{ background: C.orange, boxShadow: `0 8px 24px ${C.orange}40` }}>
-                    {cta} <ArrowRight size={17} />
-                  </motion.button>
-                </div>
-              </div>
-            </Reveal>
-          );
-        })}
-      </div>
-    </section>
-  );
-};
 
 // ══════════════════════════════════════════════════════════
 //  EFFEKT-SEKTION (bild + checklista)
@@ -564,8 +476,6 @@ const Effekt = () => (
   </section>
 );
 
-
-
 // ══════════════════════════════════════════════════════════
 //  KURS-KARUSELL
 // ══════════════════════════════════════════════════════════
@@ -574,8 +484,6 @@ const CARDS = [
   { img: '/card-team.png',   title: 'Effektiva team',        desc: 'Bygg samarbete som håller under press.',            path: '/utbildningar/team' },
   { img: '/card-shield.png', title: 'Arbetsmiljö & ansvar',  desc: 'Det systematiska arbetet, förklarat på svenska.',   path: '/utbildningar/arbetsmiljo' },
   { img: '/card-laptop.png', title: 'AI för alla',           desc: 'Kom igång med AI i det dagliga arbetet — idag.',    path: '/utbildningar/ai' },
-  { img: '/card-book.png',   title: 'Ledarskap i praktiken', desc: 'Från kollega till chef, utan att tappa fotfästet.', path: '/utbildningar/ledarskap' },
-  { img: '/card-team.png',   title: 'Effektiva team',        desc: 'Bygg samarbete som håller under press.',            path: '/utbildningar/team' },
 ];
 
 const Carousel = () => {
@@ -586,9 +494,9 @@ const Carousel = () => {
     if (el) el.scrollBy({ left: dir * (el.clientWidth * 0.8), behavior: 'smooth' });
   };
   return (
-    // Full-width band: bakgrunden går kant-till-kant, ingen rundad panel
-    <section className="py-16 sm:py-20" style={{ background: C.bgAlt }}>
-      <div className="max-w-6xl mx-auto px-5 sm:px-8">
+    <section className="py-4 px-5 sm:px-8" style={{ background: C.bg }}>
+      <div className="max-w-6xl mx-auto rounded-3xl p-6 sm:p-10"
+        style={{ background: C.bgAlt, border: `1px solid ${C.border}` }}>
         <div className="flex items-end justify-between gap-4 mb-8">
           <Reveal>
             <div>
@@ -600,7 +508,8 @@ const Carousel = () => {
           </Reveal>
           <div className="flex gap-2 flex-shrink-0">
             {[[-1, ArrowLeft], [1, ArrowRight]].map(([dir, Icon], i) => (
-              <button key={i} onClick={() => scrollBy(dir)} aria-label={dir < 0 ? 'Föregående' : 'Nästa'}
+              <button key={i} onClick={() => scrollBy(dir)}
+                aria-label={dir < 0 ? 'Föregående' : 'Nästa'}
                 className="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-105"
                 style={{ background: C.white, border: `1px solid ${C.border}` }}>
                 <Icon size={18} style={{ color: C.dark }} />
@@ -609,9 +518,12 @@ const Carousel = () => {
           </div>
         </div>
 
-        <div ref={scroller} className="flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory" style={{ scrollbarWidth: 'none' }}>
-          {CARDS.map((c) => (
-            <motion.button key={c.title} whileHover={{ y: -4 }} onClick={() => navigate(c.path)}
+        <div ref={scroller}
+          className="flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory"
+          style={{ scrollbarWidth: 'none' }}>
+          {CARDS.map((c, i) => (
+            <motion.button key={c.title} whileHover={{ y: -4 }}
+              onClick={() => navigate(c.path)}
               className="snap-start flex-shrink-0 w-[80%] sm:w-[45%] lg:w-[calc(25%-15px)] text-left rounded-3xl overflow-hidden group"
               style={{ background: C.white, border: `1px solid ${C.border}` }}>
               <div className="h-40 flex items-center justify-center" style={{ background: C.bg }}>
@@ -755,26 +667,21 @@ const CTABanner = () => {
   );
 };
 
+// ══════════════════════════════════════════════════════════
+//  FOOTER
+// ══════════════════════════════════════════════════════════
 const Footer = () => {
   const navigate = useNavigate();
   return (
-    <footer className="relative overflow-hidden mt-8" style={{ background: C.bgAlt }}>
-      {/* Bakgrundsbild – uggla nere till vänster. Bara sm+ (på mobil finns ingen plats) */}
-      <img src="/footer.png" alt="" aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover hidden sm:block"
-        style={{ objectPosition: 'left bottom' }} />
-      {/* Cream-scrim: tonar toppen + skyddar länkarna till höger */}
-      <div className="absolute inset-0 pointer-events-none hidden sm:block"
-        style={{ background: `linear-gradient(180deg, ${C.bgAlt} 0%, transparent 28%), linear-gradient(270deg, ${C.bgAlt} 0%, ${C.bgAlt}cc 32%, transparent 60%)` }} />
-
-      <div className="relative max-w-6xl mx-auto px-5 sm:px-8 pt-16 pb-10 sm:min-h-[440px] flex flex-col justify-end">
-        {/* Länk-kolumner – skjuts åt höger på desktop så de går fria från ugglan */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10 sm:pl-[32%] lg:pl-[40%]">
+    <footer className="py-14 mt-8 px-5 sm:px-8 border-t" style={{ background: C.bgAlt, borderColor: C.border }}>
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
           <div className="col-span-2 sm:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <img src="/logo.png" alt="" className="w-8 h-8 object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+              <img src="/logo.png" alt="" className="w-8 h-8 object-contain"
+                onError={(e) => { e.currentTarget.style.display = 'none'; }} />
               <span className="font-black" style={{ color: C.dark }}>
-                Utbildnings<span style={{ color: C.orange }}>bolaget</span>
+                Närings<span style={{ color: C.orange }}>klivet</span>
               </span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: C.muted }}>
@@ -782,28 +689,27 @@ const Footer = () => {
             </p>
           </div>
           {[
-            ['Utbildningar', [['Ledarskap', '/modules'], ['AI & digitalt', '/modules'], ['Ekonomi & juridik', '/modules'], ['Arbetsmiljö', '/modules']]],
-            ['Företaget', [['Om oss', '/om-oss'], ['Seminarier', '/seminarier'], ['Kontakt', '/om-oss']]],
-            ['Konto', [['Logga in', '/login'], ['Kom igång', '/anmalan']]],
+            ['Utbildningar', [['Ledarskap', '/utbildningar/ledarskap'], ['AI & digitalt', '/utbildningar/ai'], ['Ekonomi & juridik', '/utbildningar/ekonomi'], ['Arbetsmiljö', '/utbildningar/arbetsmiljo']]],
+            ['Företaget', [['Om oss', '/om-oss'], ['Seminarier', '/seminarier'], ['Kontakt', '/kontakt']]],
+            ['Konto', [['Logga in', '/login'], ['Kom igång', '/kom-igang']]],
           ].map(([title, links]) => (
             <div key={title}>
               <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: C.muted }}>{title}</p>
               <div className="space-y-2">
-                {links.map(([l, p], i) => (
-                  <button key={`${l}-${i}`} onClick={() => navigate(p)}
+                {links.map(([l, p]) => (
+                  <button key={l} onClick={() => navigate(p)}
                     className="block text-sm font-medium hover:opacity-70 transition-opacity" style={{ color: C.dark }}>{l}</button>
                 ))}
               </div>
             </div>
           ))}
         </div>
-
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t sm:pl-[32%] lg:pl-[40%]"
-          style={{ borderColor: C.border }}>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t" style={{ borderColor: C.border }}>
           <p className="text-xs" style={{ color: C.muted }}>© 2026 Utbildningsbolaget. Alla rättigheter förbehållna.</p>
           <div className="flex gap-5">
-            <button onClick={() => navigate('/integritetspolicy')} className="text-xs hover:opacity-70 transition-opacity" style={{ color: C.muted }}>Integritetspolicy</button>
-            <button onClick={() => navigate('/villkor')} className="text-xs hover:opacity-70 transition-opacity" style={{ color: C.muted }}>Villkor</button>
+            {['Integritetspolicy', 'Villkor'].map((l) => (
+              <button key={l} className="text-xs hover:opacity-70 transition-opacity" style={{ color: C.muted }}>{l}</button>
+            ))}
           </div>
         </div>
       </div>
@@ -834,7 +740,6 @@ export default function StartsidaNy() {
       <FeatureRow />
       <Effekt />
       <Carousel />
-      <Erbjudanden />  
       <Testimonials />
       <CTABanner />
       <Footer />

@@ -1,13 +1,37 @@
-// ModulesSection.jsx
+// src/components/CourseElements/ModulesSection.jsx
+// Hybrid: ModuleModal med utbyggt innehåll (lånat från CoursePage)
+// + auth-medveten CTA (inloggad → direkt till modulen, ej inloggad → köp-flöde)
+
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Clock, BookOpen, Play, ChevronRight, Lock } from 'lucide-react';
+import {
+  X, Clock, BookOpen, Play, ChevronRight, Lock,
+  CheckCircle, Award, Shield, Zap, ArrowRight, ExternalLink,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { modulesData } from '../../data/modules2.jsx';
 
 const SHOW_COUNT = 6;
-const categories = ["Alla", "Ekonomi", "Juridik", "Teknik", "Ledarskap"];
+const categories = ['Alla', 'Ekonomi', 'Juridik', 'Teknik', 'Ledarskap'];
 
+// ── Inloggningsstatus (byt mot din auth-state) ────────────
+const isLoggedIn = false;
+
+// ── Brand-tokens ──────────────────────────────────────────
+const C = {
+  orange:  '#FF5421',
+  orangeD: '#E04619',
+  orangeL: '#FFF0EB',
+  dark:    '#1A1A1A',
+  mid:     '#4A4A4A',
+  muted:   '#8A8A8A',
+  bg:      '#FAFAF8',
+  bgAlt:   '#F4F2EE',
+  border:  '#E8E5E0',
+  white:   '#FFFFFF',
+};
+
+// ── Kort i grid ───────────────────────────────────────────
 const LandingModuleCard = ({ module, index, onClick }) => {
   const isFirst = index === 0;
   return (
@@ -16,87 +40,196 @@ const LandingModuleCard = ({ module, index, onClick }) => {
       onClick={() => onClick(module)} className="relative rounded-2xl overflow-hidden group cursor-pointer">
       {isFirst && (
         <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-center gap-1.5 py-2 text-xs font-bold tracking-wider text-white"
-          style={{ background: 'linear-gradient(to right, #FF5421, #E04619)' }}>
+          style={{ background: `linear-gradient(to right, ${C.orange}, ${C.orangeD})` }}>
           ★ PROVA PÅ – GRATIS FÖR ALLA
         </div>
       )}
       <div className="relative w-full aspect-[4/3] overflow-hidden">
         <img src={module.image_url || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80'}
-          alt={module.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+          alt={module.title}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
         <div className="absolute inset-0 bg-slate-900/60 group-hover:bg-slate-900/70 transition-colors duration-300" />
         <div className={`absolute inset-0 flex flex-col justify-end p-4 sm:p-5 ${isFirst ? 'pt-10' : ''}`}>
-          <span className="text-xs font-bold px-2.5 py-1 rounded-full text-white mb-1.5 self-start" style={{ backgroundColor: '#FF5421' }}>
+          <span className="text-xs font-bold px-2.5 py-1 rounded-full text-white mb-1.5 self-start"
+            style={{ backgroundColor: C.orange }}>
             Modul {String(index + 1).padStart(2, '0')}
           </span>
-          <h3 className="text-sm sm:text-base font-bold text-white leading-snug line-clamp-2">{module.title}</h3>
+          <h3 className="text-sm sm:text-base font-bold text-white leading-snug line-clamp-2">
+            {module.title}
+          </h3>
         </div>
       </div>
     </motion.div>
   );
 };
 
+// ── HYBRID-MODAL (lånar struktur från CoursePage) ─────────
 const ModuleModal = ({ module, onClose }) => {
   if (!module) return null;
+
   const realIndex = modulesData.findIndex(m => m.id === module.id);
+  const hasContent = !!module.component;
+  const isFirst = realIndex === 0;
+  const isFree = module.type === 'free' || isFirst;
+
+  // Features som visas i listan (lånat från CoursePage)
+  const features = [
+    [Clock,    `${module.duration || '—'} · I din egen takt`],
+    module.lessons && [BookOpen, `${module.lessons} lektioner`],
+    !isFree && [Award,    'Certifikat vid genomförd modul'],
+    !isFree && [Zap,      'Tillgång direkt efter köp'],
+    !isFree && [Shield,   '14 dagars öppet köp'],
+  ].filter(Boolean);
+
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+      style={{ background: 'rgba(15,22,35,0.75)', backdropFilter: 'blur(8px)' }}
       onClick={onClose}>
-      <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.9, opacity: 0, y: 20 }} transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
-        onClick={e => e.stopPropagation()}>
-        {(module.image_url || module.image) && (
-          <div className="aspect-video overflow-hidden rounded-t-2xl">
-            <img src={module.image_url || module.image} alt={module.title} className="w-full h-full object-cover" />
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.95, opacity: 0, y: 20 }}
+        transition={{ type: 'spring', damping: 26, stiffness: 320 }}
+        className="bg-white rounded-2xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+        onClick={e => e.stopPropagation()}
+        style={{ fontFamily: "'Nunito', sans-serif" }}>
+
+        {/* ── Bild överst med badge-overlay ── */}
+        <div className="relative flex-shrink-0">
+          <div className="aspect-[16/9] overflow-hidden bg-slate-200">
+            <img
+              src={module.image_url || module.image || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80'}
+              alt={module.title}
+              className="w-full h-full object-cover" />
+            <div className="absolute inset-0"
+              style={{ background: 'linear-gradient(to top, rgba(15,22,35,0.65) 0%, transparent 50%)' }} />
           </div>
-        )}
-        <div className="p-6 sm:p-8">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-bold px-3 py-1 rounded-full text-white" style={{ backgroundColor: '#FF5421' }}>
-                Modul {String(realIndex + 1).padStart(2, '0')}
+
+          {/* Stäng-knapp */}
+          <button onClick={onClose}
+            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/95 hover:bg-white flex items-center justify-center transition-colors shadow-lg z-10">
+            <X size={16} style={{ color: C.dark }} />
+          </button>
+
+          {/* Badges */}
+          <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full text-white"
+              style={{ backgroundColor: C.orange }}>
+              Modul {String(realIndex + 1).padStart(2, '0')}
+            </span>
+            {module.category && (
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full text-white"
+                style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)',
+                  border: '1px solid rgba(255,255,255,0.3)' }}>
+                {module.category}
               </span>
-              {module.category && (
-                <span className="text-xs text-slate-400 font-medium border border-slate-200 px-2 py-1 rounded-full">{module.category}</span>
-              )}
-            </div>
-            <button onClick={onClose} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center flex-shrink-0 ml-2 transition-colors">
-              <X size={16} className="text-gray-600" />
-            </button>
+            )}
+            {isFree && (
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full text-white"
+                style={{ background: `linear-gradient(to right, ${C.orange}, ${C.orangeD})` }}>
+                ★ Gratis
+              </span>
+            )}
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 leading-snug">{module.title}</h2>
-          <div className="flex flex-wrap gap-4 mb-5 text-sm text-slate-500">
-            {module.duration && <div className="flex items-center gap-1"><Clock size={14} /><span>{module.duration}</span></div>}
-            {module.lessons && <div className="flex items-center gap-1"><BookOpen size={14} /><span>{module.lessons} lektioner</span></div>}
+
+          {/* Titel på bilden */}
+          <div className="absolute bottom-4 left-4 right-4">
+            <h2 className="text-xl sm:text-2xl font-black text-white leading-tight"
+              style={{ textShadow: '0 2px 12px rgba(0,0,0,0.4)' }}>
+              {module.title}
+            </h2>
           </div>
-          <p className="text-slate-600 leading-relaxed mb-6 text-sm sm:text-base">
-            {module.description || module.short_description || 'Mer information om denna modul kommer snart.'}
-          </p>
+        </div>
+
+        {/* ── Body (scrollbar) ── */}
+        <div className="flex-1 overflow-y-auto px-6 sm:px-8 py-6">
+
+          {/* Beskrivning */}
+          {(module.description || module.short_description) && (
+            <p className="text-sm sm:text-base leading-relaxed mb-5"
+              style={{ color: C.mid }}>
+              {module.description || module.short_description}
+            </p>
+          )}
+
+          {/* Vad du lär dig — det viktigaste för en inloggad användare */}
           {module.topics && module.topics.length > 0 && (
-            <div className="mb-6">
-              <h4 className="font-semibold text-slate-900 mb-3 text-sm uppercase tracking-wide">Vad du lär dig</h4>
-              <ul className="space-y-2">
+            <div className="mb-5">
+              <h3 className="text-xs font-bold uppercase tracking-widest mb-3"
+                style={{ color: C.orange }}>
+                Vad du lär dig
+              </h3>
+              <div className="space-y-2.5">
                 {module.topics.map((topic, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                    <span className="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#FF5421' }} />{topic}
-                  </li>
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{ background: C.orange }}>
+                      <CheckCircle size={11} color="white" />
+                    </div>
+                    <span className="text-sm" style={{ color: C.mid }}>{topic}</span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
-          {module.component ? (
-            <Link to={`/module/${module.slug}`}
-              className="w-full py-4 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2 shadow-lg hover:opacity-90 transition-opacity"
-              style={{ background: 'linear-gradient(to right, #FF5421, #E04619)' }}>
-              <Play size={18} /> Starta modulen nu
+
+          {/* Features-rad (Clock, BookOpen, Award, ...) */}
+          {features.length > 0 && (
+            <div className="rounded-xl p-4 mb-2 space-y-2"
+              style={{ background: C.bgAlt, border: `1px solid ${C.border}` }}>
+              {features.map(([Icon, text], i) => (
+                <div key={i} className="flex items-center gap-2.5">
+                  <Icon size={14} style={{ color: C.orange }} className="flex-shrink-0" />
+                  <span className="text-xs" style={{ color: C.mid }}>{text}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* ── Footer med CTA (auth-medveten) ── */}
+        <div className="border-t flex-shrink-0 px-6 sm:px-8 py-5 space-y-2.5"
+          style={{ borderColor: C.border, background: C.bg }}>
+
+          {/* CTA-knapp(ar) */}
+          {hasContent && (isLoggedIn || isFree) ? (
+            // INLOGGAD eller GRATIS-modul: direkt till modulen
+            <Link to={`/module/${module.slug}`} onClick={onClose}
+              className="w-full py-3.5 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2 hover:opacity-95 transition-opacity"
+              style={{ background: `linear-gradient(135deg, ${C.orange}, ${C.orangeD})`,
+                boxShadow: `0 4px 16px ${C.orange}40` }}>
+              <Play size={16} className="fill-current" />
+              {isFree && !isLoggedIn ? 'Starta gratis nu' : 'Starta modulen'}
             </Link>
+          ) : !hasContent ? (
+            // KOMMER SNART
+            <div className="w-full py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
+              style={{ background: C.bgAlt, color: C.muted, border: `1px solid ${C.border}` }}>
+              <Lock size={14} /> Den här modulen publiceras snart
+            </div>
           ) : (
-            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={onClose}
-              className="w-full py-4 rounded-xl font-bold text-white text-base"
-              style={{ background: 'linear-gradient(to right, #FF5421, #E04619)' }}>
-              Kom igång med Styrelsekörkortet
-            </motion.button>
+            // EJ INLOGGAD + betalmodul: köp-flöde
+            <>
+              <Link to="/purchase/styrelsekorkortet" onClick={onClose}
+                className="w-full py-3.5 rounded-xl font-bold text-white text-sm flex items-center justify-center gap-2 hover:opacity-95 transition-opacity"
+                style={{ background: `linear-gradient(135deg, ${C.orange}, ${C.orangeD})`,
+                  boxShadow: `0 4px 16px ${C.orange}40` }}>
+                Kom igång med Styrelsekörkortet
+                <ArrowRight size={15} />
+              </Link>
+            </>
+          )}
+
+          {/* Diskret länk till full kursinfo — för dem som vill djupdyka */}
+          {hasContent && (
+            <Link to={`/kurs/${module.slug}`} onClick={onClose}
+              className="w-full py-2 flex items-center justify-center gap-1.5 text-xs font-semibold hover:opacity-70 transition-opacity"
+              style={{ color: C.muted }}>
+              Se hela kursinformationen
+              <ExternalLink size={11} />
+            </Link>
           )}
         </div>
       </motion.div>
@@ -104,28 +237,34 @@ const ModuleModal = ({ module, onClose }) => {
   );
 };
 
-// ─── Alla moduler modal ───────────────────────────────────
+// ── "Alla moduler"-modal (lista) ──────────────────────────
 const AllModulesModal = ({ onClose, onSelectModule }) => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
+    className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+    style={{ background: 'rgba(15,22,35,0.75)', backdropFilter: 'blur(8px)' }}
     onClick={onClose}>
     <motion.div initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }}
       exit={{ scale: 0.95, opacity: 0, y: 20 }} transition={{ type: 'spring', damping: 25, stiffness: 300 }}
       className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
-      onClick={e => e.stopPropagation()}>
+      onClick={e => e.stopPropagation()}
+      style={{ fontFamily: "'Nunito', sans-serif" }}>
 
-      {/* Header */}
-      <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
+      <div className="px-6 py-5 border-b flex items-center justify-between flex-shrink-0"
+        style={{ borderColor: C.border }}>
         <div>
-          <p className="text-xs font-bold text-[#FF5421] uppercase tracking-widest mb-0.5">Kursinnehåll</p>
-          <h2 className="text-xl font-bold text-slate-900">Alla {modulesData.length} moduler</h2>
+          <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: C.orange }}>
+            Kursinnehåll
+          </p>
+          <h2 className="text-xl font-bold" style={{ color: C.dark }}>
+            Alla {modulesData.length} moduler
+          </h2>
         </div>
-        <button onClick={onClose} className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
-          <X size={16} className="text-gray-600" />
+        <button onClick={onClose}
+          className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+          <X size={16} style={{ color: C.mid }} />
         </button>
       </div>
 
-      {/* Lista */}
       <div className="overflow-y-auto flex-1 p-4 sm:p-6 space-y-2">
         {modulesData.map((module, i) => {
           const hasContent = !!module.component;
@@ -136,20 +275,26 @@ const AllModulesModal = ({ onClose, onSelectModule }) => (
               onClick={() => { onSelectModule(module); onClose(); }}
               className="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border
                          hover:border-orange-200 hover:bg-orange-50 group transition-all text-left"
-              style={{ borderColor: '#e2e8f0', background: i % 2 === 0 ? 'white' : '#F8F7F4' }}>
+              style={{ borderColor: C.border, background: i % 2 === 0 ? C.white : '#F8F7F4' }}>
               <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold"
-                style={{ background: hasContent ? 'rgba(255,84,33,0.12)' : '#f1f5f9', color: hasContent ? '#FF5421' : '#94a3b8' }}>
+                style={{ background: hasContent ? C.orangeL : C.bgAlt,
+                  color: hasContent ? C.orange : C.muted }}>
                 {String(i + 1).padStart(2, '0')}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm text-slate-800 truncate">{module.title}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{module.category} · {module.duration || '–'}</p>
+                <p className="font-semibold text-sm truncate" style={{ color: C.dark }}>{module.title}</p>
+                <p className="text-xs mt-0.5" style={{ color: C.muted }}>
+                  {module.category} · {module.duration || '–'}
+                </p>
               </div>
               <div className="flex-shrink-0">
                 {hasContent
-                  ? <span className="flex items-center gap-1 text-xs font-semibold text-[#FF5421]"><Play size={11} className="fill-current" /> Tillgänglig</span>
-                  : <span className="flex items-center gap-1 text-xs text-slate-300"><Lock size={11} /> Snart</span>
-                }
+                  ? <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: C.orange }}>
+                      <Play size={11} className="fill-current" /> Tillgänglig
+                    </span>
+                  : <span className="flex items-center gap-1 text-xs" style={{ color: '#cbd5e1' }}>
+                      <Lock size={11} /> Snart
+                    </span>}
               </div>
               <ChevronRight size={14} className="text-slate-300 group-hover:text-[#FF5421] transition-colors flex-shrink-0" />
             </motion.button>
@@ -157,11 +302,10 @@ const AllModulesModal = ({ onClose, onSelectModule }) => (
         })}
       </div>
 
-      {/* Footer */}
-      <div className="px-6 py-4 border-t border-gray-100 flex-shrink-0">
-        <Link to="/purchase/styrelsekorkortet-grund" onClick={onClose}
-          className="w-full py-3.5 rounded-xl font-bold text-white text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
-          style={{ background: 'linear-gradient(to right, #FF5421, #E04619)' }}>
+      <div className="px-6 py-4 border-t flex-shrink-0" style={{ borderColor: C.border }}>
+        <Link to="/purchase/styrelsekorkortet" onClick={onClose}
+          className="w-full py-3.5 rounded-xl font-bold text-white text-sm flex items-center justify-center gap-2 hover:opacity-95 transition-opacity"
+          style={{ background: `linear-gradient(to right, ${C.orange}, ${C.orangeD})` }}>
           Kom igång med alla moduler →
         </Link>
       </div>
@@ -169,13 +313,15 @@ const AllModulesModal = ({ onClose, onSelectModule }) => (
   </motion.div>
 );
 
-// ─── Sektion ───
+// ── Sektion ───────────────────────────────────────────────
 const ModulesSection = () => {
-  const [activeCategory, setActiveCategory] = useState("Alla");
+  const [activeCategory, setActiveCategory] = useState('Alla');
   const [selectedModule, setSelectedModule] = useState(null);
   const [showAllModules, setShowAllModules] = useState(false);
 
-  const filtered = activeCategory === "Alla" ? modulesData : modulesData.filter(m => m.category === activeCategory);
+  const filtered = activeCategory === 'Alla'
+    ? modulesData
+    : modulesData.filter(m => m.category === activeCategory);
   const visible = filtered.slice(0, SHOW_COUNT);
 
   return (
@@ -186,22 +332,27 @@ const ModulesSection = () => {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} className="text-center mb-10">
             <div className="inline-block px-4 py-2 text-white rounded-full font-semibold mb-4 text-sm"
-              style={{ backgroundColor: '#FF5421' }}>KURSMODULER</div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#2C2C2C] mb-3">Lär dig styrelsearbete steg för steg</h2>
+              style={{ backgroundColor: C.orange }}>KURSMODULER</div>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-3" style={{ color: '#2C2C2C' }}>
+              Lär dig styrelsearbete steg för steg
+            </h2>
             <p className="text-lg text-gray-500 max-w-2xl mx-auto">
               Följ vår beprövade process som redan hjälpt 1 450+ styrelseledamöter att bli trygga och kompetenta
             </p>
           </motion.div>
 
+          {/* Kategorier */}
           <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
             {categories.map(cat => {
-              const count = cat === "Alla" ? modulesData.length : modulesData.filter(m => m.category === cat).length;
+              const count = cat === 'Alla'
+                ? modulesData.length
+                : modulesData.filter(m => m.category === cat).length;
               const isActive = activeCategory === cat;
               return (
                 <motion.button key={cat} whileTap={{ scale: 0.96 }} onClick={() => setActiveCategory(cat)}
                   className="px-4 py-2 rounded-lg border font-medium text-sm transition-all duration-200"
                   style={isActive
-                    ? { backgroundColor: '#FF5421', borderColor: '#FF5421', color: 'white' }
+                    ? { backgroundColor: C.orange, borderColor: C.orange, color: 'white' }
                     : { backgroundColor: 'white', borderColor: '#e2e8f0', color: '#475569' }}>
                   {cat} <span className="ml-1.5 text-xs opacity-70">({count})</span>
                 </motion.button>
@@ -209,6 +360,7 @@ const ModulesSection = () => {
             })}
           </div>
 
+          {/* Modul-grid */}
           <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             <AnimatePresence mode="popLayout">
               {visible.map((module) => {
@@ -218,14 +370,14 @@ const ModulesSection = () => {
             </AnimatePresence>
           </motion.div>
 
-          {/* CTA – ersätter gamla textraden */}
+          {/* CTA — se alla moduler */}
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} className="mt-10 flex justify-center">
             <motion.button
               whileHover={{ scale: 1.03, y: -1 }} whileTap={{ scale: 0.97 }}
               onClick={() => setShowAllModules(true)}
               className="inline-flex items-center gap-2.5 px-7 py-4 rounded-xl font-bold text-sm border-2 transition-all"
-              style={{ borderColor: '#FF5421', color: '#FF5421', background: 'white' }}>
+              style={{ borderColor: C.orange, color: C.orange, background: 'white' }}>
               Se alla {modulesData.length} kursdelar i programmet
               <ChevronRight size={16} />
             </motion.button>
@@ -235,11 +387,18 @@ const ModulesSection = () => {
       </section>
 
       <AnimatePresence>
-        {selectedModule && <ModuleModal module={selectedModule} onClose={() => setSelectedModule(null)} />}
+        {selectedModule && (
+          <ModuleModal module={selectedModule} onClose={() => setSelectedModule(null)} />
+        )}
       </AnimatePresence>
 
       <AnimatePresence>
-        {showAllModules && <AllModulesModal onClose={() => setShowAllModules(false)} onSelectModule={setSelectedModule} />}
+        {showAllModules && (
+          <AllModulesModal
+            onClose={() => setShowAllModules(false)}
+            onSelectModule={setSelectedModule}
+          />
+        )}
       </AnimatePresence>
     </>
   );

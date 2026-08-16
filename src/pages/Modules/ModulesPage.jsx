@@ -2,7 +2,7 @@
 import { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight, Play, Lock, Clock, BookOpen, Search } from 'lucide-react';
+import { Play, Lock, Clock, BookOpen, Search } from 'lucide-react';
 
 import { modulesData as nk } from '../../data/modules2';
 
@@ -38,8 +38,6 @@ const Reveal = ({ children, delay = 0, y = 20, className = '' }) => {
   );
 };
 
-
-
 // ── Module card ───────────────────────────────────────────
 const ModuleCard = ({ module, index }) => {
   const navigate = useNavigate();
@@ -47,7 +45,7 @@ const ModuleCard = ({ module, index }) => {
   const isFirst = index === 0;
 
   return (
-    <Reveal delay={Math.min(index * 0.05, 0.3)}>
+    <Reveal delay={Math.min(index * 0.04, 0.25)}>
       <motion.div
         whileHover={{ y: -4 }}
         transition={{ type: 'spring', stiffness: 300, damping: 24 }}
@@ -168,82 +166,11 @@ export default function ModulesPage() {
     return matchCat && matchQ;
   });
 
-  const available = filtered.filter(m => !!m.component).length;
-  const totalStudents = modulesData.reduce((s, m) => s + (m.students || 0), 0);
-  const avgRating = (modulesData.reduce((s, m) => s + (m.rating || 0), 0) / modulesData.length).toFixed(1);
-
   return (
     <div className="min-h-screen" style={{ background: C.bg, fontFamily: "'Nunito', sans-serif" }}>
 
-      {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative pt-28 pb-16 overflow-hidden" style={{ background: C.bg }}>
-        {/* Warm glow */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full pointer-events-none"
-          style={{ background: `radial-gradient(circle, ${C.orangeL} 0%, transparent 70%)`,
-            transform: 'translate(30%, -30%)' }} />
-
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
-          {/* Back */}
-          <motion.button
-            initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-            onClick={() => navigate('/')}
-            className="inline-flex items-center gap-2 text-sm font-medium mb-10 transition-opacity hover:opacity-70"
-            style={{ color: C.muted }}>
-            ← Tillbaka
-          </motion.button>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-end">
-            <div>
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-6"
-                style={{ background: C.orangeL, color: C.orange }}>
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background: C.orange }} />
-                Kursbibliotek
-              </motion.div>
-
-              <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.95] tracking-tight mb-5"
-                style={{ color: C.dark }}>
-                Alla<br />
-                <span style={{ color: C.orange }}>utbildningar.</span>
-              </motion.h1>
-
-              <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.18 }}
-                className="text-lg leading-relaxed max-w-lg"
-                style={{ color: C.mid }}>
-                Bläddra bland alla moduler. Första modulen är alltid gratis —
-                inga kreditkort, ingen registrering.
-              </motion.p>
-            </div>
-
-            {/* Stats */}
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.22 }}
-              className="grid grid-cols-3 gap-3">
-              {[
-                { val: modulesData.length, label: 'Moduler totalt' },
-                { val: available,          label: 'Tillgängliga nu' },
-                { val: avgRating,          label: 'Snittbetyg' },
-              ].map((s, i) => (
-                <div key={i} className="rounded-2xl px-4 py-5 text-center border"
-                  style={{ background: i === 0 ? C.orangeL : C.bgCard,
-                    borderColor: i === 0 ? C.orange + '40' : C.border }}>
-                  <p className="text-3xl font-black mb-1" style={{ color: i === 0 ? C.orange : C.dark }}>
-                    {s.val}
-                  </p>
-                  <p className="text-xs font-medium" style={{ color: C.muted }}>{s.label}</p>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Filter bar ───────────────────────────────────── */}
-      <div className="sticky top-0 z-30 border-b"
+      {/* ── Filter bar (sticky, börjar nästan högst upp) ─── */}
+      <div className="sticky top-0 z-30 border-b pt-20"
         style={{ background: 'rgba(250,250,248,0.95)', backdropFilter: 'blur(12px)',
           borderColor: C.border }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-3 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
@@ -282,14 +209,14 @@ export default function ModulesPage() {
         </div>
       </div>
 
-      {/* ── Grid ─────────────────────────────────────────── */}
-      <section className="py-12 sm:py-16" style={{ background: C.bg }}>
+      {/* ── Grid (direkt under filterbaren) ──────────────── */}
+      <section className="pt-6 pb-12 sm:pb-16" style={{ background: C.bg }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <AnimatePresence mode="popLayout">
             {filtered.length > 0 ? (
               <motion.div layout
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {filtered.map((module, i) => {
+                {filtered.map((module) => {
                   const realIndex = modulesData.findIndex(m => m.id === module.id);
                   return <ModuleCard key={module.id} module={module} index={realIndex} />;
                 })}
